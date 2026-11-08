@@ -20,7 +20,7 @@ export const text = (ro: string, ru: string): Bilingual => ({ ro, ru });
 export const navigation = [
   { id: "puntea", label: text("ЭдуМост", "ЭдуМост") },
   { id: "expertiza", label: text("Expertiză", "Экспертиза") },
-  { id: "continuitate", label: text("Continuitate", "Continuitate") },
+  { id: "continuitate", label: text("Continuitate", "Продолжение") },
   { id: "trasee", label: text("Trasee", "Маршруты") },
   { id: "investigatie", label: text("Investigație", "Исследование") },
   { id: "dashboard", label: text("Prezentare", "Обзор") },
