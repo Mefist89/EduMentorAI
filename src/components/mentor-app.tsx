@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   BookMarked,
+  MessagesSquare,
   BookOpen,
   Check,
   CircleHelp,
@@ -36,6 +37,13 @@ const TraseeApp = dynamic(
     import("@/features/trasee/client/App").then((module) => module.TraseeApp),
   { loading: () => <p role="status">Se încarcă Trasee…</p> },
 );
+const ExpertizaApp = dynamic(
+  () =>
+    import("@/features/expertiza/client/ExpertizaApp").then(
+      (module) => module.ExpertizaApp,
+    ),
+  { loading: () => <p role="status">Se încarcă Expertiză…</p> },
+);
 
 const navIcons = {
   dashboard: LayoutDashboard,
@@ -44,13 +52,15 @@ const navIcons = {
   activities: WandSparkles,
   experience: BookMarked,
   trasee: Route,
+  expertiza: MessagesSquare,
 };
 
 export function MentorApp({ account }: { account: Account }) {
   const student = account.role === "elev";
   const allowedNavigation = navigation.filter(
     (item) =>
-      !student || ["dashboard", "course", "activities"].includes(item.id),
+      !student ||
+      ["dashboard", "course", "activities", "expertiza"].includes(item.id),
   );
   const storageKey = `${STORAGE_KEY}:${account.id}`;
   const [progress, setProgress] = useState<DemoProgress>(initialProgress);
@@ -72,7 +82,8 @@ export function MentorApp({ account }: { account: Account }) {
       const id = window.location.hash.slice(1);
       if (
         navigation.some((item) => item.id === id) &&
-        (!student || ["dashboard", "course", "activities"].includes(id))
+        (!student ||
+          ["dashboard", "course", "activities", "expertiza"].includes(id))
       )
         setView(id as View);
       else setView("dashboard");
@@ -258,7 +269,10 @@ export function MentorApp({ account }: { account: Account }) {
               )}
             </p>
           )}
-          {student && <StudentLearning locale={locale} view={view} go={go} />}
+          {student && view !== "expertiza" && (
+            <StudentLearning locale={locale} view={view} go={go} />
+          )}
+          {view === "expertiza" && <ExpertizaApp />}
           {!student && view === "dashboard" && (
             <Dashboard locale={locale} progress={progress} go={go} />
           )}
@@ -283,12 +297,16 @@ export function MentorApp({ account }: { account: Account }) {
             <span>
               <CircleHelp size={13} />
               {t(
-                view === "trasee"
-                  ? "Catalog de formare · Marcaje salvate în cont"
-                  : "Date fictive · Salvare în acest browser",
-                view === "trasee"
-                  ? "Каталог курсов · Отметки сохранены в аккаунте"
-                  : "Вымышленные данные · Хранение в браузере",
+                view === "expertiza"
+                  ? "Comunitate · Contribuții salvate în Supabase"
+                  : view === "trasee"
+                    ? "Catalog de formare · Marcaje salvate în cont"
+                    : "Date fictive · Salvare în acest browser",
+                view === "expertiza"
+                  ? "Сообщество · Данные сохранены в Supabase"
+                  : view === "trasee"
+                    ? "Каталог курсов · Отметки сохранены в аккаунте"
+                    : "Вымышленные данные · Хранение в браузере",
               )}
             </span>
             <button className="footer-reset text-button" onClick={reset}>

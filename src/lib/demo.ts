@@ -1,6 +1,12 @@
 export type Locale = "ro" | "ru";
 export type View =
-  "dashboard" | "course" | "mentor" | "activities" | "experience" | "trasee";
+  | "dashboard"
+  | "course"
+  | "mentor"
+  | "activities"
+  | "experience"
+  | "trasee"
+  | "expertiza";
 export type PromptKey = "start" | "differentiate" | "verify" | "reflect";
 export type Difficulty = "basic" | "medium" | "advanced";
 export type Bilingual = { ro: string; ru: string };
@@ -13,6 +19,7 @@ export const navigation = [
   { id: "activities", label: text("Activități", "Задания") },
   { id: "experience", label: text("Experiența mea", "Мой опыт") },
   { id: "trasee", label: text("Trasee", "Маршруты") },
+  { id: "expertiza", label: text("Expertiză", "Экспертиза") },
 ] as const;
 
 export const steps = [

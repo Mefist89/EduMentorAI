@@ -1,0 +1,278 @@
+{
+  "version": 1,
+  "source": "scolio-vs / Daily",
+  "demo": true,
+  "teachers": [
+    {
+      "id": 1,
+      "n": "Enache Maria",
+      "s": "Matematică",
+      "r": "Profesor",
+      "rev": [
+        [
+          5,
+          "Ana C.",
+          "Explică atât de clar încât chiar am înțeles logaritmii!"
+        ],
+        [
+          5,
+          "Mihai R.",
+          "Răbdătoare și mereu ne ajută după ore."
+        ],
+        [
+          4,
+          "Daria P.",
+          "Teste grele, dar corecte."
+        ]
+      ]
+    },
+    {
+      "id": 2,
+      "n": "Prof. Ion Rusu",
+      "s": "Informatică",
+      "r": "Profesor",
+      "rev": [
+        [
+          5,
+          "Vlad S.",
+          "Ne-a învățat să facem aplicații adevărate."
+        ],
+        [
+          4,
+          "Irina M.",
+          "Ore interactive și amuzante."
+        ]
+      ]
+    },
+    {
+      "id": 3,
+      "n": "Prof. Maria Cojocaru",
+      "s": "Limba română",
+      "r": "Profesor",
+      "rev": [
+        [
+          4,
+          "Elena T.",
+          "Ne face să iubim lectura."
+        ],
+        [
+          3,
+          "Dan B.",
+          "Cere multe eseuri."
+        ]
+      ]
+    },
+    {
+      "id": 4,
+      "n": "Dir. Vasile Popescu",
+      "s": "Director",
+      "r": "Director",
+      "rev": [
+        [
+          5,
+          "Ana C.",
+          "Ascultă părerea elevilor și face schimbări reale."
+        ]
+      ]
+    },
+    {
+      "id": 5,
+      "n": "Dir. adj. Elena Țurcanu",
+      "s": "Director adjunct",
+      "r": "Director adjunct",
+      "rev": [
+        [
+          5,
+          "Daria P.",
+          "Rezolvă rapid problemele elevilor."
+        ],
+        [
+          4,
+          "Vlad S.",
+          "Mereu disponibilă pentru discuții."
+        ]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "k": 1,
+      "a": "Ana Ceban",
+      "r": "Elev",
+      "t": "Cum învăț mai ușor formulele de la fizică?",
+      "b": "Am test săptămâna viitoare și mă încurc la formule. Aveți sfaturi?",
+      "l": 12,
+      "c": [
+        [
+          "Prof. Elena Munteanu",
+          "Profesor",
+          "Fă-ți o fișă cu formulele și rezolvă 3 probleme pe zi, nu toate într-o seară."
+        ],
+        [
+          "Mihai Rusu",
+          "Elev",
+          "Eu le desenez ca scheme colorate. Merge!"
+        ],
+        [
+          "Prof. Elena Munteanu",
+          "Profesor",
+          "Încearcă să le explici cu voce tare cuiva de acasă."
+        ]
+      ]
+    },
+    {
+      "id": 2,
+      "k": 3,
+      "a": "Vlad Sandu",
+      "r": "Elev",
+      "t": "Când începe clubul de robotică?",
+      "b": "Aș vrea să mă înscriu, dar nu găsesc programul.",
+      "l": 7,
+      "c": [
+        [
+          "Prof. Ion Rusu",
+          "Profesor",
+          "Începem joi la 15:00, în laboratorul de informatică. Vă așteptăm!"
+        ],
+        [
+          "Prof. Elena Munteanu",
+          "Profesor",
+          "Sunt și eu acolo să ajut cu partea de matematică!"
+        ]
+      ]
+    }
+  ],
+  "communities": [
+    {
+      "id": 1,
+      "n": "Matematică și fizică",
+      "e": "tri",
+      "d": "Probleme, teste și trucuri pentru note mai bune.",
+      "m": 128,
+      "j": true,
+      "c": "#4f8bff",
+      "i": "Liceul Teoretic „Mihai Eminescu”"
+    },
+    {
+      "id": 2,
+      "n": "Informatică",
+      "e": "code",
+      "d": "Cod, proiecte și olimpiade.",
+      "m": 96,
+      "j": false,
+      "c": "#17d3a8",
+      "i": "Toate școlile"
+    },
+    {
+      "id": 3,
+      "n": "Robotică",
+      "e": "robot",
+      "d": "Construim roboți împreună.",
+      "m": 54,
+      "j": false,
+      "c": "#ffc928",
+      "i": "Școala Gimnazială nr. 5"
+    },
+    {
+      "id": 4,
+      "n": "Clubul de lectură",
+      "e": "book",
+      "d": "Cărți, eseuri și discuții.",
+      "m": 73,
+      "j": true,
+      "c": "#9b6bff",
+      "i": "Liceul Teoretic „Mihai Eminescu”"
+    },
+    {
+      "id": 5,
+      "n": "Anunțurile școlii",
+      "e": "mega",
+      "d": "Evenimente și noutăți de la direcție.",
+      "m": 310,
+      "j": true,
+      "c": "#ff7a59",
+      "i": "Liceul Teoretic „Mihai Eminescu”"
+    }
+  ],
+  "schools": [
+    {
+      "n": "Liceul Teoretic „Mihai Eminescu”",
+      "a": "Chișinău · str. Exemplu 10",
+      "el": 820,
+      "pr": 54,
+      "d": "Vasile Popescu",
+      "y": 1962,
+      "c": "#4f8bff"
+    },
+    {
+      "n": "Școala Gimnazială nr. 5",
+      "a": "Chișinău · str. Demo 3",
+      "el": 410,
+      "pr": 31,
+      "d": "Ana Rotaru",
+      "y": 1975,
+      "c": "#ff7a59"
+    },
+    {
+      "n": "Colegiul de Informatică",
+      "a": "Chișinău · bd. Test 22",
+      "el": 600,
+      "pr": 42,
+      "d": "Ion Gându",
+      "y": 1991,
+      "c": "#9b6bff"
+    }
+  ],
+  "rules": [
+    {
+      "t": "Regulamentul intern",
+      "b": "Elevii respectă programul orelor, colegii și personalul școlii. Cadrele didactice și direcțiunea asigură un mediu sigur și respectuos."
+    },
+    {
+      "t": "Frecvență și absențe",
+      "b": "Absențele se motivează în cel mult 3 zile, pe baza unui act medical sau a unei cereri a părinților."
+    },
+    {
+      "t": "Telefoane și dispozitive",
+      "b": "Telefoanele rămân închise în timpul orelor, cu excepția activităților în care profesorul permite folosirea lor."
+    },
+    {
+      "t": "Evaluare și note",
+      "b": "Evaluarea se face curent, prin teste și lucrări. Notele se comunică elevilor în cel mult 7 zile."
+    },
+    {
+      "t": "Comportament și bullying",
+      "b": "Hărțuirea nu este tolerată. Orice caz se raportează profesorului diriginte sau direcțiunii."
+    }
+  ],
+  "events": [
+    {
+      "d": "12",
+      "m": "NOI",
+      "t": "Olimpiada de matematică",
+      "p": "Sala festivă",
+      "c": "#4f8bff"
+    },
+    {
+      "d": "18",
+      "m": "NOI",
+      "t": "Ziua porților deschise",
+      "p": "Toate clasele",
+      "c": "#ff7a59"
+    },
+    {
+      "d": "25",
+      "m": "NOI",
+      "t": "Concurs de robotică",
+      "p": "Laboratorul de informatică",
+      "c": "#17d3a8"
+    }
+  ],
+  "tips": [
+    "Explică ce ai învățat cuiva, așa îți rămâne mai bine în minte.",
+    "Pauză de 5 minute la fiecare 25 de minute de învățat.",
+    "O întrebare bună valorează cât un răspuns bun.",
+    "Somnul de seară ajută mai mult decât încă o oră de carte."
+  ]
+}
