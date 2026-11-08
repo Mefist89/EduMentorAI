@@ -32,6 +32,16 @@ npm start
 
 Accesul la cabinet necesită un cont Supabase cu rol EduMentor. Pagina informativă și linkurile către resurse externe sunt publice. Materialul cursului și fișa din «Experiența mea» rămân exemple demonstrative în browser. Modulul separat «Practici pedagogice» salvează contribuțiile reale în Supabase și le publică numai după aprobare.
 
+## Cohorte / grupuri de învățare
+
+Modulul `/#cohorts` este separat de comunitățile Expertiză. Profesorul creează o cohortă cu nume, disciplină, clasă și descriere, selectează conturi existente de elev și vede componența. Poate modifica datele grupului și elimina un elev din grup fără a-i șterge contul. Numele grupului este obligatoriu; nu se creează conturi sau parole din acest modul. Un elev poate aparține mai multor grupuri; în același grup apare o singură dată. Limita MVP este de 100 de elevi per cohortă.
+
+Profesorul gestionează numai grupurile pentru care `teacherId` este propriul ID Supabase verificat; administratorul vede și gestionează toate grupurile. Elevul vede numai grupurile în care este înscris, metadatele și profesorul responsabil, fără catalogul elevilor sau lista altor membri. Catalogul de selecție include numai conturi cu rolul administrativ `app_metadata.edumentor_role = elev`, verificat din nou la adăugare. Numele editabil din profil este folosit doar pentru afișare, niciodată pentru autorizare. API-ul nu trimite emailuri, parole, tokenuri sau metadatele Auth; numai conturile demonstrative folosesc aliasul de login din domeniul rezervat `.example`.
+
+Inițializare în proiectul Supabase configurat: `npm run setup:cohorts`. Scriptul creează/verifică bucketul privat `edumentor-cohorts`, fără grupuri sau conturi demonstrative suplimentare. Datele sunt documente JSON private, cu legătura `teacherId → studentIds`, salvate ca revizii imuabile `groups/<UUID>/<versiune>.json`. API-ul `/api/cohorts` verifică sesiunea, rolul, proprietarul, tipul conturilor selectate și versiunea, iar scrierea fără upsert previne suprascrierea schimbărilor concurente. Un conflict HTTP 409 cere reîncărcarea versiunii curente. Nu există acces direct la Storage din browser; cheia administrativă existentă rămâne pe server, fără o variabilă nouă pe Vercel.
+
+`npm run test:cohorts` verifică proprietarul, rolurile, izolarea între grupuri, limitele, duplicatele, conturile eligibile, catalogul fără metadate private, modificările concurente și API-ul din spatele proxy-ului. Stocarea este potrivită unui MVP cu volum mic: pentru multe grupuri, sunt necesare tabele SQL indexate și paginare pe server. Nu sunt implementate invitații prin email, atribuirea lecțiilor, transferul grupului către alt profesor sau ștergerea grupurilor. Referințe: [Storage access control](https://supabase.com/docs/guides/storage/security/access-control), [Admin listUsers](https://supabase.com/docs/reference/javascript/auth-admin-listusers).
+
 ## Publicarea și moderarea practicilor
 
 Deschide `/#practices` din meniul «Practici pedagogice» / «Практики». Toate rolurile autentificate pot citi și căuta biblioteca aprobată. Profesorii și administratorii au «Adaugă practică» și «Practicile mele»; numai administratorul vede «Moderare» și poate aproba sau respinge o propunere.

@@ -19,7 +19,9 @@
     "test:public": "node --test tests/public.test.mjs",
     "test:puntea": "node --test tests/puntea.test.mjs",
     "setup:practices": "node scripts/setup-practices.mjs",
-    "test:practices": "node --test tests/practices.test.mjs"
+    "test:practices": "node --test tests/practices.test.mjs",
+    "setup:cohorts": "node scripts/setup-cohorts.mjs",
+    "test:cohorts": "node --test tests/cohorts.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

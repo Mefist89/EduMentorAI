@@ -6,6 +6,7 @@ import {
   BookMarked,
   Compass,
   NotebookPen,
+  Users,
   MessagesSquare,
   BookOpen,
   Check,
@@ -59,7 +60,13 @@ const PracticesApp = dynamic(
   { loading: () => <p role="status">Se încarcă practicile…</p> },
 );
 
+const CohortsApp = dynamic(
+  () => import("@/features/cohorts/CohortsApp").then(module => module.CohortsApp),
+  { loading: () => <p role="status">Se încarcă cohortele…</p> },
+);
+
 const navIcons = {
+  cohorts: Users,
   practices: NotebookPen,
   puntea: Compass,
   dashboard: LayoutDashboard,
@@ -76,7 +83,7 @@ export function MentorApp({ account }: { account: Account }) {
   const allowedNavigation = navigation.filter(
     (item) =>
       !student ||
-      ["practices", "puntea", "dashboard", "course", "activities", "expertiza"].includes(
+      ["cohorts", "practices", "puntea", "dashboard", "course", "activities", "expertiza"].includes(
         item.id,
       ),
   );
@@ -101,7 +108,7 @@ export function MentorApp({ account }: { account: Account }) {
       if (
         navigation.some((item) => item.id === id) &&
         (!student ||
-          ["practices", "puntea", "dashboard", "course", "activities", "expertiza"].includes(
+          ["cohorts", "practices", "puntea", "dashboard", "course", "activities", "expertiza"].includes(
             id,
           ))
       )
@@ -289,12 +296,13 @@ export function MentorApp({ account }: { account: Account }) {
               )}
             </p>
           )}
-          {student && view !== "expertiza" && view !== "puntea" && view !== "practices" && (
+          {student && !["expertiza", "puntea", "practices", "cohorts"].includes(view) && (
             <StudentLearning locale={locale} view={view} go={go} />
           )}
           {view === "expertiza" && <ExpertizaApp />}
           {view === "puntea" && <PunteaCatalog locale={locale} />}
           {view === "practices" && <PracticesApp locale={locale} account={account} />}
+          {view === "cohorts" && <CohortsApp locale={locale} account={account} />}
           {!student && view === "dashboard" && (
             <Dashboard locale={locale} progress={progress} go={go} />
           )}
@@ -322,7 +330,9 @@ export function MentorApp({ account }: { account: Account }) {
             <span>
               <CircleHelp size={13} />
               {t(
-                view === "practices"
+                view === "cohorts"
+                  ? "Cohorte · Grupuri și componență salvate în Supabase"
+                  : view === "practices"
                   ? "Practici · Publicare cu moderare · Salvare în Supabase"
                   : view === "puntea"
                   ? "Puntea Edu · Catalog informativ · Surse externe"
@@ -331,7 +341,9 @@ export function MentorApp({ account }: { account: Account }) {
                     : view === "trasee"
                       ? "Catalog de formare · Marcaje salvate în cont"
                       : "Date fictive · Salvare în acest browser",
-                view === "practices"
+                view === "cohorts"
+                  ? "Когорты · Группы и состав сохранены в Supabase"
+                  : view === "practices"
                   ? "Практики · Публикация с модерацией · Сохранение в Supabase"
                   : view === "puntea"
                   ? "Puntea Edu · Информационный каталог · Внешние источники"
