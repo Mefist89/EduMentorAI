@@ -17,15 +17,15 @@ export const text = (ro: string, ru: string): Bilingual => ({ ro, ru });
 
 export const navigation = [
   { id: "puntea", label: text("Puntea Edu · Catalog", "Puntea Edu · Каталог") },
+  { id: "expertiza", label: text("Expertiză", "Экспертиза") },
   { id: "dashboard", label: text("Prezentare", "Обзор") },
+  { id: "trasee", label: text("Trasee", "Маршруты") },
   { id: "practices", label: text("Practici pedagogice", "Практики") },
   { id: "cohorts", label: text("Cohorte", "Когорты") },
   { id: "course", label: text("Cursul meu", "Мой курс") },
   { id: "mentor", label: text("AI Mentor", "AI Mentor") },
   { id: "activities", label: text("Activități", "Задания") },
   { id: "experience", label: text("Experiența mea", "Мой опыт") },
-  { id: "trasee", label: text("Trasee", "Маршруты") },
-  { id: "expertiza", label: text("Expertiză", "Экспертиза") },
 ] as const;
 
 export const steps = [
