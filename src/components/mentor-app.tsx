@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import {
   BookMarked,
   BookOpen,
@@ -10,6 +11,7 @@ import {
   LockKeyhole,
   MessageCircle,
   RotateCcw,
+  Route,
   WandSparkles,
   X,
 } from "lucide-react";
@@ -24,6 +26,16 @@ import {
 import { ActivitiesView, CourseView, ExperienceView } from "./learning-views";
 import { MentorChat as MentorView } from "./mentor-chat";
 import { Dashboard } from "./dashboard";
+import { type Account, roleLabels } from "@/lib/accounts";
+import { LogoutButton } from "./login-form";
+import { StudentLearning } from "./student-learning";
+import { httpApi } from "@/features/trasee/client/api";
+
+const TraseeApp = dynamic(
+  () =>
+    import("@/features/trasee/client/App").then((module) => module.TraseeApp),
+  { loading: () => <p role="status">Se încarcă Trasee…</p> },
+);
 
 const navIcons = {
   dashboard: LayoutDashboard,
@@ -31,9 +43,16 @@ const navIcons = {
   mentor: MessageCircle,
   activities: WandSparkles,
   experience: BookMarked,
+  trasee: Route,
 };
 
-export function MentorApp() {
+export function MentorApp({ account }: { account: Account }) {
+  const student = account.role === "elev";
+  const allowedNavigation = navigation.filter(
+    (item) =>
+      !student || ["dashboard", "course", "activities"].includes(item.id),
+  );
+  const storageKey = `${STORAGE_KEY}:${account.id}`;
   const [progress, setProgress] = useState<DemoProgress>(initialProgress);
   const [view, setView] = useState<View>("dashboard");
   const [ready, setReady] = useState(false);
@@ -44,29 +63,33 @@ export function MentorApp() {
   const selected = navigation.find((item) => item.id === view)!;
   useEffect(() => {
     try {
-      setProgress(parseProgress(localStorage.getItem(STORAGE_KEY)));
+      setProgress(parseProgress(localStorage.getItem(storageKey)));
     } catch {
       setStorageError(true);
     }
     setReady(true);
     const readHash = () => {
       const id = window.location.hash.slice(1);
-      if (navigation.some((item) => item.id === id)) setView(id as View);
+      if (
+        navigation.some((item) => item.id === id) &&
+        (!student || ["dashboard", "course", "activities"].includes(id))
+      )
+        setView(id as View);
       else setView("dashboard");
     };
     readHash();
     window.addEventListener("hashchange", readHash);
     return () => window.removeEventListener("hashchange", readHash);
-  }, []);
+  }, [storageKey, student]);
 
   useEffect(() => {
     if (!ready) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+      localStorage.setItem(storageKey, JSON.stringify(progress));
     } catch {
       setStorageError(true);
     }
-  }, [progress, ready]);
+  }, [progress, ready, storageKey]);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -111,7 +134,7 @@ export function MentorApp() {
 
   const props = { locale, go, progress, update, notify: setToast };
   return (
-    <div className="app-shell">
+    <div className={`app-shell${student ? " student-shell" : ""}`}>
       <a className="skip-link" href="#main-content">
         {t("Sari la conținut", "Перейти к содержимому")}
       </a>
@@ -135,7 +158,7 @@ export function MentorApp() {
           className="main-nav"
           aria-label={t("Navigare principală", "Основная навигация")}
         >
-          {navigation.map((item) => {
+          {allowedNavigation.map((item) => {
             const Icon = navIcons[item.id];
             return (
               <button
@@ -144,23 +167,36 @@ export function MentorApp() {
                 aria-current={view === item.id ? "page" : undefined}
               >
                 <Icon size={19} strokeWidth={1.7} />
-                <span>{item.label[locale]}</span>
+                <span>
+                  {student && item.id === "activities"
+                    ? t("Exerciții", "Задания")
+                    : item.label[locale]}
+                </span>
               </button>
             );
           })}
         </nav>
+        {account.role === "administrator" && (
+          <a className="admin-link" href="/admin">
+            {t("Administrare", "Администрирование")}
+          </a>
+        )}
         <div className="sidebar-spacer" />
         <button className="reset-button" onClick={reset}>
           <RotateCcw size={16} />
           {t("Reia demonstrația", "Начать заново")}
         </button>
         <div className="sidebar-profile">
-          <span className="profile-avatar">AP</span>
+          <span className="profile-avatar">
+            {account.role === "administrator"
+              ? "AD"
+              : account.role === "profesor"
+                ? "PR"
+                : "EL"}
+          </span>
           <span>
-            <strong>{t("Ana Popescu", "Анна Попеску")}</strong>
-            <small>
-              {t("Profesor · cont demonstrativ", "Учитель · демопрофиль")}
-            </small>
+            <strong>{roleLabels[account.role][locale]}</strong>
+            <small>{t("Cont conectat", "Вход выполнен")}</small>
           </span>
           <LockKeyhole size={14} />
         </div>
@@ -174,7 +210,7 @@ export function MentorApp() {
           <div className="topbar-right">
             <span className="demo-indicator">
               <span />
-              {t("Mod demonstrativ", "Деморежим")}
+              {roleLabels[account.role][locale]}
             </span>
             <div
               className="locale-switch"
@@ -201,8 +237,13 @@ export function MentorApp() {
               </button>
             </div>
             <span className="topbar-avatar" aria-hidden="true">
-              AP
+              {account.role === "administrator"
+                ? "AD"
+                : account.role === "profesor"
+                  ? "PR"
+                  : "EL"}
             </span>
+            <LogoutButton label={t("Deconectare", "Выйти")} />
           </div>
         </header>
         <main
@@ -217,13 +258,20 @@ export function MentorApp() {
               )}
             </p>
           )}
-          {view === "dashboard" && (
+          {student && <StudentLearning locale={locale} view={view} go={go} />}
+          {!student && view === "dashboard" && (
             <Dashboard locale={locale} progress={progress} go={go} />
           )}
-          {view === "course" && <CourseView {...props} />}
-          {view === "mentor" && <MentorView {...props} />}
-          {view === "activities" && <ActivitiesView {...props} />}
-          {view === "experience" && <ExperienceView {...props} />}
+          {!student && view === "course" && <CourseView {...props} />}
+          {!student && view === "mentor" && <MentorView {...props} />}
+          {!student && view === "activities" && <ActivitiesView {...props} />}
+          {!student && view === "experience" && <ExperienceView {...props} />}
+          {!student && view === "trasee" && (
+            <TraseeApp
+              api={httpApi}
+              canCoordinate={account.role === "administrator"}
+            />
+          )}
           <footer className="page-footer">
             <span>
               EduMentor AI <span className="footer-dot">·</span>{" "}
@@ -235,8 +283,12 @@ export function MentorApp() {
             <span>
               <CircleHelp size={13} />
               {t(
-                "Date fictive · Salvare în acest browser",
-                "Вымышленные данные · Хранение в браузере",
+                view === "trasee"
+                  ? "Catalog de formare · Marcaje salvate în cont"
+                  : "Date fictive · Salvare în acest browser",
+                view === "trasee"
+                  ? "Каталог курсов · Отметки сохранены в аккаунте"
+                  : "Вымышленные данные · Хранение в браузере",
               )}
             </span>
             <button className="footer-reset text-button" onClick={reset}>

@@ -16,6 +16,8 @@ export type MentorRequest = {
 export type MentorAnswer = { answer: string; sourceSections: number[] };
 export type MentorReply = MentorAnswer & { provider: "openai"; model: string };
 export type MentorErrorCode =
+  | "unauthenticated"
+  | "forbidden"
   | "not_configured"
   | "invalid_request"
   | "rate_limited"

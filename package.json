@@ -9,7 +9,11 @@
     "typecheck": "tsc --noEmit",
     "check:supabase": "node scripts/check-supabase.mjs",
     "test:supabase": "node --test tests/supabase.test.mjs",
-    "test:mentor": "node --test tests/mentor.test.mjs"
+    "test:mentor": "node --test tests/mentor.test.mjs",
+    "test:auth": "node --test tests/auth.test.mjs",
+    "create:demo-users": "node scripts/create-demo-users.mjs",
+    "setup:trasee": "node scripts/setup-trasee.mjs",
+    "test:trasee": "node --test tests/trasee.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

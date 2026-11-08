@@ -31,6 +31,14 @@ type Turn = {
 };
 
 const errors: Record<MentorErrorCode, { ro: string; ru: string }> = {
+  unauthenticated: {
+    ro: "Sesiunea a expirat. Conectează-te din nou pentru a continua.",
+    ru: "Сессия истекла. Войдите снова, чтобы продолжить.",
+  },
+  forbidden: {
+    ro: "Acest cont nu are acces la mentorul pentru profesori.",
+    ru: "У этого аккаунта нет доступа к наставнику для учителей.",
+  },
   not_configured: {
     ro: "Mentorul nu este conectat momentan. Poți explora răspunsul exemplu.",
     ru: "Наставник пока не подключён. Вы можете посмотреть пример ответа.",
@@ -136,6 +144,10 @@ export function MentorChat({
       });
       const data: unknown = await response.json();
       if (controller.signal.aborted) return;
+      if (response.status === 401) {
+        window.location.assign("/login");
+        return;
+      }
       const reply = response.ok ? parseMentorReply(data) : null;
       if (!reply) {
         const code =

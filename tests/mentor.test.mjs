@@ -43,6 +43,7 @@ function load(path, dependencies = {}, globals = {}) {
   return module.exports;
 }
 const demo = load("src/lib/demo.ts");
+const accounts = load("src/lib/accounts.ts");
 const contract = load("src/lib/mentor-contract.ts", { "./demo": demo });
 const normalized = (value) => JSON.parse(JSON.stringify(value));
 const validRequest = { promptKey: "start", locale: "ro", history: [] };
@@ -256,8 +257,10 @@ class ServiceError extends Error {
     this.status = status;
   }
 }
-function route(generate) {
+function route(generate, account = { id: "teacher-test", role: "profesor" }) {
   return load("src/app/api/mentor/chat/route.ts", {
+    "@/lib/auth": { getAccount: async () => account },
+    "@/lib/accounts": accounts,
     "@/lib/mentor-contract": contract,
     "@/lib/openai-mentor": {
       generateMentorReply: generate,
@@ -272,6 +275,21 @@ function request(body = validRequest, extra = {}) {
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
 }
+
+test("mentor denies guests and pupils before invoking OpenAI", async () => {
+  let calls = 0;
+  const generate = async () => {
+    calls++;
+    return {};
+  };
+  assert.equal((await route(generate, null).POST(request())).status, 401);
+  assert.equal(
+    (await route(generate, { id: "pupil", role: "elev" }).POST(request()))
+      .status,
+    403,
+  );
+  assert.equal(calls, 0);
+});
 
 test("invalid, oversized and cross-origin requests are rejected without generating text", async () => {
   let calls = 0;

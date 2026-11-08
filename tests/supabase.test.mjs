@@ -206,7 +206,7 @@ test("proxy refreshes claims and propagates cookie batches and cache protection"
   assert.equal(response.headers.get("pragma"), "no-cache");
 });
 
-test("anonymous requests keep the demonstration accessible without redirects", async () => {
+test("session refresh leaves anonymous redirects to the page authorization guard", async () => {
   let claimsCalls = 0;
   const session = loadSource("src/utils/supabase/middleware.ts", {
     "./config": configDependency,

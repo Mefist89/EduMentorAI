@@ -2,6 +2,8 @@
 
 Data: 8 noiembrie 2026. Verificările au rulat pe buildul de producție, la `http://127.0.0.1:3000`, cu Chromium automatizat prin Playwright.
 
+Acest document păstrează verificările etapelor succesive. Afirmațiile despre accesul fără cont din etapele inițiale au fost înlocuite de autentificarea și cele trei roluri descrise la final.
+
 - `npm run typecheck` — trecut.
 - `npm run build` — trecut.
 - 15 verificări ale fluxului — trecute: diagnostic exemplu, conversații simulate, referințe la material, exerciții, selectarea activității, salvare, aprobare, copiere, progres, reîncărcare, resetare și recuperarea stocării invalide sau indisponibile.
@@ -51,3 +53,33 @@ Testele automate ale erorilor folosesc SDK simulat și nu generează costuri API
 - Verificate navigarea din carduri, diagnosticul, continuarea parcursului, alegerea activității, salvarea și aprobarea fișei, precum și păstrarea progresului după reîncărcare.
 - După ajustarea contrastului, axe-core a raportat zero încălcări pentru regulile WCAG selectate pe cele cinci ecrane inițiale, în română, la 1440 px. Verificarea automată nu reprezintă o certificare completă de accesibilitate.
 - Răspunsurile mentorului au fost simulate la limita de rețea în verificarea designului; nu au fost efectuate generări OpenAI suplimentare.
+
+## Autentificare și trei roluri
+
+- Create efectiv în proiectul Supabase configurat: `administrator`, `profesor`, `elev`, cu parole aleatoare distincte, emailuri demonstrative confirmate și roluri în `app_metadata.edumentor_role`. Autentificarea cu parolă a fost verificată pentru fiecare cont.
+- `.env.local` și `.env.demo-users.json` sunt ignorate de Git. Cheia administrativă este utilizată numai de scriptul local de inițializare. Aplicația nu importă acest script și nu necesită cheia administrativă pe Vercel.
+- `/login` folosește Server Actions și Supabase Auth. Nu există selector de rol sau parole în interfața publică. Rolurile sunt verificate cu `getUser()`, din metadatele administrative; metadatele editabile ale utilizatorului nu acordă acces.
+- Vizitatorul este redirecționat din `/` către `/login`. `/admin` este disponibil doar administratorului. API-ul mentorului refuză vizitatorii cu 401 și elevii cu 403, înainte de apelarea OpenAI.
+- Elevul vede propriul spațiu, materialul de curs și cele nouă exerciții cu soluții. Încercarea de a deschide `#mentor` revine la prezentarea elevului. Profesorul păstrează fluxul pedagogic existent.
+- Autentificare reală în browser pentru toate cele trei conturi, sesiune păstrată după reîncărcare, verificarea accesului la `/admin`, deconectare și refuzul cererilor ulterioare fără sesiune — trecute. Parola incorectă a afișat un mesaj generic.
+- 108 combinații responsive — ecranul de login și ecranele disponibile celor trei roluri, în română și rusă, la 320, 390, 768 și 1440 px; fără derulare orizontală. Zero erori JavaScript și zero răspunsuri HTTP 500 în parcurgerea verificată.
+- axe-core: zero încălcări detectate pentru regulile WCAG selectate pe login și pe pagina inițială a fiecăruia dintre cele trei roluri, în română, la 1440 px. Verificarea automată nu reprezintă o certificare completă.
+- `npm run test:auth` — 5 teste; `npm run test:mentor` — 13 teste; `npm run test:supabase` — 8 teste; toate trecute. Sunt verificate rolurile, refuzul sesiunilor invalide/revocate, imposibilitatea escaladării prin `user_metadata`, loginul și tratarea erorilor la logout.
+- `npm run typecheck` și `npm run build` — trecute. Progresul demonstrativ folosește cheia locală `edumentor-demo-v1:<user-id>`; fișele nu sunt încă persistate în Supabase.
+
+Verificarea autentificării nu a generat răspunsuri OpenAI suplimentare. Pagina de administrare descrie rolurile și nu implementează editarea conturilor. Pentru publicarea pe Vercel trebuie publicat codul actual și configurate variabilele de mediu ale aplicației; conturile sunt deja în Supabase.
+
+## Trasee — integrarea consilierului de formare
+
+- Importate și adaptate componentele, dicționarul și clasarea din folderul `consilier-formare` furnizat. Meniul include **Trasee** pentru profesor și administrator; elevul nu are acces.
+- Catalogul cu 124 de cursuri și 8 furnizori este încărcat efectiv în bucketul privat Supabase Storage `edumentor-trasee`, la `catalog/v1.json`. Descărcarea ulterioară a coincis cu fișierul încărcat prin verificare SHA-256. Nu este folosit un catalog local de rezervă în runtime.
+- Accesul direct la catalog a fost refuzat atât fără sesiune, cât și cu sesiunea reală a elevului. Cheia secretă este utilizată exclusiv de server și scriptul local. Nu au fost create politici publice sau schimbate tabelele aplicației.
+- Verificat în browser, cu Supabase real: căutarea STEAM, fișa cursului, comparația a două cursuri, marcarea unui curs deja urmat, păstrarea marcajului după reîncărcare și anularea lui. Marcajul nu a apărut în contul administratorului. Un `userId` străin în query nu a schimbat proprietarul datelor returnate.
+- API-ul a returnat 401 pentru vizitatori, 403 pentru elev și 403 pentru profesor la harta coordonatorilor. Administratorul a încărcat harta reală, completitudinea furnizorilor și simularea listelor complete.
+- Căutările au fost jurnalizate cu competențe, treaptă și număr de rezultate, fără textul introdus, ID de utilizator sau IP. Recomandările sunt calculate cu dicționarul original, fără generări AI suplimentare. Statisticile arată explicit limita de 1.000 de evenimente în 90 de zile și includ căutările de verificare.
+- `npm run test:trasee` — 14 teste trecute, inclusiv cele 7 verificări originale ale clasării, validarea inputurilor, refuzul URL-urilor nesigure, proprietatea marcajelor, rolurile, cererile din altă origine și erorile Storage. Cele 26 de teste pentru autentificare, mentor și sesiuni au rămas trecute; total 40.
+- `npm run typecheck` și `npm run build` — trecute; buildul include `/api/trasee/[...path]`.
+- 25 de combinații responsive — căutare, rezultate, fișă, comparație și coordonatori la 320, 390, 768, 1024 și 1440 px, fără derulare orizontală. Zero erori JavaScript sau răspunsuri HTTP 500/503 în fluxul verificat.
+- axe-core a raportat zero încălcări pentru regulile WCAG selectate pe căutare, rezultate, fișă și comparație; după corectarea contrastului și a barelor de progres, și pe pagina coordonatorilor. Verificarea coordonatorilor a fost reluată pe buildul final, inclusiv la cele cinci lățimi. Nu reprezintă o certificare completă de accesibilitate.
+
+Pentru **Trasee pe Vercel**, este necesară acum și variabila privată `SUPABASE_SECRET_KEY`, pe lângă configurația Supabase publică și OpenAI deja documentată. Codul nou trebuie publicat și trebuie executat Redeploy. Conținutul catalogului și interfața modulului importat sunt în română; eticheta de meniu rămâne bilingvă. Sursele, datele de consultare și informațiile lipsă sunt cele din fișierul furnizat, fără reverificarea online a fiecărui curs.

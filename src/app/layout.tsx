@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./theme.css";
+import "./auth.css";
+import "./trasee.css";
 
 export const metadata: Metadata = {
   title: "EduMentor AI · Spațiul profesorului",

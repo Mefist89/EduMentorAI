@@ -29,9 +29,56 @@ npm start
 5. **Experiența mea** — citește reflecția fictivă, afișează sinteza exemplu, salvează și aprobă fișa. Revino la ciornă sau copiază textul dacă dorești.
 6. **RO / RU** — schimbă limba interfeței, a materialelor și a exemplelor.
 
-Nu sunt necesare conturi, fișiere încărcate, formulare sau date reale pentru parcurgerea demonstrației. Numele profesorului și toate observațiile pedagogice sunt fictive. Nu există încă o interfață de autentificare, salvare a fișelor în baza de date, trimitere de feedback către o echipă sau publicare externă.
+Accesul necesită un cont Supabase cu rol EduMentor. Conținutul pedagogic și observațiile rămân exemple fictive. Fișele nu sunt încă salvate în baza de date.
+
+## Autentificare și cele trei conturi
+
+Deschide `/login` și folosește loginul și parola contului. Rolul nu se alege din formular; serverul îl citește din `app_metadata.edumentor_role`, după verificarea utilizatorului prin Supabase `getUser()`.
+
+| Login                         | Rol și acces                                                             |
+| ----------------------------- | ------------------------------------------------------------------------ |
+| `administrator` (sau `admin`) | Platforma completă și pagina protejată `/admin` cu descrierea rolurilor. |
+| `profesor`                    | Curs, mentor AI, activități pedagogice și reflecție.                     |
+| `elev`                        | Materialul cursului și nouă exerciții cu soluții, în trei niveluri.      |
+
+Aceste conturi au fost create în Supabase Auth, cu parole aleatoare distincte. Datele de acces se găsesc exclusiv în fișierul local ignorat de Git `.env.demo-users.json`. Identificatorii interni sunt `administrator@edumentor.example`, `profesor@edumentor.example` și `elev@edumentor.example`; domeniul rezervat `.example` este folosit pentru conturi demonstrative, fără trimitere de emailuri. Nu există înregistrare publică în interfață.
+
+Pentru inițializarea celor trei identități într-un proiect configurat, adaugă local `SUPABASE_SECRET_KEY`, apoi rulează `npm run create:demo-users`. Scriptul folosește Admin API, confirmă emailurile demonstrative, atribuie rolurile în metadatele administrative și verifică autentificarea cu parolă. Salvează datele de acces local, fără a afișa parole în terminal. Reluarea nu schimbă parolele și refuză suprascrierea conturilor existente care nu aparțin acestei inițializări.
+
+Autentificarea nu necesită cheia administrativă în runtime. Modulul Trasee folosește însă această cheie exclusiv pe server pentru accesul la Supabase Storage privat. Loginul, deconectarea și verificarea rolurilor folosesc cheia publishable și cookie-urile de sesiune Supabase. `/` redirecționează vizitatorii către `/login`; `/admin` este verificat pe server; API-ul mentorului răspunde 401 fără cont și 403 pentru elevi. Metadatele editabile `user_metadata` nu acordă permisiuni.
+
+Pe Vercel configurează `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `OPENAI_API_KEY`, `SUPABASE_SECRET_KEY` și opțional `OPENAI_MODEL`, pentru mediile publicate, apoi execută Redeploy. Nu publica fișierele locale cu parole sau cheia administrativă. Parolele conturilor se gestionează în Supabase Authentication; pagina `/admin` nu implementează încă editarea conturilor.
+
+```powershell
+npm run test:auth
+```
 
 ## Conexiune Supabase
+
+### Trasee — consilier de formare
+
+Butonul **Trasee** din meniul profesorului și al administratorului integrează modulul `consilier-formare` furnizat de utilizator. Include căutare după nevoile profesorului, treaptă și disciplină; filtre de calendar, format și credite; trei recomandări principale; comparație între maximum trei cursuri; fișe cu surse și întrebări pentru furnizor; marcarea cursurilor deja urmate. Administratorul are și harta tematică, completitudinea datelor și statistici ale căutărilor. Elevii nu au acces la acest modul sau la API-ul lui. Catalogul și interfața modulului sunt în română; meniul aplicației păstrează etichetele RO/RU.
+
+Catalogul importat conține **124 de oferte și 8 furnizori**, cu informațiile și datele de consultare din fișierul sursă. Acestea nu sunt o reverificare online a disponibilității sau prețurilor. Căutarea folosește dicționarul și clasarea deterministă din modulul original, fără apeluri Gemini/OpenAI. Informațiile lipsă rămân marcate ca nepublicate, iar edițiile încheiate sunt excluse în funcție de calendarul Europe/Bucharest. Pașii de după curs sunt recomandări, nu servicii garantate ale furnizorului.
+
+Datele sunt păstrate în **Supabase Storage privat**, bucket `edumentor-trasee`:
+
+- `catalog/v1.json` — catalogul importat, verificat după încărcare prin SHA-256;
+- `users/<user-id>/completed/<course-id>.json` — marcajele personale, persistente după reîncărcare și între dispozitive;
+- `searches/` — evenimente cu competențe, treaptă și număr de rezultate; fără textul căutării, ID de utilizator sau IP.
+
+API-ul `/api/trasee/*` verifică fiecare sesiune și rolul pe server. Calea marcajelor este construită din ID-ul contului verificat, nu dintr-un ID primit de la browser. Harta și statisticile sunt rezervate administratorului. Accesul direct la bucket este refuzat pentru vizitatori și pentru conturile aplicației; operațiile autorizate trec prin server, cu cheia privată `SUPABASE_SECRET_KEY`. Nu sunt create politici publice de Storage și nu sunt modificate tabelele PostgreSQL ale aplicației.
+
+Pentru configurarea într-un alt proiect, completează `.env.local`, apoi rulează cu Node.js 22.18+ sau 24:
+
+```powershell
+npm run setup:trasee
+npm run test:trasee
+```
+
+Scriptul creează bucketul privat dacă lipsește și încarcă doar catalogul. Refuză un bucket deja public; nu resetează marcajele sau căutările. Catalogul poate fi păstrat în cache pe proces maximum cinci minute. API-ul are o limită de 40 de solicitări/minut/cont/proces și corpuri de maximum 16 KB; limita nu este distribuită între instanțele Vercel. Harta agregă maximum ultimele 1.000 de evenimente din 90 de zile și menționează că statisticile prototipului includ și căutări de test.
+
+**Vercel:** pentru Trasee trebuie configurată și `SUPABASE_SECRET_KEY`, ca **Secret**, fără prefix `NEXT_PUBLIC_`, apoi publicată o versiune nouă. Cheia nu ajunge în componentele client. Fișierele portate și adaptate sunt în `src/features/trasee/`; stilurile sunt izolate în `src/app/trasee.css`. Folderul sursă din Downloads rămâne o referință, fără dependență la rularea aplicației.
 
 Pachetele `@supabase/supabase-js` și `@supabase/ssr` sunt instalate cu versiuni exacte în `package.json` și `package-lock.json`. Configurația locală folosește proiectul Supabase indicat pentru această aplicație. Pentru un checkout nou, copiază `.env.example` în `.env.local` și completează URL-ul și cheia **publishable** ale proiectului. `.env.local` este exclus din Git.
 
@@ -54,7 +101,7 @@ import { createClient } from "@/utils/supabase/server";
 const supabase = await createClient();
 ```
 
-`src/proxy.ts` este punctul de intrare Next.js 16 pentru reîmprospătarea sesiunilor. Acesta apelează `updateSession` din `src/utils/supabase/middleware.ts`, care execută `auth.getClaims()`, actualizează cookie-urile cererii și răspunsului și propagă antetele de protecție împotriva cache-ului. Fiecare cerere server primește un client separat. Demo-ul rămâne accesibil fără autentificare; proxy-ul nu reprezintă o regulă de autorizare pentru viitoarele date private.
+`src/proxy.ts` este punctul de intrare Next.js 16 pentru reîmprospătarea sesiunilor. Acesta apelează `updateSession` din `src/utils/supabase/middleware.ts`, care execută `auth.getClaims()`, actualizează cookie-urile cererii și răspunsului și propagă antetele de protecție împotriva cache-ului. Fiecare cerere server primește un client separat. Autorizarea este verificată separat în pagini și în API; proxy-ul singur nu acordă acces.
 
 ```powershell
 npm run check:supabase
@@ -63,13 +110,13 @@ npm run test:supabase
 
 `GET /api/health/supabase` verifică efectiv accesul la Supabase Auth cu cheia configurată, inclusiv fără un utilizator autentificat. Un răspuns reușit este `{ "status": "ok", "service": "supabase", "auth": "reachable" }`. Verificarea nu confirmă existența tabelelor sau politicile RLS și nu returnează chei, tokenuri sau identități.
 
-Pentru o verificare Data API fără a citi rânduri, folosește `npm run check:supabase -- numele_tabelului`. Comanda execută o interogare `LIMIT 0`. Tabelul `todos` din exemplul de configurare nu există în proiect la momentul conectării; pagina principală EduMentor nu depinde de el. Nu au fost create tabele sau modificate politici. Înaintea salvării datelor utilizatorilor sunt necesare schema aplicației, autentificare și politici RLS pentru proprietarul fiecărui rând. Cheile secret și `service_role` nu se folosesc în configurația publică.
+Pentru o verificare Data API fără a citi rânduri, folosește `npm run check:supabase -- numele_tabelului`. Comanda execută o interogare `LIMIT 0`. Tabelul `todos` din exemplul de configurare nu există în proiect la momentul conectării; pagina principală EduMentor nu depinde de el. Nu au fost create tabele ale aplicației sau modificate politici. Înaintea salvării fișelor pe server sunt necesare schema aplicației și politici RLS pentru proprietarul fiecărui rând. Cheile secret și `service_role` nu se folosesc în configurația publică.
 
 Referință: [configurarea SSR Supabase în Next.js](https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs).
 
 ## Persistență
 
-Preferința de limbă, diagnosticul activat, pașii explorați, starea fișei și reacția demonstrativă sunt păstrate în `localStorage`, cheia `edumentor-demo-v1`. Conversația este temporară și se reia la părăsirea ecranului sau reîncărcare. Răspunsurile OpenAI sunt păstrate în memoria ecranului; următorul apel poate include ultimele patru răspunsuri OpenAI din conversație. Schimbarea limbii afectează răspunsurile noi, fără a traduce retroactiv istoricul. Datele de profil și materialele transmise modelului sunt fictive și pregătite în cod. Dacă stocarea browserului este blocată, aplicația anunță că progresul va fi temporar. „Reia demonstrația” resetează doar acest demo, după confirmare. Nu folosi acest prototip pentru date reale sau sensibile.
+Preferința de limbă, diagnosticul activat, pașii explorați, starea fișei și reacția demonstrativă sunt păstrate în `localStorage`, cheia `edumentor-demo-v1:<user-id>`, separat pentru fiecare cont. Conversația este temporară și se reia la părăsirea ecranului sau reîncărcare. Răspunsurile OpenAI sunt păstrate în memoria ecranului; următorul apel poate include ultimele patru răspunsuri OpenAI din conversație. Schimbarea limbii afectează răspunsurile noi, fără a traduce retroactiv istoricul. Datele de profil și materialele transmise modelului sunt fictive și pregătite în cod. Dacă stocarea browserului este blocată, aplicația anunță că progresul va fi temporar. „Reia demonstrația” resetează doar acest demo, după confirmare. Nu folosi acest prototip pentru date reale sau sensibile.
 
 ## Mentor OpenAI
 
@@ -113,7 +160,7 @@ Referințe: [Responses API și stocarea răspunsurilor](https://developers.opena
 
 ## Limite și continuare
 
-Acesta este un MVP demonstrativ local cu mentor OpenAI și integrarea de bază Supabase configurate. Interfața de autentificare, autorizarea între profesori, schema și persistența fișelor în Supabase și documentele încărcate sunt etape următoare. Diagnosticul, planul, activitățile, exercițiile și sinteza din fișa de experiență rămân exemple pregătite; doar conversația mentorului generează răspunsuri noi prin OpenAI. Aprobarea fișei nu validează independent eficiența pedagogică. Designul urmează noua referință vizuală: verde petrol `#153F43`, lime `#D5ED8C`, verde pentru acțiuni secundare `#23675C`, fundal `#F4F7F5`, suprafețe `#FFFFFF` și text `#203D3E`. Stilurile comune sunt în `globals.css`, iar tema este în `theme.css`.
+Acesta este un MVP demonstrativ cu autentificare Supabase, trei roluri și mentor OpenAI. Schema și persistența fișelor în Supabase, gestionarea conturilor din interfață și documentele încărcate sunt etape următoare. Diagnosticul, planul, activitățile, exercițiile și sinteza din fișa de experiență rămân exemple pregătite; doar conversația mentorului generează răspunsuri noi prin OpenAI. Aprobarea fișei nu validează independent eficiența pedagogică. Designul urmează noua referință vizuală: verde petrol `#153F43`, lime `#D5ED8C`, verde pentru acțiuni secundare `#23675C`, fundal `#F4F7F5`, suprafețe `#FFFFFF` și text `#203D3E`. Stilurile comune sunt în `globals.css`, iar tema este în `theme.css`.
 
 Fontul Manrope se încarcă de la Google Fonts; dacă nu există acces la internet se folosește Segoe UI sau Arial. Răspunsurile reale ale mentorului necesită internet și un cont OpenAI cu acces API. Exemplele statice pot fi explorate și când apelul AI nu reușește.
 

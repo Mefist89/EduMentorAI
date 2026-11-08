@@ -1,6 +1,6 @@
 export type Locale = "ro" | "ru";
 export type View =
-  "dashboard" | "course" | "mentor" | "activities" | "experience";
+  "dashboard" | "course" | "mentor" | "activities" | "experience" | "trasee";
 export type PromptKey = "start" | "differentiate" | "verify" | "reflect";
 export type Difficulty = "basic" | "medium" | "advanced";
 export type Bilingual = { ro: string; ru: string };
@@ -12,6 +12,7 @@ export const navigation = [
   { id: "mentor", label: text("AI Mentor", "AI Mentor") },
   { id: "activities", label: text("Activități", "Задания") },
   { id: "experience", label: text("Experiența mea", "Мой опыт") },
+  { id: "trasee", label: text("Trasee", "Маршруты") },
 ] as const;
 
 export const steps = [

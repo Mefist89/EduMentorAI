@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { parseMentorRequest } from "@/lib/mentor-contract";
 import { generateMentorReply, MentorServiceError } from "@/lib/openai-mentor";
+import { getAccount } from "@/lib/auth";
+import { canUseMentor } from "@/lib/accounts";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -62,6 +64,17 @@ export async function POST(request: Request) {
 
   let active = false;
   try {
+    const account = await getAccount();
+    if (!account)
+      return NextResponse.json(
+        { error: { code: "unauthenticated" } },
+        { status: 401, headers },
+      );
+    if (!canUseMentor(account.role))
+      return NextResponse.json(
+        { error: { code: "forbidden" } },
+        { status: 403, headers },
+      );
     const input = parseMentorRequest(await readBody(request));
     if (!input) throw new MentorServiceError("invalid_request", 400);
     const now = Date.now();
@@ -69,7 +82,7 @@ export async function POST(request: Request) {
       quota.windowStart = now;
       quota.used = 0;
     }
-    // A process-wide budget bounds costs for the local account-free demo.
+    // A process-wide budget bounds costs across authenticated demo accounts.
     if (quota.used >= 20 || quota.active >= 2)
       return NextResponse.json(
         { error: { code: "rate_limited" } },
