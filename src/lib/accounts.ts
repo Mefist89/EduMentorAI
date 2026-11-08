@@ -18,6 +18,7 @@ export function loginEmail(value: unknown): string | null {
   const login = value.trim().toLowerCase();
   const aliases: Record<string, string> = {
     admin: "administrator",
+    admin1: "admin1",
     administrator: "administrator",
     profesor: "profesor",
     elev: "elev",
