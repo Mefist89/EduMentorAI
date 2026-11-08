@@ -6,7 +6,7 @@ import vm from "node:vm";
 import ts from "typescript";
 const require = createRequire(import.meta.url);
 const React = require("react"), { renderToStaticMarkup } = require("react-dom/server");
-const shared = { "react/jsx-runtime": require("react/jsx-runtime"), "lucide-react": require("lucide-react") };
+const shared = { react: React, "react/jsx-runtime": require("react/jsx-runtime"), "lucide-react": require("lucide-react") };
 function load(file, dependencies = {}) {
   const { outputText } = ts.transpileModule(readFileSync(new URL(`../${file}`, import.meta.url), "utf8"), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } });
   const module = { exports: {} };
@@ -18,7 +18,9 @@ function load(file, dependencies = {}) {
   return module.exports;
 }
 const demo = load("src/lib/demo.ts");
-const views = load("src/components/learning-navigation.tsx", { "@/lib/demo": demo, "./ui": load("src/components/ui.tsx") });
+const plan = load("src/lib/continuity-plan.ts");
+const annual = load("src/components/annual-continuity.tsx", { "@/lib/continuity-plan": plan });
+const views = load("src/components/learning-navigation.tsx", { "@/lib/demo": demo, "./ui": load("src/components/ui.tsx"), "./annual-continuity": annual });
 const continuity = (completed, student = false) => renderToStaticMarkup(React.createElement(views.ContinuityView, { locale: "ru", progress: { ...demo.initialProgress, completed }, student, go: () => {} }));
 
 test("five primary items retain Puntea, Expertiza and Trasee while grouping all learning routes", () => {
@@ -29,20 +31,32 @@ test("five primary items retain Puntea, Expertiza and Trasee while grouping all 
   assert.equal(new Set(all).size, demo.navigation.length);
   assert.ok(demo.navigation.every(item => all.includes(item.id)));
 });
-test("continuity renders the next unfinished step and accurately reports completed progress", () => {
-  for (const [completed, title, total] of [[[false, false, false], "Уточните цель", 0], [[true, false, false], "Адаптируйте задание", 1], [[true, true, false], "Примените и осмыслите", 2]]) {
-    const html = continuity(completed);
-    assert.match(html, new RegExp(`<h2>${title}</h2>`));
-    assert.match(html, new RegExp(`aria-valuenow="${total}"`));
-    assert.match(html, /Продолжить маршрут/);
+test("annual continuity stays within twelve months with 7-14-30 and quarterly review", () => {
+  assert.equal(plan.continuityYear.length,12);
+  assert.equal(JSON.stringify(plan.continuityYear.map(m=>m.month)),JSON.stringify(Array.from({length:12},(_,i)=>i+1)));
+  assert.equal(JSON.stringify(plan.continuityYear.filter(m=>m.review).map(m=>m.month)),JSON.stringify([3,6,9,12]));
+  assert.equal(JSON.stringify(plan.continuityMilestones.map(m=>m.day)),JSON.stringify([7,14,30]));
+  for(const locale of ["ro","ru"]) {
+    const html=renderToStaticMarkup(React.createElement(views.ContinuityView,{locale,progress:demo.initialProgress,student:false,go:()=>{}}));
+    assert.equal((html.match(/aria-pressed=/g)||[]).length,12);
+    assert.ok(html.includes(locale==="ro"?"Testarea cu profesori: în așteptare":"Тестирование с учителями: ожидается"));
+    assert.ok(html.includes(locale==="ro"?"Țintă propusă, nu rezultat":"Предлагаемая цель, не результат"));
+    assert.ok(html.includes("60%"));
+    assert.ok(html.includes(locale==="ro"?"transferuri manual":"вручную"));
+    assert.doesNotMatch(html,/aria-valuenow=|Luna 13|Месяц 13/);
   }
-  const finished = continuity([true, true, true]);
-  assert.match(finished, /Демомаршрут пройден/); assert.match(finished, /Вернуться к рефлексии/); assert.match(finished, /aria-valuenow="3"/);
 });
+
+test("old demo completion cannot turn the proposed annual pilot into completed results", () => {
+  const html=continuity([true,true,true]);
+  assert.match(html,/ПРЕДЛАГАЕМЫЙ ПЛАН/);
+  assert.doesNotMatch(html,/Демомаршрут пройден|Этап пройден/);
+});
+
 test("pupil continuation offers only course and exercises without teacher progress or reflection", () => {
   const html = continuity([true, true, true], true);
   assert.match(html, /Открыть курс/); assert.match(html, /Задания/);
-  assert.doesNotMatch(html, /role="progressbar"|Вернуться к рефлексии|Демомаршрут пройден/);
+  assert.doesNotMatch(html, /role="progressbar"|Вернуться к рефлексии|Демомаршрут пройден|M3|60%/);
 });
 test("Investigation hub renders only provided sections, in the submenu order", () => {
   const allowed = ["dashboard", "practices", "course", "activities", "cohorts"];

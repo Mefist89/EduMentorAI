@@ -194,3 +194,12 @@ Limite MVP: cel mult 100 de elevi per grup; selectarea conturilor deja existente
 - Verificare reală locală EduMentor: DOCX fictiv cu marker ИРИС-482 și lecție despre structura florii. Modelul a identificat exact markerul și tema din document; nicio copiere manuală a textului în întrebare.
 - Verificare reală locală AI Lori: TXT cu planul lecției, trimis fără text suplimentar; raport cu 9 criterii, fără erori. Vechiul DOCX din EduMentor nu apare în lista Lori. După eliminarea TXT, trimiterea fără text este din nou dezactivată.
 - Fără modificări în Supabase, chei noi, fișiere publice sau dependențe suplimentare. Fișierele de probă sunt în afara Git.
+
+
+## Continuitate M3 — plan pe un singur an, 08.11.2026
+
+- Înlocuită prezentarea celor trei etape demo pentru profesor/administrator cu planul propus M3 pe 12 luni, adaptat celor cinci capturi furnizate. Accesul elevului la curs și exerciții rămâne separat.
+- Prima lună: cerc de practică de 30 de zile, repere 7/14/30; apoi schimburi lunare și revizuiri în lunile 3, 6, 9 și 12. Ultima lună închide bilanțul anual. Nu este introdus un al doilea an.
+- Datele disting propunerea de rezultate: trei profesori invitați la proba de parcurs, testare în așteptare, țintă propusă 60%, număr de interviuri necunoscut. Vechiul progres demo nu produce rezultate fictive pentru noul pilot.
+- Rolurile, transferurile manuale M1/M2/M4/M5/M6, acordul autorului și anonimizarea sunt afișate explicit. Nu au fost create integrări automate, tabele sau participanți.
+- Verificate în browser: luna 12 și bilanțul, detaliile M5, navigarea către reflecție, RO/RU, 12 butoane de lună și lipsa depășirii orizontale la 390 px. Build reușit; 92 de teste trec.

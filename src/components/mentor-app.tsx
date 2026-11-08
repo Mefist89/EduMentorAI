@@ -359,7 +359,7 @@ export function MentorApp({ account }: { account: Account }) {
               <CircleHelp size={13} />
               {t(
                 view === "continuitate"
-                  ? "Traseu demonstrativ · Progres salvat în acest browser"
+                  ? student ? "Curs și exerciții" : "M3 · Plan propus pentru 12 luni · Transferuri manuale în pilot"
                   : view === "investigatie"
                     ? "Secțiunile spațiului de învățare"
                     : view === "cohorts"
@@ -374,7 +374,7 @@ export function MentorApp({ account }: { account: Account }) {
                       ? "Catalog de formare · Marcaje salvate în cont"
                       : "Date fictive · Salvare în acest browser",
                 view === "continuitate"
-                  ? "Демомаршрут · Прогресс сохранён в этом браузере"
+                  ? student ? "Курс и упражнения" : "M3 · Предлагаемый план на 12 месяцев · Ручные передачи в пилоте"
                   : view === "investigatie"
                     ? "Разделы учебного пространства"
                     : view === "cohorts"
