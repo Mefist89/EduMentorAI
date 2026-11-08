@@ -26,7 +26,7 @@ const descriptions = {
 } as const;
 export function InvestigationView({ locale, views, go, student }: { locale: Locale; views: readonly View[]; go: (view: View) => void; student: boolean }) {
   const t = (ro: string, ru: string) => locale === "ro" ? ro : ru;
-  return <section className="ln-page"><header className="ln-heading"><p className="eyebrow">{t("EXPLOREAZĂ · ÎNVAȚĂ · APLICĂ", "ИССЛЕДУЙТЕ · УЧИТЕСЬ · ПРИМЕНЯЙТЕ")}</p><h1 id="page-title" tabIndex={-1}>Investigație</h1><p>{t("Toate secțiunile de învățare, într-un singur loc. Alege unde continui.", "Все учебные разделы в одном месте. Выберите, куда перейти.")}</p></header><div className="ln-grid">{views.map(id => {
+  return <section className="ln-page"><header className="ln-heading"><p className="eyebrow">{t("EXPLOREAZĂ · ÎNVAȚĂ · APLICĂ", "ИССЛЕДУЙТЕ · УЧИТЕСЬ · ПРИМЕНЯЙТЕ")}</p><h1 id="page-title" tabIndex={-1}>{t("Investigație", "Исследование")}</h1><p>{t("Toate secțiunile de învățare, într-un singur loc. Alege unde continui.", "Все учебные разделы в одном месте. Выберите, куда перейти.")}</p></header><div className="ln-grid">{views.map(id => {
     const item = navigation.find(entry => entry.id === id)!;
     const description = descriptions[id as keyof typeof descriptions];
     return <button className="ln-card" key={id} onClick={() => go(id)}><BookOpen size={23} aria-hidden="true" /><h2>{student && id === "activities" ? t("Exerciții", "Задания") : item.label[locale]}</h2><p>{description?.[locale === "ro" ? 0 : 1]}</p><span>{t("Deschide secțiunea", "Открыть раздел")}<ArrowRight size={16} aria-hidden="true" /></span></button>;

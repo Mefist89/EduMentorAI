@@ -70,7 +70,7 @@ Pentru profesor și administrator, meniul principal are cinci puncte: ЭдуМо
 
 `/#continuitate` arată progresul demonstrativ existent al contului în browser și următoarea etapă neparcursă. Butonul de continuare deschide cursul, activitatea sau reflecția, în funcție de cele trei etape. După finalizare sunt disponibile revenirea la reflecție și repetarea etapelor, fără resetare automată. Nu introduce o stocare separată și nu înlocuiește progresul din paginile existente.
 
-Elevul are numai secțiunile permise rolului său: Prezentare, Practici, Curs, Exerciții și Cohorte în Investigație. Continuitate îi oferă acces la curs și exerciții, fără progresul celor trei etape specifice profesorului. Trasee, AI Mentor și Experiența mea își păstrează restricțiile existente. Pe mobil submeniul se afișează sub butoanele principale, fără suprapunerea lor. Denumirile Continuitate și Investigație sunt păstrate în ambele limbi, iar descrierile și conținutul sunt RO/RU.
+Elevul are numai secțiunile permise rolului său: Prezentare, Practici, Curs, Exerciții și Cohorte în Investigație. Continuitate îi oferă acces la curs și exerciții, fără progresul celor trei etape specifice profesorului. Trasee, AI Mentor și Experiența mea își păstrează restricțiile existente. Pe mobil submeniul se afișează sub butoanele principale, fără suprapunerea lor. Denumirea Continuitate este păstrată în ambele limbi; Investigație se afișează în rusă drept «Исследование». Descrierile și conținutul sunt RO/RU.
 
 ## Catalogul ЭдуМост
 

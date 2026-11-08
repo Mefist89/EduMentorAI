@@ -22,7 +22,7 @@ export const navigation = [
   { id: "expertiza", label: text("Expertiză", "Экспертиза") },
   { id: "continuitate", label: text("Continuitate", "Continuitate") },
   { id: "trasee", label: text("Trasee", "Маршруты") },
-  { id: "investigatie", label: text("Investigație", "Investigație") },
+  { id: "investigatie", label: text("Investigație", "Исследование") },
   { id: "dashboard", label: text("Prezentare", "Обзор") },
   { id: "practices", label: text("Practici pedagogice", "Практики") },
   { id: "course", label: text("Cursul meu", "Мой курс") },

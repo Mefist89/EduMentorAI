@@ -230,7 +230,7 @@ export function MentorApp({ account }: { account: Account }) {
                 <span>{item.label[locale]}</span>
                 {group && <ChevronDown className={`nav-disclosure${investigationOpen ? " is-open" : ""}`} aria-hidden="true" />}
               </button>
-              {group && investigationOpen && <div className="nav-submenu" id="investigation-menu" role="group" aria-label="Investigație">
+              {group && investigationOpen && <div className="nav-submenu" id="investigation-menu" role="group" aria-label={t("Investigație", "Исследование")}>
                 {investigationNavigation.map(child => {
                   const ChildIcon = navIcons[child.id];
                   return <button key={child.id} onClick={() => go(child.id)} aria-current={view === child.id ? "page" : undefined}><ChildIcon size={17} strokeWidth={1.7} aria-hidden="true" /><span>{student && child.id === "activities" ? t("Exerciții", "Задания") : child.label[locale]}</span></button>;
