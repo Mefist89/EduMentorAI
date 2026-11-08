@@ -66,7 +66,7 @@ export function CourseView({
         )}
       />
       <div className="course-banner">
-        <div className="course-symbol">x²</div>
+        <div className="course-symbol">x</div>
         <div>
           <Badge>
             {t("Matematică · Clasa a VII-a", "Математика · 7 класс")}
