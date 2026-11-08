@@ -18,6 +18,7 @@ import {
   categories,
   filterCatalog,
   initialFilters,
+  localizeEntry,
   timing,
   todayInBucharest,
   type CatalogEntry,
@@ -54,7 +55,7 @@ export function PunteaCatalog({ locale }: { locale: Locale }) {
             )}
           </p>
           <h1 id="page-title" tabIndex={-1}>
-            Puntea Edu · Catalog
+            {t("Puntea Edu · Catalog", "Puntea Edu · Каталог")}
           </h1>
           <p>
             {t(
@@ -103,7 +104,7 @@ export function PunteaCatalog({ locale }: { locale: Locale }) {
                 maxLength={160}
                 placeholder={t(
                   "Ex. matematică, STEAM, mentorat, granturi…",
-                  "Например: STEAM, matematică, INEL…",
+                  "Например: математика, наставничество, гранты…",
                 )}
                 type="search"
               />
@@ -198,7 +199,7 @@ export function PunteaCatalog({ locale }: { locale: Locale }) {
       <p className="pc-language-note">
         {t(
           "Textele fișelor păstrează limba sursei: română. Caută după titlu, domeniu sau organizator.",
-          "Тексты карточек сохранены на языке источника — румынском. Ищите по названию, теме или организатору.",
+          "Карточки переведены с румынского. Оригинальные источники доступны по ссылкам. Ищите по названию, теме или организатору.",
         )}
       </p>
       {results.length > 0 ? (
@@ -246,7 +247,7 @@ export function PunteaCatalog({ locale }: { locale: Locale }) {
 }
 
 function CatalogCard({
-  entry: e,
+  entry,
   locale,
   today,
 }: {
@@ -254,6 +255,7 @@ function CatalogCard({
   locale: Locale;
   today: string;
 }) {
+  const e = localizeEntry(entry, locale);
   const t = (ro: string, ru: string) => (locale === "ro" ? ro : ru),
     category = categories.find((c) => c.id === e.category)!,
     state = timing(e, today);
@@ -283,8 +285,8 @@ function CatalogCard({
         <span className="pc-category">{category[locale]}</span>
         <ExternalLink size={15} aria-hidden="true" />
       </div>
-      <h3 lang="ro">{e.title}</h3>
-      <p className="pc-provider" lang="ro">
+      <h3 lang={locale}>{e.title}</h3>
+      <p className="pc-provider" lang={locale}>
         {e.provider}
       </p>
       <p className={`pc-timing pc-timing-${state}`}>
@@ -298,33 +300,33 @@ function CatalogCard({
           )}
         </span>
       </p>
-      <p className="pc-summary" lang="ro">
+      <p className="pc-summary" lang={locale}>
         {e.summary}
       </p>
       <dl className="pc-details">
         {e.eligible && (
           <>
             <dt>{t("Cui se adresează", "Кто может участвовать")}</dt>
-            <dd lang="ro">{e.eligible}</dd>
+            <dd lang={locale}>{e.eligible}</dd>
           </>
         )}
         {e.when && (
           <>
             <dt>{t("Perioadă / dată", "Период / дата")}</dt>
-            <dd lang="ro">{e.when}</dd>
+            <dd lang={locale}>{e.when}</dd>
           </>
         )}
         {e.cost && (
           <>
             <dt>{t("Cost", "Стоимость")}</dt>
-            <dd lang="ro">{e.cost}</dd>
+            <dd lang={locale}>{e.cost}</dd>
           </>
         )}
       </dl>
       {e.next && (
         <div className="pc-next">
           <strong>{t("Următorul pas", "Следующий шаг")}</strong>
-          <p lang="ro">{e.next}</p>
+          <p lang={locale}>{e.next}</p>
         </div>
       )}
       <div className="pc-card-bottom">
@@ -358,7 +360,7 @@ function CatalogCard({
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    lang="ro"
+                    lang={locale}
                   >
                     {label}
                     <ArrowUpRight size={12} aria-hidden="true" />

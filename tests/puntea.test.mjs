@@ -38,8 +38,10 @@ function load(file, dependencies = {}) {
   );
   return module.exports;
 }
+const russianSnapshot = JSON.parse(readFileSync(new URL("../src/features/puntea/catalog.ru.json", import.meta.url), "utf8"));
 const api = load("src/features/puntea/catalog.ts", {
   "./catalog.json": snapshot,
+  "./catalog.ru.json": russianSnapshot,
 });
 const entry = (id) => api.catalog.find((e) => e.id === id);
 const search = (patch = {}, today = "2026-11-08") =>
@@ -131,5 +133,60 @@ test("Puntea Edu is the first workspace menu item without replacing the dashboar
   const demo = load("src/lib/demo.ts");
   assert.equal(demo.navigation[0].id, "puntea");
   assert.equal(demo.navigation[0].label.ro, "Puntea Edu · Catalog");
+  assert.equal(demo.navigation[0].label.ru, "Puntea Edu · Каталог");
   assert.ok(demo.navigation.some((item) => item.id === "dashboard"));
+});
+
+test("all 49 Russian cards preserve source identities, URLs, dates, audiences and factual numbers", () => {
+  const before = JSON.stringify(api.catalog);
+  assert.equal(Object.keys(api.russianTranslations).length, 49);
+  for (const original of api.catalog) {
+    assert.equal(api.localizeEntry(original, "ro"), original);
+    const ru = api.localizeEntry(original, "ru");
+    for (const key of ["id", "source", "category", "audience", "status", "checkedAt", "deadline", "event"])
+      assert.equal(JSON.stringify(ru[key]), JSON.stringify(original[key]), `${original.id}/${key}`);
+    for (const key of ["title", "provider", "summary", "eligible", "when", "cost", "next", "deadlineLabel"]) {
+      if (original[key] === undefined) assert.equal(ru[key], undefined);
+      else {
+        assert.ok(typeof ru[key] === "string" && ru[key].trim(), `${original.id}/${key}`);
+        const numbers = text => JSON.stringify(text.match(/\d+(?:[.:]\d+)*/g) ?? []);
+        assert.equal(numbers(ru[key]), numbers(original[key]), `${original.id}/${key}: factual numbers changed`);
+      }
+    }
+    assert.equal(ru.references.length, original.references.length);
+    ru.references.forEach(([label, href], index) => {
+      assert.equal(href, original.references[index][1]);
+      assert.ok(/[А-Яа-яЁё]/.test(label), `${original.id}: untranslated reference`);
+    });
+  }
+  assert.equal(JSON.stringify(api.catalog), before);
+  assert.match(api.localizeEntry(entry("busola-curriculara"), "ru").title, /Учебный компас/);
+});
+
+test("incomplete translations and attempts to replace source metadata are rejected", () => {
+  for (const change of [
+    data => delete data["phet-simulari"],
+    data => data["unknown-id"] = data["phet-simulari"],
+    data => data["phet-simulari"].summary = " ",
+    data => delete data["dor-de-traditii"].cost,
+    data => data["phet-simulari"].source = "https://example.com/changed",
+    data => data["phet-simulari"].deadline = "2099-01-01",
+    data => data["phet-simulari"].when = "Invented date",
+    data => data["busola-curriculara"].references = [],
+    data => data["busola-curriculara"].references = [""],
+  ]) {
+    const changed = structuredClone(russianSnapshot); change(changed);
+    assert.throws(() => api.validateTranslations(changed, api.catalog));
+  }
+});
+
+test("Russian and mixed-language searches find translated content and combine existing filters", () => {
+  assert.equal(search({ query: "PhET ФИЗИКА" })[0].id, "phet-simulari");
+  assert.equal(search({ query: "биология экосистемы" })[0].id, "biologie-viii-eduresurse");
+  assert.equal(search({ query: "школьных грантов", audience: "Școli", category: "finantari" })[0].id, "granturi-scolare");
+  assert.equal(search({ query: "школьных грантов", audience: "Profesori" }).length, 0);
+  assert.equal(search({ query: "брюссельское" })[0].id, "parteneri-etwinning");
+  assert.equal(JSON.stringify(search({ query: "КИШИНЕВ" }).map(e => e.id)), JSON.stringify(search({ query: "кишинёв" }).map(e => e.id)));
+  assert.ok(search({ query: "КИШИНЕВ" }).length > 0);
+  assert.equal(search({ query: "DigiProf", hidePast: true }).length, 0);
 });

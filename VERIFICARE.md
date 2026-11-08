@@ -121,6 +121,14 @@ Persistența acestui MVP folosește documente JSON în Storage privat, cu permis
 
 Datele sunt un snapshot informativ al fișierelor furnizate, nu confirmări în timp real ale înscrierilor. Conținutul sursei este în română, interfața de navigare și filtrare este bilingvă. Nu au fost necesare variabile de mediu sau politici Supabase suplimentare.
 
+### Traducerea rusă a catalogului
+
+- Adăugate traduceri pentru toate cele 49 de fișe în `catalog.ru.json`, inclusiv câmpurile opționale prezente în sursă și cele 14 etichete de referință. La alegerea RU se schimbă și titlul din meniu/antet în «Puntea Edu · Каталог», textele cardurilor și atributele `lang`. Versiunea RO folosește obiectele originale, fără modificări.
+- Traducerile sunt validate la încărcare: aceleași ID-uri, toate câmpurile existente traduse, fără câmpuri suplimentare care ar putea înlocui URL-uri ori date. Cardinalitatea referințelor este păstrată, iar URL-urile sunt preluate exclusiv din sursă.
+- Trei teste noi acoperă integritatea celor 49 de traduceri, păstrarea metadatelor, a numerelor factuale și a linkurilor, refuzul traducerilor incomplete sau al înlocuirii metadatelor, căutarea rusă/mixtă și filtrele. Căutările «PhET ФИЗИКА», «биология экосистемы», «школьных грантов» și «брюссельское» găsesc fișele corespunzătoare; «КИШИНЕВ» și «кишинёв» au rezultate identice. Filtrul de termene încheiate continuă să funcționeze.
+- Traducerea nu schimbă condițiile sursei, nu actualizează termenele și nu traduce paginile externe. Nu sunt necesare schimbări Supabase, variabile de mediu sau apeluri AI.
+- În browser: 49 de carduri și 49 de titluri/rezumate cu `lang="ru"`; căutarea «PhET физика» a găsit un singur card. Referința tradusă «Официальные учебные программы MEC» a păstrat URL-ul sursei. Trecerea pe RO a restabilit titlul original «Busola Curriculară», apoi RU a restabilit traducerea. La 320, 642 și 1440 px nu au existat carduri care depășesc lățimea sau derulare orizontală. Total: 75 de teste trecute și build de producție reușit.
+
 ## Publicarea și moderarea practicilor
 
 - Adăugat modulul `/#practices`, cu interfață RO/RU și încărcare separată. Biblioteca aprobată este disponibilă tuturor rolurilor; profesorul și administratorul pot crea ciorne și urmări propriile practici. Numai administratorul poate modera. Puntea Edu rămâne primul punct al meniului.

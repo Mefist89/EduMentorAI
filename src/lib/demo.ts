@@ -16,7 +16,7 @@ export type Bilingual = { ro: string; ru: string };
 export const text = (ro: string, ru: string): Bilingual => ({ ro, ru });
 
 export const navigation = [
-  { id: "puntea", label: text("Puntea Edu · Catalog", "Puntea Edu · Catalog") },
+  { id: "puntea", label: text("Puntea Edu · Catalog", "Puntea Edu · Каталог") },
   { id: "dashboard", label: text("Prezentare", "Обзор") },
   { id: "practices", label: text("Practici pedagogice", "Практики") },
   { id: "cohorts", label: text("Cohorte", "Когорты") },

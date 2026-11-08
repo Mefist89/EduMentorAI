@@ -1,4 +1,5 @@
 import snapshot from "./catalog.json";
+import russianSnapshot from "./catalog.ru.json";
 
 export const categories = [
   { id: "formari", ro: "Cursuri și formări", ru: "Курсы и обучение" },
@@ -127,6 +128,47 @@ export function validateCatalog(value: unknown): CatalogEntry[] {
   return data.entries as CatalogEntry[];
 }
 export const catalog = validateCatalog(snapshot);
+const translatedFields = ["title", "provider", "summary", "eligible", "when", "cost", "next", "keywords", "deadlineLabel"] as const;
+type TranslatedField = (typeof translatedFields)[number];
+export type CatalogTranslation = Partial<Record<TranslatedField, string>> & {
+  title: string;
+  provider: string;
+  summary: string;
+  keywords: string;
+  references: string[];
+};
+const kindsRu: Record<string, string> = {
+  Concurs: "Конкурс", Program: "Программа", Formare: "Обучение",
+  Comunitate: "Сообщество", Mentorat: "Наставничество", Finanțare: "Финансирование",
+  Plan: "План", Resursă: "Ресурс", Telegram: "Telegram",
+};
+export function validateTranslations(value: unknown, entries: CatalogEntry[]): Record<string, CatalogTranslation> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Invalid catalog translations.");
+  const rows = value as Record<string, CatalogTranslation>;
+  const allowed = new Set<string>([...translatedFields, "references"]);
+  if (Object.keys(rows).length !== entries.length || Object.keys(rows).some(id => !entries.some(e => e.id === id))) throw new Error("Translation identities do not match the catalog.");
+  for (const e of entries) {
+    const row = rows[e.id];
+    if (!row || typeof row !== "object" || Array.isArray(row) || Object.keys(row).some(key => !allowed.has(key)) || !Object.hasOwn(kindsRu, e.kind)) throw new Error("Invalid catalog translation fields.");
+    for (const field of translatedFields) {
+      if (e[field] === undefined ? row[field] !== undefined : typeof row[field] !== "string" || !row[field]!.trim()) throw new Error(`Incomplete translation: ${e.id}/${field}`);
+    }
+    if (!Array.isArray(row.references) || row.references.length !== e.references.length || !row.references.every(label => typeof label === "string" && label.trim())) throw new Error("Invalid translated reference labels.");
+  }
+  return rows;
+}
+export const russianTranslations = validateTranslations(russianSnapshot, catalog);
+export function localizeEntry(entry: CatalogEntry, locale: "ro" | "ru"): CatalogEntry {
+  if (locale === "ro") return entry;
+  const text = russianTranslations[entry.id];
+  if (!text) throw new Error("Missing catalog translation.");
+  return {
+    ...entry,
+    ...text,
+    kind: kindsRu[entry.kind],
+    references: entry.references.map(([, href], index): [string, string] => [text.references[index], href]),
+  };
+}
 export function fold(value: string) {
   return value
     .normalize("NFD")
@@ -190,6 +232,8 @@ export function filterCatalog(
         e.next,
         e.keywords,
         e.kind,
+        ...Object.values(russianTranslations[e.id] ?? {}).flat(),
+        kindsRu[e.kind],
         category.ro,
         category.ru,
         ...e.audience.flatMap((a) => {
