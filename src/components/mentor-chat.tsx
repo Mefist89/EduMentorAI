@@ -16,16 +16,21 @@ import { prompts, type Locale, type PromptKey, type View } from "@/lib/demo";
 import {
   MAX_HISTORY_TURNS,
   MAX_QUESTION_LENGTH,
+  MAX_LESSON_LENGTH,
+  type MentorMode,
   mentorQuestionText,
   parseMentorReply,
   type MentorAnswer,
   type MentorErrorCode,
   type MentorQuestion,
 } from "@/lib/mentor-contract";
+import { LORI_CRITERIA } from "@/lib/lori-rubric";
+import { LoriAnalysis } from "./lori-report";
 import { Action, Badge, Heading } from "./ui";
 
 type Turn = MentorQuestion & {
   id: string;
+  mode: MentorMode;
   locale: Locale;
   status: "loading" | "done" | "error";
   reply?: MentorAnswer;
@@ -43,8 +48,8 @@ const errors: Record<MentorErrorCode, { ro: string; ru: string }> = {
     ru: "У этого аккаунта нет доступа к наставнику для учителей.",
   },
   not_configured: {
-    ro: "Mentorul nu este conectat momentan. Poți explora răspunsul exemplu.",
-    ru: "Наставник пока не подключён. Вы можете посмотреть пример ответа.",
+    ro: "Asistentul nu este conectat momentan. Reîncearcă mai târziu.",
+    ru: "Помощник пока не подключён. Попробуйте позже.",
   },
   invalid_request: {
     ro: "Întrebarea nu a putut fi trimisă. Reia conversația și încearcă din nou.",
@@ -55,24 +60,24 @@ const errors: Record<MentorErrorCode, { ro: string; ru: string }> = {
     ru: "Сейчас слишком много запросов. Попробуйте снова через минуту.",
   },
   quota_exceeded: {
-    ro: "Serviciul AI nu poate genera un răspuns momentan. Poți vedea răspunsul exemplu.",
-    ru: "AI пока не может создать ответ. Вы можете посмотреть готовый пример.",
+    ro: "Serviciul AI nu poate genera un răspuns momentan. Reîncearcă mai târziu.",
+    ru: "AI пока не может создать ответ. Попробуйте позже.",
   },
   provider_auth: {
-    ro: "Conexiunea cu mentorul nu este disponibilă momentan. Poți vedea un răspuns exemplu.",
-    ru: "Соединение с наставником пока недоступно. Вы можете посмотреть пример ответа.",
+    ro: "Conexiunea cu asistentul nu este disponibilă momentan.",
+    ru: "Соединение с помощником пока недоступно.",
   },
   unavailable: {
-    ro: "Mentorul nu a putut răspunde. Reîncearcă sau explorează răspunsul exemplu.",
-    ru: "Наставник не смог ответить. Повторите попытку или посмотрите пример.",
+    ro: "Asistentul nu a putut răspunde. Reîncearcă.",
+    ru: "Помощник не смог ответить. Повторите попытку.",
   },
   timeout: {
     ro: "Răspunsul durează mai mult decât era de așteptat. Poți reîncerca.",
     ru: "Ответ занимает больше времени, чем ожидалось. Попробуйте снова.",
   },
   invalid_response: {
-    ro: "Răspunsul nu a putut fi afișat corect. Reîncearcă sau vezi exemplul pregătit.",
-    ru: "Не удалось корректно показать ответ. Повторите попытку или откройте готовый пример.",
+    ro: "Răspunsul nu a putut fi afișat corect. Reîncearcă.",
+    ru: "Не удалось корректно показать ответ. Повторите попытку.",
   },
   refused: {
     ro: "Mentorul nu a generat un răspuns pentru această solicitare. Alege o altă întrebare.",
@@ -89,7 +94,13 @@ export function MentorChat({
 }) {
   const [conversation, setConversation] = useState<Turn[]>([]);
   const [busy, setBusy] = useState(false);
-  const [draft, setDraft] = useState("");
+  const [mode, setMode] = useState<MentorMode>("mentor");
+  const [drafts, setDrafts] = useState({ mentor: "", lori: "" });
+  const draft = drafts[mode];
+  const setDraft = (value: string) => setDrafts(previous => ({ ...previous, [mode]: value }));
+  const lori = mode === "lori";
+  const questionLimit = lori ? MAX_LESSON_LENGTH : MAX_QUESTION_LENGTH;
+  const visibleConversation = conversation.filter(turn => turn.mode === mode);
   const controllerRef = useRef<AbortController | null>(null);
   const t = (ro: string, ru: string) => (locale === "ro" ? ro : ru);
 
@@ -118,7 +129,7 @@ export function MentorChat({
     const history = context
       .filter(
         (turn) =>
-          turn.status === "done" && turn.provider === "openai" && turn.reply,
+          turn.mode === mode && turn.status === "done" && turn.provider === "openai" && turn.reply,
       )
       .slice(-MAX_HISTORY_TURNS)
       .map((turn) => ({
@@ -137,7 +148,7 @@ export function MentorChat({
           )
         : [
             ...previous,
-            { ...question, id, locale: turnLocale, status: "loading" },
+            { ...question, id, mode, locale: turnLocale, status: "loading" },
           ],
     );
 
@@ -145,7 +156,7 @@ export function MentorChat({
       const response = await fetch("/api/mentor/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...question, locale: turnLocale, history }),
+        body: JSON.stringify({ ...question, mode, locale: turnLocale, history }),
         signal: controller.signal,
       });
       const data: unknown = await response.json();
@@ -154,7 +165,7 @@ export function MentorChat({
         window.location.assign("/login");
         return;
       }
-      const reply = response.ok ? parseMentorReply(data) : null;
+      const reply = response.ok ? parseMentorReply(data, mode) : null;
       if (!reply) {
         const code =
           typeof data === "object" &&
@@ -223,7 +234,7 @@ export function MentorChat({
     controllerRef.current?.abort();
     controllerRef.current = null;
     setBusy(false);
-    setConversation([]);
+    setConversation(previous => previous.filter(turn => turn.mode !== mode));
     setDraft("");
   }
 
@@ -231,11 +242,11 @@ export function MentorChat({
     <>
       <Heading
         eyebrow={t("AI MENTOR", "AI-НАСТАВНИК")}
-        title={t(
+        title={lori ? t("Lecția ta, privită prin LORI.", "Ваш урок через критерии LORI.") : t(
           "Un spațiu pentru întrebările tale.",
           "Место для ваших вопросов.",
         )}
-        description={t(
+        description={lori ? t("Introdu planul lecției pentru o analiză structurată după manualul LORI 1.5.", "Вставьте план урока для анализа по руководству LORI 1.5.") : t(
           "Scrie întrebarea ta sau alege un exemplu. Mentorul te ajută să aplici ideile la clasă.",
           "Напишите свой вопрос или выберите пример. Наставник поможет применить идеи на занятиях.",
         )}
@@ -257,14 +268,15 @@ export function MentorChat({
               <Sparkles size={21} />
             </span>
             <div>
-              <h2>EduMentor</h2>
+              <h2>{lori ? "AI Lori" : "EduMentor"}</h2>
               <span className="muted small">
-                {t(
+                {lori ? t("Analiza lecției · LORI 1.5", "Анализ урока · LORI 1.5") : t(
                   "Ecuații de gradul I · Material demonstrativ",
                   "Линейные уравнения · Демоматериал",
                 )}
               </span>
             </div>
+            <label className="mentor-mode-switch"><span>{t("Asistent", "Помощник")}</span><select aria-label={t("Alege asistentul AI", "Выберите AI-помощника")} value={mode} disabled={busy} onChange={event => setMode(event.target.value as MentorMode)}><option value="mentor">EduMentor</option><option value="lori">AI Lori</option></select></label>
             <span className="mode-dot" aria-hidden="true" />
           </div>
           <div
@@ -275,16 +287,16 @@ export function MentorChat({
             <div className="chat-message assistant">
               <span className="message-label">
                 <Sparkles size={13} />
-                {t("Mentor · bun venit", "Наставник · приветствие")}
+                {lori ? "AI Lori · LORI 1.5" : t("Mentor · bun venit", "Наставник · приветствие")}
               </span>
               <p>
-                {t(
+                {lori ? t("Descrie lecția sau lipește planul: clasa, tema, obiectivele, etapele, materialele și evaluarea. Voi analiza cele 9 criterii LORI și voi indica ce informații lipsesc. Manualul LORI este baza criteriilor, nu lecția evaluată.", "Опишите урок или вставьте план: класс, тему, цели, этапы, материалы и оценивание. Я разберу 9 критериев LORI и отмечу, каких данных не хватает. Руководство LORI задаёт критерии, а не заменяет описание вашего урока.") : t(
                   "Bun venit! Hai să transformăm materialul despre ecuații într-o activitate potrivită clasei tale. Scrie întrebarea ta mai jos sau pornește de la un exemplu.",
                   "Добро пожаловать! Давайте превратим материал об уравнениях в задание для вашего класса. Напишите свой вопрос ниже или начните с примера.",
                 )}
               </p>
             </div>
-            {conversation.map((turn) => (
+            {visibleConversation.map((turn) => (
               <div className="chat-turn" key={turn.id}>
                 <div className="chat-message user">
                   <span className="message-label">
@@ -303,7 +315,7 @@ export function MentorChat({
                           "Mentor · exemplu static",
                           "Наставник · готовый пример",
                         )
-                      : t("Mentor · OpenAI", "Наставник · OpenAI")}
+                      : lori ? "AI Lori · OpenAI" : t("Mentor · OpenAI", "Наставник · OpenAI")}
                   </span>
                   {turn.status === "loading" && (
                     <p className="chat-loading">
@@ -346,7 +358,8 @@ export function MentorChat({
                   {turn.status === "done" && turn.reply && (
                     <>
                       <p className="ai-answer">{turn.reply.answer}</p>
-                      {turn.reply.sourceSections.length ? (
+                      {turn.reply.loriReport && <LoriAnalysis report={turn.reply.loriReport} locale={turn.locale} />}
+                      {lori ? null : turn.reply.sourceSections.length ? (
                         <div className="source-links">
                           {turn.reply.sourceSections.map((section) => (
                             <button
@@ -382,32 +395,33 @@ export function MentorChat({
               onSubmit={(event) => {
                 event.preventDefault();
                 const question = draft.trim();
-                if (!question || question.length > MAX_QUESTION_LENGTH || controllerRef.current) return;
+                if (!question || question.length > questionLimit || controllerRef.current) return;
                 setDraft("");
                 void ask({ question });
               }}
             >
-              <label htmlFor="mentor-question">{t("Întrebarea ta", "Ваш вопрос")}</label>
+              <label htmlFor="mentor-question">{lori ? t("Planul sau descrierea lecției", "План или описание урока") : t("Întrebarea ta", "Ваш вопрос")}</label>
               <div className="mentor-composer-row">
-                <input
+                {lori ? <textarea id="mentor-question" value={draft} onChange={event => setDraft(event.target.value)} maxLength={questionLimit} rows={7} placeholder={t("Clasa, tema, obiectivele, etapele, materialele, evaluarea și accesibilitatea…", "Класс, тема, цели, этапы, материалы, оценивание и доступность…")} aria-describedby="mentor-question-hint" /> : <input
                   id="mentor-question"
                   type="text"
                   value={draft}
                   onChange={(event) => setDraft(event.target.value)}
-                  maxLength={MAX_QUESTION_LENGTH}
+                  maxLength={questionLimit}
                   placeholder={t("Scrie ce vrei să întrebi mentorul…", "Напишите вопрос наставнику…")}
                   aria-describedby="mentor-question-hint"
-                />
+                />}
                 <button type="submit" disabled={busy || !draft.trim()}>
                   {busy ? <LoaderCircle size={17} className="spinner" aria-hidden="true" /> : <Send size={17} aria-hidden="true" />}
-                  {t("Trimite", "Отправить")}
+                  {lori ? t("Analizează lecția", "Анализировать урок") : t("Trimite", "Отправить")}
                 </button>
               </div>
               <p id="mentor-question-hint" className="mentor-composer-hint">
-                <span>{t("Enter pentru a trimite", "Enter — отправить")}</span>
-                <span>{draft.length}/{MAX_QUESTION_LENGTH}</span>
+                <span>{lori ? t("Lipiți planul, apoi apăsați «Analizează lecția»", "Вставьте план и нажмите «Анализировать урок»") : t("Enter pentru a trimite", "Enter — отправить")}</span>
+                <span>{draft.length}/{questionLimit}</span>
               </p>
             </form>
+            {!lori && <>
             <span className="eyebrow">
               {t("ÎNCEARCĂ O ÎNTREBARE", "ПОПРОБУЙТЕ ВОПРОС")}
             </span>
@@ -424,14 +438,15 @@ export function MentorChat({
                 </button>
               ))}
             </div>
+            </>}
             <p className="footnote">
               <ShieldCheck size={13} />
-              {t(
+              {lori ? t("Descrierea lecției și criteriile LORI sunt trimise către OpenAI pentru analiză. Verifică recomandările înainte de aplicare.", "Описание урока и критерии LORI отправляются в OpenAI для анализа. Проверьте рекомендации перед применением.") : t(
                 "Întrebarea și contextul demonstrativ sunt trimise către OpenAI. Verifică răspunsul înainte de folosire.",
                 "Вопрос и демонстрационный контекст отправляются в OpenAI. Проверьте ответ перед использованием.",
               )}
             </p>
-            {conversation.length > 0 && (
+            {visibleConversation.length > 0 && (
               <button className="text-button" onClick={reset}>
                 <RotateCcw size={13} />
                 {t("Reia conversația", "Начать заново")}
@@ -440,6 +455,8 @@ export function MentorChat({
           </div>
         </section>
         <aside className="stack">
+          {lori ? <section className="panel lori-guide"><h2>{t("Analiză după LORI 1.5", "Анализ по LORI 1.5")}</h2><p className="muted">{t("Instrument pentru resurse educaționale, adaptat aici la planul lecției. Evaluăm ce descrii, fără a presupune ce s-a întâmplat la clasă.", "Инструмент оценки учебных ресурсов, здесь адаптированный для плана урока. Анализируем описание, не предполагая, что происходило в классе.")}</p><ol>{LORI_CRITERIA.map(c => <li key={c.id}>{c[locale]}</li>)}</ol><p className="muted">{t("Scală: 1–5. Fără dovezi: date insuficiente; criteriu nerelevant: nu se aplică.", "Шкала: 1–5. Нет доказательств — недостаточно данных; нерелевантный критерий — не применимо.")}</p><small>LORI User Manual v1.5 · Nesbit, Belfer, Leacock</small></section> : <>
+
           <section className="panel">
             <span className="icon-box">
               <Lightbulb size={21} />
@@ -470,6 +487,7 @@ export function MentorChat({
               {t("Explorează activitățile", "Изучить задания")}
             </Action>
           </section>
+          </>}
         </aside>
       </div>
     </>

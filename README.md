@@ -238,3 +238,11 @@ Acesta este un MVP pentru exemple: fluxul citește cele mai recente 200 de docum
 ### Actualizare Trasee — 8 noiembrie 2026
 
 Versiunea nouă `consilier-formare (1)` aduce designul cu hartă de transport: 4 linii de competențe și 8 centre, calendarul edițiilor în carduri, harta termică și suprapuneri calendaristice pentru coordonator. API-ul de rețea construiește harta din catalogul privat Supabase; aceeași autentificare și aceleași marcaje individuale se păstrează. Catalogul noii surse este identic cu cel existent (124 de cursuri), verificat și față de Storage; nu necesită reimport sau modificări de schemă. Nu se importă serverul PostgreSQL/Gemini ori API-ul demonstrativ al sursei.
+
+### AI Lori — analiza lecției după LORI
+
+În antetul chatului AI Mentor se poate selecta **EduMentor** sau **AI Lori**. Dialogurile și ciornele sunt separate, păstrate în memorie numai cât este deschis modulul. Lori primește planul introdus de profesor (maximum 12.000 de caractere) și o rubrică parafrazată din PDF-ul furnizat `slidsahre-file.pdf`: *Learning Object Review Instrument, User Manual v1.5*, John Nesbit, Karen Belfer, Tracey Leacock. Documentul are 12 pagini scanate; criteriile au fost citite vizual, nu extrase dintr-un strat text absent. SHA-256 al sursei: `68217ce114051ed6734e0201cc0fe70d9c6f11c17688b8085cdf1d3409ea393c`.
+
+Rubrica (`src/lib/lori-rubric.ts`) conține cele nouă criterii, cu paginile originale 3–11. Se păstrează scala 1–5; aplicația distinge între date insuficiente și criteriu neaplicabil, ambele fără notă, ca elaborare a opțiunii NA din manual. Folosirea LORI pentru planul unei lecții este o adaptare a instrumentului pentru resurse educaționale, nu certificare sau observație a unui curs efectiv predat. Nu se calculează o medie fără dovezi.
+
+Răspunsul structurat conține un rezumat și nouă aprecieri cu dovezi și îmbunătățiri. Serverul respinge criterii lipsă/duplicate, scoruri nevalide și referințe inventate la cursul demonstrativ. Lori nu primește materialul fictiv despre ecuații sau profilul demo. OpenAI folosește aceeași cheie server, `store: false`, timeout 30 s și maximum 4500 tokeni de ieșire. PDF-ul complet nu este publicat și nu este trimis repetat modelului; doar rubrica verificată și textul introdus sunt folosite. Nicio modificare Supabase sau variabilă nouă nu este necesară.

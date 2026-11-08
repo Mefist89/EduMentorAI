@@ -44,7 +44,8 @@ function load(path, dependencies = {}, globals = {}) {
 }
 const demo = load("src/lib/demo.ts");
 const accounts = load("src/lib/accounts.ts");
-const contract = load("src/lib/mentor-contract.ts", { "./demo": demo });
+const lori = load("src/lib/lori-rubric.ts");
+const contract = load("src/lib/mentor-contract.ts", { "./demo": demo, "./lori-rubric": lori });
 const normalized = (value) => JSON.parse(JSON.stringify(value));
 const validRequest = { promptKey: "start", locale: "ro", history: [] };
 
@@ -69,6 +70,7 @@ function service(handler, env) {
       openai: Client,
       "./demo": demo,
       "./mentor-contract": contract,
+      "./lori-rubric": lori,
     },
     env ? { process: { env } } : {},
   );
@@ -336,7 +338,7 @@ test("invalid, oversized and cross-origin requests are rejected without generati
     400,
   );
   assert.equal(
-    (await api.POST(request({ long: "x".repeat(64001) }))).status,
+    (await api.POST(request({ long: "x".repeat(320001) }))).status,
     413,
   );
   assert.equal(
@@ -450,4 +452,56 @@ test("concurrent requests are bounded and slots are released when replies finish
   unblock();
   await Promise.all([first, second]);
   assert.equal((await api.POST(request())).status, 200);
+});
+
+
+const loriReport = () => ({ criteria: lori.LORI_CRITERIA.map(c => ({ criterion: c.id, status: "insufficient_data", score: null, evidence: "Нет данных об этом аспекте урока.", improvement: "Добавьте описание этого аспекта." })) });
+
+test("Lori accepts bounded lesson plans while rejecting unknown modes and course prompt shortcuts", () => {
+  const lesson = {mode:"lori",locale:"ru",question:"x".repeat(12000),history:[]};
+  assert.equal(contract.parseMentorRequest(lesson).question.length,12000);
+  assert.equal(contract.parseMentorRequest({...lesson,question:"x".repeat(12001)}),null);
+  assert.equal(contract.parseMentorRequest({...lesson,mode:"mentor"}),null);
+  assert.equal(contract.parseMentorRequest({...lesson,mode:"other"}),null);
+  assert.equal(contract.parseMentorRequest({mode:"lori",locale:"ru",promptKey:"start"}),null);
+});
+
+test("LORI validates all nine unique criteria, score bounds and reasons for missing evidence", () => {
+  assert.ok(lori.parseLoriReport(loriReport()));
+  const missing=loriReport(); missing.criteria.pop(); assert.equal(lori.parseLoriReport(missing),null);
+  const duplicate=loriReport(); duplicate.criteria[8]=duplicate.criteria[0]; assert.equal(lori.parseLoriReport(duplicate),null);
+  for(const score of [0,6,2.5,"3",null]) {
+    const invalid=loriReport();invalid.criteria[0]={...invalid.criteria[0],status:"assessed",score}; assert.equal(lori.parseLoriReport(invalid),null);
+  }
+  const fabricated=loriReport();fabricated.criteria[0].score=1;assert.equal(lori.parseLoriReport(fabricated),null);
+  const valid=loriReport();valid.criteria[0]={...valid.criteria[0],status:"assessed",score:4};valid.criteria[8].status="not_applicable";assert.ok(lori.parseLoriReport(valid));
+});
+
+test("Lori receives only the lesson, verified rubric and its own history without the fictional course", async () => {
+  const generator=service(async input => {
+    assert.ok(input.instructions.includes("User Manual version 1.5"));
+    assert.ok(input.instructions.includes("insufficient_data"));
+    assert.ok(input.instructions.includes("not_applicable"));
+    assert.ok(!input.instructions.includes("TEACHER PROFILE"));
+    assert.ok(!input.instructions.includes("2x + 3 = 11"));
+    for(const c of lori.LORI_CRITERIA) assert.ok(input.instructions.includes(c.id));
+    assert.equal(input.input.at(-1).content,"Урок биологии: фотосинтез");
+    assert.equal(input.store,false);
+    assert.equal(input.text.format.schema.properties.loriReport.properties.criteria.minItems,9);
+    return {...completed(),output_text:JSON.stringify({answer:"Нужны этапы и цели урока.",sourceSections:[],loriReport:loriReport()})};
+  });
+  const result=await generator.generateMentorReply({mode:"lori",locale:"ru",question:"Урок биологии: фотосинтез",history:[]});
+  assert.equal(result.mode,"lori");assert.equal(result.loriReport.criteria.length,9);
+  assert.ok(contract.parseMentorReply(result,"lori"));
+  assert.equal(contract.parseMentorReply(result,"mentor"),null);
+});
+
+test("Lori rejects reports with invented course references or missing rubric rows", async () => {
+  for(const body of [
+    {answer:"Report",sourceSections:[1],loriReport:loriReport()},
+    {answer:"Report",sourceSections:[],loriReport:{criteria:[]}},
+  ]) {
+    const generator=service(async()=>({...completed(),output_text:JSON.stringify(body)}));
+    await assert.rejects(generator.generateMentorReply({mode:"lori",locale:"ru",question:"План урока",history:[]}),error=>error.code==="invalid_response");
+  }
 });

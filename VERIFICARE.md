@@ -178,3 +178,11 @@ Limite MVP: cel mult 100 de elevi per grup; selectarea conturilor deja existente
 - Reîncercarea păstrează textul întrebării. Pentru întrebările proprii nu se afișează răspunsuri statice inventate.
 - Verificat în browser: întrebare manuală despre `3x + 6 = 18`, trimitere prin Enter, răspuns real OpenAI cu `x = 4`; întrebare de continuare trimisă prin buton, răspuns relevant; input și buton fără depășirea lățimii la 390 px.
 - Build de producție reușit; toate cele 85 de teste trec, inclusiv validarea textului, istoricul mixt și transmiterea mesajelor proprii către model.
+
+
+## AI Lori — 08.11.2026
+
+- Manual LORI v1.5: toate cele 12 pagini randate și inspectate vizual; parafrază a celor 9 criterii cu paginile 3–11, cu sursa și limita adaptării afișate în interfață.
+- Comutator în antet EduMentor / AI Lori. Verificat că ciorna EduMentor rămâne când se revine din Lori; dialogurile nu se combină în contextul modelului.
+- Test real local: plan fictiv de biologie, clasa VII, fotosinteză; răspuns OpenAI cu toate cele nouă criterii, note justificate, recomandări și lipsa datelor pentru standardele tehnice. Fără trimiteri la cursul fictiv despre ecuații.
+- Validarea modului, lungimea planului, integritatea rubricii, scala 1–5 / null și izolarea contextului sunt acoperite de teste. Build reușit; 89 de teste trec.

@@ -1,8 +1,11 @@
 import { prompts, type Locale, type PromptKey } from "./demo";
+import { parseLoriReport, type LoriReport } from "./lori-rubric";
 
 export const MAX_HISTORY_TURNS = 4;
 export const MAX_ANSWER_LENGTH = 4000;
 export const MAX_QUESTION_LENGTH = 2000;
+export const MAX_LESSON_LENGTH = 12000;
+export type MentorMode = "mentor" | "lori";
 
 export type MentorQuestion =
   | { promptKey: PromptKey; question?: never }
@@ -13,11 +16,12 @@ export type MentorHistoryTurn = MentorQuestion & {
   answer: string;
 };
 export type MentorRequest = MentorQuestion & {
+  mode?: MentorMode;
   locale: Locale;
   history: MentorHistoryTurn[];
 };
-export type MentorAnswer = { answer: string; sourceSections: number[] };
-export type MentorReply = MentorAnswer & { provider: "openai"; model: string };
+export type MentorAnswer = { answer: string; sourceSections: number[]; loriReport?: LoriReport };
+export type MentorReply = MentorAnswer & { provider: "openai"; model: string; mode?: MentorMode };
 export type MentorErrorCode =
   | "unauthenticated"
   | "forbidden"
@@ -39,13 +43,13 @@ export function isPromptKey(value: unknown): value is PromptKey {
   return typeof value === "string" && Object.hasOwn(prompts, value);
 }
 
-function parseQuestion(value: Record<string, unknown>): MentorQuestion | null {
+function parseQuestion(value: Record<string, unknown>, limit = MAX_QUESTION_LENGTH): MentorQuestion | null {
   if (value.question !== undefined) {
     if (
       value.promptKey !== undefined ||
       typeof value.question !== "string" ||
       !value.question.trim() ||
-      value.question.length > MAX_QUESTION_LENGTH
+      value.question.length > limit
     ) return null;
     return { question: value.question.trim() };
   }
@@ -62,8 +66,11 @@ export function parseMentorRequest(value: unknown): MentorRequest | null {
     (value.locale !== "ro" && value.locale !== "ru")
   )
     return null;
-  const question = parseQuestion(value);
+  const mode = value.mode === undefined ? "mentor" : value.mode;
+  if (mode !== "mentor" && mode !== "lori") return null;
+  const question = parseQuestion(value, mode === "lori" ? MAX_LESSON_LENGTH : MAX_QUESTION_LENGTH);
   if (!question) return null;
+  if (mode === "lori" && question.promptKey) return null;
   const history = value.history ?? [];
   if (!Array.isArray(history) || history.length > MAX_HISTORY_TURNS)
     return null;
@@ -77,8 +84,9 @@ export function parseMentorRequest(value: unknown): MentorRequest | null {
       turn.answer.length > MAX_ANSWER_LENGTH
     )
       return null;
-    const priorQuestion = parseQuestion(turn);
+    const priorQuestion = parseQuestion(turn, mode === "lori" ? MAX_LESSON_LENGTH : MAX_QUESTION_LENGTH);
     if (!priorQuestion) return null;
+    if (mode === "lori" && priorQuestion.promptKey) return null;
     parsedHistory.push({
       ...priorQuestion,
       locale: turn.locale,
@@ -87,6 +95,7 @@ export function parseMentorRequest(value: unknown): MentorRequest | null {
   }
   return {
     ...question,
+    ...(value.mode !== undefined ? { mode } : {}),
     locale: value.locale,
     history: parsedHistory,
   };
@@ -111,14 +120,20 @@ export function parseMentorAnswer(value: unknown): MentorAnswer | null {
   };
 }
 
-export function parseMentorReply(value: unknown): MentorReply | null {
+export function parseMentorReply(value: unknown, mode: MentorMode = "mentor"): MentorReply | null {
   const answer = parseMentorAnswer(value);
   if (
     !answer ||
     !isRecord(value) ||
     value.provider !== "openai" ||
-    typeof value.model !== "string"
+    typeof value.model !== "string" ||
+    (value.mode ?? "mentor") !== mode
   )
     return null;
+  if (mode === "lori") {
+    const report = parseLoriReport(value.loriReport);
+    if (!report || answer.sourceSections.length) return null;
+    return { ...answer, loriReport: report, provider: "openai", model: value.model, mode };
+  }
   return { ...answer, provider: "openai", model: value.model };
 }

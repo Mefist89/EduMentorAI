@@ -1095,3 +1095,23 @@
 .app-shell .mentor-composer-hint { display: flex; justify-content: space-between; gap: 12px; margin: 8px 0 0; font-size: 11px; color: #61756f; }
 .app-shell .chat-message.user p { white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 540px) { .app-shell .mentor-composer-row { flex-direction: column; } .app-shell .mentor-composer-row button { min-height: 44px; } }
+.app-shell .mentor-mode-switch { display: flex; flex-direction: column; gap: 4px; margin-left: auto; flex-shrink: 0; font-size: 10px; color: #61756f; }
+.app-shell .mentor-mode-switch select { font: inherit; font-size: 13px; font-weight: 750; color: #203d3e; border: 1px solid #cddbd2; border-radius: 9px; padding: 8px 28px 8px 10px; background: #fff; min-height: 40px; }
+.app-shell .mentor-composer-row:has(textarea) { flex-direction: column; }
+.app-shell .mentor-composer-row textarea { width: 100%; min-width: 0; min-height: 170px; resize: vertical; border: 1px solid #cddbd2; border-radius: 12px; padding: 13px 15px; font: inherit; font-size: 14px; color: #203d3e; background: #fff; line-height: 1.6; }
+.app-shell .mentor-composer-row textarea:focus-visible, .app-shell .mentor-mode-switch select:focus-visible { outline: 3px solid #b5d5c4; outline-offset: 2px; }
+.app-shell .lori-report { border-top: 1px solid #ceddd3; margin-top: 20px; padding-top: 18px; }
+.app-shell .lori-report h3 { font-size: 17px; margin: 0 0 10px; }
+.app-shell .lori-report .lori-report-note { color: #61756f; font-size: 11px; line-height: 1.7; }
+.app-shell .lori-criteria { padding: 0; margin: 18px 0; list-style: none; display: grid; gap: 12px; }
+.app-shell .lori-criteria > li { border: 1px solid #dce6df; background: #fff; border-radius: 12px; padding: 15px; }
+.app-shell .lori-criterion-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+.app-shell .lori-criterion-heading h4 { margin: 0; font-size: 13px; }
+.app-shell .lori-score { flex-shrink: 0; border-radius: 7px; padding: 4px 7px; font-size: 10px; line-height: 1.4; font-weight: 750; background: #edf2ed; color: #53665c; }
+.app-shell .lori-score--assessed { background: #e6f1df; color: #315831; }
+.app-shell .lori-score--insufficient_data { background: #fff1d9; color: #7d571d; }
+.app-shell .lori-criteria .lori-improvement { margin-top: 8px; }
+.app-shell .lori-criteria small { display: block; margin-top: 8px; color: #61756f; font-size: 10px; }
+.app-shell .lori-guide ol { padding-left: 19px; font-size: 12px; line-height: 1.9; margin: 18px 0; }
+.app-shell .lori-guide small { display: block; margin-top: 14px; color: #61756f; font-size: 10px; }
+@media(max-width: 540px) { .app-shell .chat-header { flex-wrap: wrap; } .app-shell .mentor-mode-switch { margin-left: 0; width: 100%; } .app-shell .chat-header .mode-dot { display: none; } .app-shell .lori-criterion-heading { flex-direction: column; gap: 6px; } }
