@@ -34,6 +34,7 @@ import {
   type View,
 } from "@/lib/demo";
 import { Action, Badge, Heading } from "./ui";
+import { CourseLessons } from "./course-lessons";
 
 type Props = {
   locale: Locale;
@@ -46,12 +47,13 @@ type ProgressProps = Props & {
 };
 
 export function CourseView({
+  accountId,
   locale,
   go,
   progress,
   update,
   notify,
-}: ProgressProps) {
+}: ProgressProps & { accountId: string }) {
   const t = (ro: string, ru: string) => (locale === "ro" ? ro : ru);
   return (
     <>
@@ -82,6 +84,7 @@ export function CourseView({
           {t("20 min · traseu demo", "20 мин · демомаршрут")}
         </span>
       </div>
+      <CourseLessons locale={locale} accountId={accountId} />
       <div className="two-columns course-columns">
         <section className="panel">
           <div className="panel-heading">

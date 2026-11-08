@@ -334,7 +334,7 @@ export function MentorApp({ account }: { account: Account }) {
           {!student && view === "dashboard" && (
             <Dashboard locale={locale} progress={progress} go={go} />
           )}
-          {!student && view === "course" && <CourseView {...props} />}
+          {!student && view === "course" && <CourseView {...props} accountId={account.id} />}
           {!student && view === "mentor" && <MentorView {...props} />}
           {!student && view === "activities" && <ActivitiesView {...props} />}
           {!student && view === "experience" && <ExperienceView {...props} />}
