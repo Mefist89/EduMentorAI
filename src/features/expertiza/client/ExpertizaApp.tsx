@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  createContext,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -20,8 +22,19 @@ import {
   Users,
 } from "lucide-react";
 import { roleLabels } from "@/lib/accounts";
+import { countText, translate } from "./translations";
 import type { Locale } from "@/lib/demo";
 import type { Command, ExpertizaState, Message, Question } from "../shared";
+
+const LocaleContext = createContext<Locale>("ro");
+function useTranslation() {
+  const locale = useContext(LocaleContext);
+  return (text: string) => translate(locale, text);
+}
+function useCount() {
+  const locale = useContext(LocaleContext);
+  return (count: number, ro: string, ru: [string, string, string]) => countText(locale, count, ro, ru);
+}
 
 type Tab =
   "questions" | "communities" | "teachers" | "info" | "messages" | "profile";
@@ -88,7 +101,8 @@ function Field({
   );
 }
 function Demo({ children = "Exemplu fictiv" }: { children?: ReactNode }) {
-  return <span className="ex-demo">{children}</span>;
+  const tr = useTranslation();
+  return <span className="ex-demo">{typeof children === "string" ? tr(children) : children}</span>;
 }
 const role = (value: string) =>
   value === "ai"
@@ -97,6 +111,7 @@ const role = (value: string) =>
       ? "Exemplu fictiv"
       : roleLabels[value as keyof typeof roleLabels]?.ro || "Membru";
 function Stamp({ name, kind }: { name: string; kind: string }) {
+  const tr = useTranslation();
   return (
     <span className="ex-author">
       <span
@@ -111,7 +126,7 @@ function Stamp({ name, kind }: { name: string; kind: string }) {
       </span>
       <span>
         <strong>{name}</strong>
-        <small>{role(kind)}</small>
+        <small>{tr(role(kind))}</small>
       </span>
     </span>
   );
@@ -119,6 +134,12 @@ function Stamp({ name, kind }: { name: string; kind: string }) {
 type Mutate = (command: Command) => Promise<boolean>;
 
 export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
+  return <LocaleContext.Provider value={locale}><ExpertizaContent locale={locale} /></LocaleContext.Provider>;
+}
+
+function ExpertizaContent({ locale }: { locale: Locale }) {
+  const tr = useTranslation();
+  const count = useCount();
   const t = (ro: string, ru: string) => locale === "ro" ? ro : ru;
   const [state, setState] = useState<ExpertizaState | null>(null),
     [tab, setTab] = useState<Tab>("questions"),
@@ -180,7 +201,7 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
       0,
     ) || 0;
   return (
-    <section className="expertiza" lang="ro" aria-busy={pending || loading}>
+    <section className="expertiza" lang={locale} aria-busy={pending || loading}>
       <header className="ex-heading" lang={locale}>
         <div>
           <p className="eyebrow">{t("COMUNITATEA EDUMENTOR", "СООБЩЕСТВО EDUMENTOR")}</p>
@@ -196,13 +217,12 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
       </header>
       <div className="ex-hero">
         <div>
-          <span className="ex-kicker">UN SPAȚIU PENTRU IDEILE TALE</span>
-          <h2>
-            O întrebare bună.
+          <span className="ex-kicker">{tr("UN SPAȚIU PENTRU IDEILE TALE")}</span>
+          <h2>{tr("O întrebare bună.")}
             <br />
-            <span>Mai multe perspective.</span>
+            <span>{tr("Mai multe perspective.")}</span>
           </h2>
-          <p>Elevi și profesori, în aceeași comunitate de învățare.</p>
+          <p>{tr("Elevi și profesori, în aceeași comunitate de învățare.")}</p>
         </div>
         <div className="ex-hero-art" aria-hidden="true">
           <MessagesSquare />
@@ -210,7 +230,7 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
           <span className="ex-orbit ex-orbit-two">?</span>
         </div>
       </div>
-      <nav className="ex-tabs" aria-label="Secțiuni Expertiză">
+      <nav className="ex-tabs" aria-label={tr("Secțiuni Expertiză")}>
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
@@ -222,44 +242,41 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
             }}
           >
             <Icon size={17} />
-            {label}
+            {tr(label)}
           </button>
         ))}
       </nav>
       {error && (
         <div className="ex-alert" role="alert">
-          <p>{error}</p>
-          <button onClick={() => void load()} disabled={pending || loading}>
-            Reîncarcă datele
+          <p>{tr(error)}</p>
+          <button onClick={() => void load()} disabled={pending || loading}>{tr("Reîncarcă datele")}
           </button>
         </div>
       )}
       <p role="status" className="ex-status">
         {pending
-          ? "Se salvează…"
+          ? tr("Se salvează…")
           : loading
-            ? "Se încarcă datele comunității…"
-            : notice}
+            ? tr("Se încarcă datele comunității…")
+            : tr(notice)}
       </p>
       {state && (
         <>
           <div className="ex-summary">
             <span>
-              <strong>{state.communities.length}</strong> comunități
+              {count(state.communities.length, "comunități", ["сообщество", "сообщества", "сообществ"])}
             </span>
             <span>
-              <strong>{state.questions.length}</strong> întrebări în flux
+              {count(state.questions.length, "întrebări în flux", ["вопрос в ленте", "вопроса в ленте", "вопросов в ленте"])}
             </span>
             <span>
-              <strong>{contributions}</strong> răspunsuri de la tine{" "}
+              {count(contributions, "răspunsuri de la tine", ["ваш ответ", "ваших ответа", "ваших ответов"])}{" "}
               {contributions >= 3 && (
-                <Crown size={16} aria-label="Coroană pentru contribuții" />
+                <Crown size={16} aria-label={tr("Coroană pentru contribuții")} />
               )}
             </span>
           </div>
-          <p className="ex-source">
-            Conținutul inițial din Daily este demonstrativ. Contribuțiile
-            conturilor conectate se salvează în Supabase.
+          <p className="ex-source">{tr("Conținutul inițial din Daily este demonstrativ. Contribuțiile conturilor conectate se salvează în Supabase.")}
           </p>
           {tab === "questions" && (
             <div className="ex-columns">
@@ -284,50 +301,47 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                     <span className="ex-icon">
                       <MessageCircle size={19} />
                     </span>
-                    <h2>Ce vrei să afli astăzi?</h2>
+                    <h2>{tr("Ce vrei să afli astăzi?")}</h2>
                   </div>
-                  <Field label="Întrebarea ta" name="title" max={140} />
+                  <Field label={tr("Întrebarea ta")} name="title" max={140} />
                   <Field
-                    label="Detalii (opțional)"
+                    label={tr("Detalii (opțional)")}
                     name="body"
                     multiline
                     optional
                   />
                   <div className="ex-form-row">
                     <label className="ex-field">
-                      <span>Publică în</span>
+                      <span>{tr("Publică în")}</span>
                       <select name="community">
-                        <option value="">Comunitatea EduMentor</option>
+                        <option value="">{tr("Comunitatea EduMentor")}</option>
                         {state.communities
                           .filter((c) => c.joined)
                           .map((c) => (
                             <option key={c.id} value={c.id}>
-                              {c.name}
+                              {c.demo ? tr(c.name) : c.name}
                             </option>
                           ))}
                       </select>
                     </label>
-                    <button className="ex-primary" disabled={pending}>
-                      Publică întrebarea <ArrowUpRight size={16} />
+                    <button className="ex-primary" disabled={pending}>{tr("Publică întrebarea")} <ArrowUpRight size={16} />
                     </button>
                   </div>
-                  <small>
-                    Întrebările sunt vizibile membrilor autentificați. Evită
-                    datele personale.
+                  <small>{tr("Întrebările sunt vizibile membrilor autentificați. Evită datele personale.")}
                   </small>
                 </form>
                 <div className="ex-section-bar">
-                  <h2>Conversații recente</h2>
+                  <h2>{tr("Conversații recente")}</h2>
                   <label className="ex-field ex-filter">
-                    <span>Comunitate</span>
+                    <span>{tr("Comunitate")}</span>
                     <select
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
                     >
-                      <option value="">Toate comunitățile</option>
+                      <option value="">{tr("Toate comunitățile")}</option>
                       {state.communities.map((c) => (
                         <option key={c.id} value={c.id}>
-                          {c.name}
+                          {c.demo ? tr(c.name) : c.name}
                         </option>
                       ))}
                     </select>
@@ -347,43 +361,38 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                 {!state.questions.some(
                   (q) => !filter || q.communityId === filter,
                 ) && (
-                  <div className="ex-card ex-empty">
-                    Încă nu sunt întrebări aici. Începe conversația.
+                  <div className="ex-card ex-empty">{tr("Încă nu sunt întrebări aici. Începe conversația.")}
                   </div>
                 )}
               </div>
               <aside className="ex-stack ex-side">
                 <div className="ex-card ex-tip">
                   <Sparkles size={24} />
-                  <h2>Ideea zilei</h2>
-                  <p>{state.tips[0]}</p>
-                  <span className="ex-overline">
-                    ÎNVĂȚAREA CONTINUĂ ÎMPREUNĂ
+                  <h2>{tr("Ideea zilei")}</h2>
+                  <p>{tr(state.tips[0])}</p>
+                  <span className="ex-overline">{tr("ÎNVĂȚAREA CONTINUĂ ÎMPREUNĂ")}
                   </span>
                 </div>
                 <div className="ex-card">
-                  <h2>Comunitățile tale</h2>
+                  <h2>{tr("Comunitățile tale")}</h2>
                   {state.communities
                     .filter((c) => c.joined)
                     .map((c) => (
-                      <p key={c.id}>{c.name}</p>
+                      <p key={c.id}>{c.demo ? tr(c.name) : c.name}</p>
                     ))}
                   {!state.communities.some((c) => c.joined) && (
-                    <p>Alege o comunitate și alătură-te conversației.</p>
+                    <p>{tr("Alege o comunitate și alătură-te conversației.")}</p>
                   )}
                   <button
                     className="ex-link"
                     onClick={() => setTab("communities")}
-                  >
-                    Explorează comunitățile <ArrowUpRight size={15} />
+                  >{tr("Explorează comunitățile")} <ArrowUpRight size={15} />
                   </button>
                 </div>
                 <div className="ex-card ex-soft">
                   <Crown size={22} />
-                  <h2>Fiecare răspuns contează</h2>
-                  <p>
-                    Primești o coroană după 3 răspunsuri publicate de tine în
-                    fluxul recent.
+                  <h2>{tr("Fiecare răspuns contează")}</h2>
+                  <p>{tr("Primești o coroană după 3 răspunsuri publicate de tine în fluxul recent.")}
                   </p>
                 </div>
               </aside>
@@ -392,8 +401,8 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
           {tab === "communities" && (
             <div className="ex-stack">
               <div className="ex-section-bar">
-                <h2>Găsește-ți comunitatea</h2>
-                <span>Discuții deschise membrilor EduMentor</span>
+                <h2>{tr("Găsește-ți comunitatea")}</h2>
+                <span>{tr("Discuții deschise membrilor EduMentor")}</span>
               </div>
               <div className="ex-grid">
                 {state.communities.map((c) => (
@@ -403,13 +412,13 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                     </div>
                     <div className="ex-badges">
                       {c.demo && <Demo />}
-                      {c.pinned && <span className="ex-demo">Fixată</span>}
+                      {c.pinned && <span className="ex-demo">{tr("Fixată")}</span>}
                     </div>
-                    <h3>{c.name}</h3>
-                    <p>{c.description}</p>
-                    <small>{c.school}</small>
+                    <h3>{c.demo ? tr(c.name) : c.name}</h3>
+                    <p>{c.demo ? tr(c.description) : c.description}</p>
+                    <small>{c.demo ? tr(c.school) : c.school}</small>
                     <div className="ex-card-bottom">
-                      <span>{c.members} membri conectați</span>
+                      <span>{count(c.members, "membri conectați", ["участник", "участника", "участников"])}</span>
                       <button
                         className={c.joined ? "" : "ex-primary"}
                         disabled={pending}
@@ -421,7 +430,7 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                           })
                         }
                       >
-                        {c.joined ? "Părăsește" : "Alătură-te"}
+                        {c.joined ? tr("Părăsește") : tr("Alătură-te")}
                       </button>
                     </div>
                     {admin && (
@@ -453,17 +462,16 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                       form.reset();
                   }}
                 >
-                  <h2>Comunitate nouă</h2>
-                  <Field label="Nume" name="name" max={100} />
-                  <Field label="Instituție / context" name="school" max={120} />
+                  <h2>{tr("Comunitate nouă")}</h2>
+                  <Field label={tr("Nume")} name="name" max={100} />
+                  <Field label={tr("Instituție / context")} name="school" max={120} />
                   <Field
-                    label="Descriere"
+                    label={tr("Descriere")}
                     name="description"
                     max={500}
                     multiline
                   />
-                  <button className="ex-primary" disabled={pending}>
-                    Creează comunitatea
+                  <button className="ex-primary" disabled={pending}>{tr("Creează comunitatea")}
                   </button>
                 </form>
               )}
@@ -472,29 +480,27 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
           {tab === "teachers" && (
             <div className="ex-stack">
               <div className="ex-section-bar">
-                <h2>Perspective despre profesori</h2>
-                <Demo>Director demonstrativ</Demo>
+                <h2>{tr("Perspective despre profesori")}</h2>
+                <Demo>{tr("Director demonstrativ")}</Demo>
               </div>
-              <p>
-                Profilurile profesorilor și recenziile inițiale sunt fictive.
-                Recenziile noi sunt contribuții ale conturilor conectate.
+              <p>{tr("Profilurile profesorilor și recenziile inițiale sunt fictive. Recenziile noi sunt contribuții ale conturilor conectate.")}
               </p>
               <div className="ex-grid">
                 {state.teachers.map((t) => (
                   <article className="ex-card" key={t.id}>
                     <Stamp name={t.name} kind="demo" />
-                    <h3>{t.subject}</h3>
-                    <p>{t.position}</p>
+                    <h3>{tr(t.subject)}</h3>
+                    <p>{tr(t.position)}</p>
                     <strong className="ex-rating">
                       ★{" "}
                       {(
                         t.reviews.reduce((n, r) => n + r.stars, 0) /
                         Math.max(t.reviews.length, 1)
                       ).toFixed(1)}{" "}
-                      <small>din {t.reviews.length} recenzii</small>
+                      <small>{tr("din")} {count(t.reviews.length, "recenzii", ["отзыва", "отзывов", "отзывов"])}</small>
                     </strong>
                     <details>
-                      <summary>Vezi recenziile</summary>
+                      <summary>{tr("Vezi recenziile")}</summary>
                       <div className="ex-stack">
                         {t.reviews.map((r) => (
                           <blockquote className="ex-review" key={r.id}>
@@ -502,7 +508,7 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                               {r.authorName} · {r.stars}/5
                             </strong>
                             {r.demo && <Demo />}
-                            <p>{r.body}</p>
+                            <p>{r.demo ? tr(r.body) : r.body}</p>
                           </blockquote>
                         ))}
                       </div>
@@ -520,7 +526,7 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                       }}
                     >
                       <label className="ex-field">
-                        <span>Evaluarea ta pentru {t.name}</span>
+                        <span>{tr("Evaluarea ta pentru")} {t.name}</span>
                         <select
                           name="stars"
                           defaultValue={
@@ -530,13 +536,13 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                         >
                           {[5, 4, 3, 2, 1].map((n) => (
                             <option key={n} value={n}>
-                              {n} din 5
+                              {n} {tr("din")} 5
                             </option>
                           ))}
                         </select>
                       </label>
                       <Field
-                        label="Recenzia ta"
+                        label={tr("Recenzia ta")}
                         name="body"
                         max={1000}
                         multiline
@@ -545,9 +551,8 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                             ?.body || ""
                         }
                       />
-                      <button disabled={pending}>Salvează recenzia</button>
-                      <small>
-                        O recenzie per cont. Salvarea actualizează recenzia ta.
+                      <button disabled={pending}>{tr("Salvează recenzia")}</button>
+                      <small>{tr("O recenzie per cont. Salvarea actualizează recenzia ta.")}
                       </small>
                     </form>
                   </article>
@@ -558,49 +563,47 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
           {tab === "info" && (
             <div className="ex-stack">
               <div className="ex-section-bar">
-                <h2>Școli și informații utile</h2>
-                <Demo>Date de exemplu</Demo>
+                <h2>{tr("Școli și informații utile")}</h2>
+                <Demo>{tr("Date de exemplu")}</Demo>
               </div>
               <div className="ex-grid">
                 {state.schools.map((s) => (
-                  <article className="ex-card" key={s.n}>
+                  <article className="ex-card" key={tr(s.n)}>
                     <BookOpen size={24} />
-                    <h3>{s.n}</h3>
-                    <p>{s.a}</p>
+                    <h3>{tr(s.n)}</h3>
+                    <p>{tr(s.a)}</p>
                     <small>
-                      {s.el} elevi · {s.pr} profesori (exemplu)
+                      {count(s.el, "elevi", ["ученик", "ученика", "учеников"])} · {count(s.pr, "profesori", ["преподаватель", "преподавателя", "преподавателей"])} ({locale === "ru" ? "пример" : "exemplu"})
                     </small>
                   </article>
                 ))}
               </div>
-              <h2>Regulamente și anunțuri</h2>
-              <p>
-                Regulile importate sunt exemple din prototip. Confirmă
-                regulamentele aplicabile direct cu instituția ta.
+              <h2>{tr("Regulamente și anunțuri")}</h2>
+              <p>{tr("Regulile importate sunt exemple din prototip. Confirmă regulamentele aplicabile direct cu instituția ta.")}
               </p>
               {state.rules.map((r) => (
                 <article className="ex-card" key={r.id}>
                   <div className="ex-badges">
                     {r.demo ? (
-                      <Demo>Regulă de exemplu</Demo>
+                      <Demo>{tr("Regulă de exemplu")}</Demo>
                     ) : (
-                      <span className="ex-demo">Publicat de administrator</span>
+                      <span className="ex-demo">{tr("Publicat de administrator")}</span>
                     )}
                   </div>
-                  <h3>{r.title}</h3>
-                  <p className="ex-body">{r.body}</p>
+                  <h3>{r.demo ? tr(r.title) : r.title}</h3>
+                  <p className="ex-body">{r.demo ? tr(r.body) : r.body}</p>
                 </article>
               ))}
-              <h2>Calendar demonstrativ</h2>
+              <h2>{tr("Calendar demonstrativ")}</h2>
               <div className="ex-grid">
                 {state.events.map((e, i) => (
                   <article className="ex-card" key={i}>
                     <Demo />
                     <p className="ex-event-date">
-                      {e.d} {e.m}
+                      {e.d} {tr(e.m)}
                     </p>
-                    <h3>{e.t}</h3>
-                    <p>{e.p}</p>
+                    <h3>{tr(e.t)}</h3>
+                    <p>{tr(e.p)}</p>
                   </article>
                 ))}
               </div>
@@ -620,11 +623,10 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                       form.reset();
                   }}
                 >
-                  <h2>Publică o informație</h2>
-                  <Field label="Titlu" name="title" max={140} />
-                  <Field label="Conținut" name="body" max={4000} multiline />
-                  <button disabled={pending} className="ex-primary">
-                    Publică informația
+                  <h2>{tr("Publică o informație")}</h2>
+                  <Field label={tr("Titlu")} name="title" max={140} />
+                  <Field label={tr("Conținut")} name="body" max={4000} multiline />
+                  <button disabled={pending} className="ex-primary">{tr("Publică informația")}
                   </button>
                 </form>
               )}
@@ -649,40 +651,37 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                   }}
                 >
                   <Stamp name={state.me.name} kind={state.me.role} />
-                  <h2>Profilul tău în comunitate</h2>
+                  <h2>{tr("Profilul tău în comunitate")}</h2>
                   <Field
-                    label="Nume afișat"
+                    label={tr("Nume afișat")}
                     name="name"
                     max={80}
                     initial={state.me.name}
                   />
                   <Field
-                    label="Instituție (opțional)"
+                    label={tr("Instituție (opțional)")}
                     name="school"
                     max={120}
                     initial={state.me.school}
                     optional
                   />
                   <Field
-                    label="Disciplină / interes (opțional)"
+                    label={tr("Disciplină / interes (opțional)")}
                     name="subject"
                     max={80}
                     initial={state.me.subject}
                     optional
                   />
-                  <p>
-                    Aceste informații sunt vizibile membrilor autentificați.
-                    Rolul contului este gestionat de administrator.
+                  <p>{tr("Aceste informații sunt vizibile membrilor autentificați. Rolul contului este gestionat de administrator.")}
                   </p>
-                  <button className="ex-primary" disabled={pending}>
-                    Salvează profilul
+                  <button className="ex-primary" disabled={pending}>{tr("Salvează profilul")}
                   </button>
                 </form>
                 {admin && (
                   <div className="ex-card">
-                    <h2>Elemente arhivate</h2>
+                    <h2>{tr("Elemente arhivate")}</h2>
                     {state.archived.length === 0 && (
-                      <p>Niciun element arhivat.</p>
+                      <p>{tr("Niciun element arhivat.")}</p>
                     )}
                     {state.archived.map((a) => (
                       <div className="ex-card-bottom" key={a.id}>
@@ -698,8 +697,7 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                               active: false,
                             })
                           }
-                        >
-                          Restabilește
+                        >{tr("Restabilește")}
                         </button>
                       </div>
                     ))}
@@ -710,19 +708,17 @@ export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
                 <Crown size={30} />
                 <h2>
                   {contributions >= 3
-                    ? "Ai primit o coroană!"
-                    : "Experiența ta ajută comunitatea"}
+                    ? tr("Ai primit o coroană!")
+                    : tr("Experiența ta ajută comunitatea")}
                 </h2>
                 <p>
-                  {contributions} răspunsuri publicate de tine în fluxul recent.
+                  {locale === "ru" ? `Ваших ответов в текущей ленте: ${contributions}.` : `${contributions} răspunsuri publicate de tine în fluxul recent.`}
                 </p>
-                <p>Răspunsurile AI și exemplele nu se includ.</p>
+                <p>{tr("Răspunsurile AI și exemplele nu se includ.")}</p>
               </aside>
             </div>
           )}
-          <p className="ex-recent">
-            Flux recent: până la 200 de înregistrări per categorie și 100 de
-            mesaje per conversație.
+          <p className="ex-recent">{tr("Flux recent: până la 200 de înregistrări per categorie și 100 de mesaje per conversație.")}
           </p>
         </>
       )}
@@ -743,6 +739,7 @@ function Moderation({
   mutate: Mutate;
   pending: boolean;
 }) {
+  const tr = useTranslation();
   return (
     <div className="ex-moderation">
       <button
@@ -758,14 +755,14 @@ function Moderation({
         }
       >
         <Pin size={13} />
-        {pinned ? "Desprinde" : "Fixează"}
+        {pinned ? tr("Desprinde") : tr("Fixează")}
       </button>
       <button
         disabled={pending}
         onClick={() => {
           if (
             window.confirm(
-              "Arhivezi acest element? Îl poți restabili din Profilul meu.",
+              tr("Arhivezi acest element? Îl poți restabili din Profilul meu."),
             )
           )
             void mutate({
@@ -776,8 +773,7 @@ function Moderation({
               active: true,
             });
         }}
-      >
-        Arhivează
+      >{tr("Arhivează")}
       </button>
     </div>
   );
@@ -793,6 +789,8 @@ function QuestionCard({
   mutate: Mutate;
   pending: boolean;
 }) {
+  const tr = useTranslation();
+  const count = useCount();
   const [answering, setAnswering] = useState(false),
     [aiNotice, setAiNotice] = useState(false);
   const community = state.communities.find((c) => c.id === q.communityId),
@@ -804,15 +802,14 @@ function QuestionCard({
         <div className="ex-badges">
           {q.pinned && (
             <span className="ex-demo">
-              <Pin size={12} />
-              Fixată
+              <Pin size={12} />{tr("Fixată")}
             </span>
           )}
-          <span className="ex-category">{community?.name || "EduMentor"}</span>
+          <span className="ex-category">{community ? community.demo ? tr(community.name) : community.name : "EduMentor"}</span>
         </div>
       </div>
-      <h3>{q.title}</h3>
-      {q.body && <p className="ex-body">{q.body}</p>}
+      <h3>{q.demo ? tr(q.title) : q.title}</h3>
+      {q.body && <p className="ex-body">{q.demo ? tr(q.body) : q.body}</p>}
       <div className="ex-actions">
         <button
           aria-pressed={q.liked}
@@ -822,30 +819,27 @@ function QuestionCard({
           }
         >
           <Heart size={16} />
-          {q.likes} aprecieri
+          {count(q.likes, "aprecieri", ["отметка «Нравится»", "отметки «Нравится»", "отметок «Нравится»"])}
         </button>
         <button
           aria-expanded={answering}
           onClick={() => setAnswering(!answering)}
         >
           <MessageCircle size={16} />
-          {q.replies.length} răspunsuri
+          {count(q.replies.length, "răspunsuri", ["ответ", "ответа", "ответов"])}
         </button>
         <button
           className="ex-ai-link"
           onClick={() => setAiNotice(!aiNotice)}
           aria-expanded={aiNotice}
         >
-          <Sparkles size={16} />
-          Întreab-o pe Maria
+          <Sparkles size={16} />{tr("Întreab-o pe Maria")}
         </button>
       </div>
       {aiNotice && (
         <div className="ex-ai-notice">
-          <strong>Maria · asistent AI</strong>
-          <p>
-            Întrebarea și detaliile ei vor fi trimise către OpenAI. Răspunsul va
-            fi publicat aici și poate conține erori.
+          <strong>{tr("Maria · asistent AI")}</strong>
+          <p>{tr("Întrebarea și detaliile ei vor fi trimise către OpenAI. Răspunsul va fi publicat aici și poate conține erori.")}
           </p>
           <button
             disabled={pending || !canReply}
@@ -855,11 +849,10 @@ function QuestionCard({
                 setAnswering(true);
               }
             }}
-          >
-            Trimite întrebarea către AI
+          >{tr("Trimite întrebarea către AI")}
           </button>
           {!canReply && (
-            <small>Alătură-te comunității pentru a continua.</small>
+            <small>{tr("Alătură-te comunității pentru a continua.")}</small>
           )}
         </div>
       )}
@@ -871,7 +864,7 @@ function QuestionCard({
               key={r.id}
             >
               <Stamp name={r.authorName} kind={r.role} />
-              <p className="ex-body">{r.body}</p>
+              <p className="ex-body">{r.demo ? tr(r.body) : r.body}</p>
             </div>
           ))}
           {canReply ? (
@@ -889,14 +882,12 @@ function QuestionCard({
                   form.reset();
               }}
             >
-              <Field label="Răspunsul tău" name="body" multiline />
-              <button disabled={pending} className="ex-primary">
-                Publică răspunsul
+              <Field label={tr("Răspunsul tău")} name="body" multiline />
+              <button disabled={pending} className="ex-primary">{tr("Publică răspunsul")}
               </button>
             </form>
           ) : (
-            <p>
-              Alătură-te comunității din secțiunea Comunități pentru a răspunde.
+            <p>{tr("Alătură-te comunității din secțiunea Comunități pentru a răspunde.")}
             </p>
           )}
         </div>
@@ -922,6 +913,8 @@ function Messages({
   mutate: Mutate;
   pending: boolean;
 }) {
+  const tr = useTranslation();
+  const locale = useContext(LocaleContext);
   const [recipient, setRecipient] = useState(state.contacts[0]?.id || ""),
     [messages, setMessages] = useState<Message[]>([]),
     [error, setError] = useState(""),
@@ -964,8 +957,8 @@ function Messages({
   return (
     <div className="ex-messages">
       <aside className="ex-card ex-contacts">
-        <h2>Conversații</h2>
-        <p>Doar cu membrii autentificați.</p>
+        <h2>{tr("Conversații")}</h2>
+        <p>{tr("Doar cu membrii autentificați.")}</p>
         {state.contacts.map((p) => (
           <button
             key={p.id}
@@ -979,32 +972,31 @@ function Messages({
       <div className="ex-card ex-conversation">
         <h2>
           {person
-            ? `Mesaje cu ${person.name}`
-            : "Nu există destinatari disponibili"}
+            ? `${tr("Mesaje cu")} ${person.name}`
+            : tr("Nu există destinatari disponibili")}
         </h2>
-        <p className="ex-source">
-          Mesajele sunt private între cele două conturi participante.
+        <p className="ex-source">{tr("Mesajele sunt private între cele două conturi participante.")}
         </p>
-        {error && <p role="alert">{error}</p>}
+        {error && <p role="alert">{tr(error)}</p>}
         <div
           className="ex-message-list"
           role="log"
           aria-live="polite"
-          aria-label="Istoricul conversației"
+          aria-label={tr("Istoricul conversației")}
           aria-busy={loading}
         >
           {messages.length === 0 && !loading && (
-            <p className="ex-empty">Niciun mesaj. Începe conversația.</p>
+            <p className="ex-empty">{tr("Niciun mesaj. Începe conversația.")}</p>
           )}
           {messages.map((m) => (
             <div
               key={m.id}
               className={`ex-bubble ${m.senderId === state.me.id ? "ex-bubble-own" : ""}`}
             >
-              <small>{m.senderId === state.me.id ? "Tu" : person?.name}</small>
+              <small>{m.senderId === state.me.id ? tr("Tu") : person?.name}</small>
               <p>{m.body}</p>
               <time dateTime={m.createdAt}>
-                {new Date(m.createdAt).toLocaleString("ro-RO", {
+                {new Date(m.createdAt).toLocaleString(locale === "ru" ? "ru-RU" : "ro-RO", {
                   day: "numeric",
                   month: "short",
                   hour: "2-digit",
@@ -1032,9 +1024,8 @@ function Messages({
               }
             }}
           >
-            <Field label="Mesajul tău" name="body" multiline />
-            <button disabled={pending} className="ex-primary">
-              Trimite mesajul
+            <Field label={tr("Mesajul tău")} name="body" multiline />
+            <button disabled={pending} className="ex-primary">{tr("Trimite mesajul")}
             </button>
           </form>
         )}

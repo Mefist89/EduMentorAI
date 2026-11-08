@@ -51,7 +51,7 @@ const ExpertizaApp = dynamic(
     import("@/features/expertiza/client/ExpertizaApp").then(
       (module) => module.ExpertizaApp,
     ),
-  { loading: () => <p role="status">Se încarcă Expertiză…</p> },
+  { loading: () => <p role="status">EduMentor…</p> },
 );
 const PunteaCatalog = dynamic(
   () =>

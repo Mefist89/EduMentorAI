@@ -42,7 +42,7 @@ test("annual continuity stays within twelve months with 7-14-30 and quarterly re
     assert.ok(html.includes(locale==="ro"?"Testarea cu profesori: în așteptare":"Тестирование с учителями: ожидается"));
     assert.ok(html.includes(locale==="ro"?"Țintă propusă, nu rezultat":"Предлагаемая цель, не результат"));
     assert.ok(html.includes("60%"));
-    assert.ok(html.includes(locale==="ro"?"transferuri manual":"вручную"));
+    assert.doesNotMatch(html,/Legăturile cu celelalte module|Связи с другими модулями|ct-transfers/);
     assert.doesNotMatch(html,/aria-valuenow=|Luna 13|Месяц 13/);
   }
 });
