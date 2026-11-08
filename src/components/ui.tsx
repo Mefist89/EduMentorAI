@@ -1,4 +1,4 @@
-import { ArrowRight, type LucideIcon } from "lucide-react";
+import { ArrowRight, BrainCircuit, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 export function Badge({
@@ -62,28 +62,25 @@ export function Heading({
   );
 }
 
-export function AlgebraArt({ russian = false }: { russian?: boolean }) {
+export function MentorOrbitArt({ russian = false }: { russian?: boolean }) {
   return (
-    <div className="algebra-art" aria-hidden="true">
-      <div className="orbit orbit-one" />
-      <div className="orbit orbit-two" />
-      <span className="art-star art-star-one">✳</span>
-      <span className="art-star art-star-two">+</span>
-      <div className="equation-paper">
-        <span className="paper-label">
-          {russian ? "ИЗУЧАЙТЕ · ПРИМЕНЯЙТЕ" : "EXPLORĂ · APLICĂ"}
-        </span>
-        <div className="paper-equation">2x + 3 = 11</div>
-        <div className="paper-rule" />
-        <span className="paper-answer">
-          x = 4 <span>✓</span>
-        </span>
-        <span className="paper-scribble">
-          {russian ? "шаг к пониманию" : "un pas spre înțelegere"}
-        </span>
+    <div className="mentor-orbit" aria-hidden="true">
+      <div className="mentor-orbit-ring ring-outer" />
+      <div className="mentor-orbit-ring ring-middle" />
+      <div className="mentor-orbit-ring ring-inner" />
+      <div className="mentor-orbit-core">
+        <BrainCircuit size={39} strokeWidth={1.6} />
+        <span>AI</span>
       </div>
-      <span className="art-mini">a + b</span>
-      <span className="art-circle">=</span>
+      <span className="orbit-label orbit-label-practice">
+        {russian ? "Практика" : "Practică"}
+      </span>
+      <span className="orbit-label orbit-label-mentor">
+        {russian ? "Наставник" : "Mentorat"}
+      </span>
+      <span className="orbit-label orbit-label-reflection">
+        {russian ? "Рефлексия" : "Reflecție"}
+      </span>
     </div>
   );
 }

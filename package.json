@@ -8,15 +8,18 @@
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "check:supabase": "node scripts/check-supabase.mjs",
-    "test:supabase": "node --test tests/supabase.test.mjs"
+    "test:supabase": "node --test tests/supabase.test.mjs",
+    "test:mentor": "node --test tests/mentor.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.119.0",
     "lucide-react": "1.70.0",
     "next": "16.4.5",
+    "openai": "7.53.0",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

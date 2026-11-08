@@ -1,6 +1,6 @@
 # EduMentor AI — prototip demonstrativ
 
-Aplicație Next.js + TypeScript cu design violet, lavandă și coral. Traseul este pregătit pentru un profesor de matematică, clasa a VII-a, cu tema ecuațiilor de gradul I.
+Aplicație Next.js + TypeScript cu design verde petrol, accente lime și suprafețe deschise. Traseul este pregătit pentru un profesor de matematică, clasa a VII-a, cu tema ecuațiilor de gradul I.
 
 ## Pornire locală
 
@@ -22,9 +22,9 @@ npm start
 
 ## Ce poți încerca
 
-1. **Panou principal** — traseu cu progres real al interacțiunilor din demonstrație.
+1. **Prezentare** — banner introductiv, resurse demonstrative și traseu cu progres real al interacțiunilor din demonstrație.
 2. **Cursul meu** — material demonstrativ în trei secțiuni și trei răspunsuri de diagnostic pregătite. Apasă „Folosește acest exemplu”.
-3. **AI Mentor** — alege întrebările pregătite pentru răspunsuri simulate. Butonul sursei deschide materialul cursului. Nu se apelează un model AI.
+3. **AI Mentor** — alege întrebările pregătite pentru răspunsuri reale OpenAI. Mentorul primește materialul cursului și contextul demonstrativ. Referințele afișate deschid materialul cursului. Dacă serviciul nu răspunde, poți reîncerca sau alege explicit un răspuns static, etichetat drept exemplu.
 4. **Activități** — compară varianta cu AI și cea fără AI; alege o activitate exemplu. Explorează trei niveluri a câte trei exerciții și soluțiile verificate prin substituție.
 5. **Experiența mea** — citește reflecția fictivă, afișează sinteza exemplu, salvează și aprobă fișa. Revino la ciornă sau copiază textul dacă dorești.
 6. **RO / RU** — schimbă limba interfeței, a materialelor și a exemplelor.
@@ -69,24 +69,52 @@ Referință: [configurarea SSR Supabase în Next.js](https://supabase.com/docs/g
 
 ## Persistență
 
-Preferința de limbă, diagnosticul activat, pașii explorați, starea fișei și reacția demonstrativă sunt păstrate în `localStorage`, cheia `edumentor-demo-v1`. Conversația este temporară și se reia la părăsirea ecranului sau reîncărcare. Textul exemplelor este comun și pregătit în cod; nu sunt colectate date personale. Dacă stocarea browserului este blocată, aplicația anunță că progresul va fi temporar. „Reia demonstrația” resetează doar acest demo, după confirmare. Nu folosi acest prototip pentru date reale sau sensibile.
+Preferința de limbă, diagnosticul activat, pașii explorați, starea fișei și reacția demonstrativă sunt păstrate în `localStorage`, cheia `edumentor-demo-v1`. Conversația este temporară și se reia la părăsirea ecranului sau reîncărcare. Răspunsurile OpenAI sunt păstrate în memoria ecranului; următorul apel poate include ultimele patru răspunsuri OpenAI din conversație. Schimbarea limbii afectează răspunsurile noi, fără a traduce retroactiv istoricul. Datele de profil și materialele transmise modelului sunt fictive și pregătite în cod. Dacă stocarea browserului este blocată, aplicația anunță că progresul va fi temporar. „Reia demonstrația” resetează doar acest demo, după confirmare. Nu folosi acest prototip pentru date reale sau sensibile.
+
+## Mentor OpenAI
+
+Configurează în `.env.local`, exclusiv pe server:
+
+```dotenv
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-5.4-mini
+```
+
+Cheia nu are prefix `NEXT_PUBLIC_` și nu este inclusă în Git. Modelul se poate schimba din configurație. SDK-ul oficial `openai` este instalat cu versiune exactă. Modulul care îl folosește este marcat `server-only` și poate fi importat numai din cod server.
+
+`POST /api/mentor/chat` primește `promptKey`, `locale` și un istoric opțional de maximum patru răspunsuri. Pentru această etapă se acceptă doar cele patru întrebări exemplu, fără formular liber sau date personale. Contextul este construit pe server din materialul cursului și profilul demonstrativ, iar OpenAI Responses API este apelat cu `store: false` și maximum 1200 de tokeni de ieșire. Opțiunea de stocare a răspunsurilor nu constituie o promisiune de retenție zero pentru toate mecanismele furnizorului.
+
+Răspunsul are format structurat și este validat înainte de afișare. Secțiunile citate pot fi doar cele existente, 1–3. Profesorul verifică în continuare recomandările și calculele; o referință existentă nu este o validare independentă a tuturor afirmațiilor modelului. Erorile furnizorului sunt traduse în coduri controlate, fără chei sau mesaje brute în răspunsul API. Nu există înlocuire automată cu un răspuns fictiv.
+
+Demo-ul local permite maximum 20 de solicitări pe minut și două apeluri simultane pe proces server. Limita este în memorie și se resetează la repornire; nu este o cotă distribuită pentru o viitoare implementare pe mai multe instanțe. Timeout-ul apelului este de 30 de secunde, fără reîncercări automate. Cererile din altă origine sunt respinse. Browserul apelează numai ruta locală; secretul nu este trimis browserului.
+
+```powershell
+npm run test:mentor
+```
+
+Referințe: [Responses API și stocarea răspunsurilor](https://developers.openai.com/api/docs/guides/migrate-to-responses), [răspunsuri structurate](https://developers.openai.com/api/docs/guides/structured-outputs).
 
 ## Organizare
 
 - `src/app/` — aplicație, metadate, icon și stiluri responsive.
 - `src/components/mentor-app.tsx` — navigare, panou principal și persistență.
+- `src/components/dashboard.tsx` — prezentare, carduri de resurse și traseu compact.
 - `src/components/learning-views.tsx` — curs, conversație, activități, reflecție și portofoliu.
 - `src/components/ui.tsx` — elemente vizuale comune.
+- `src/components/mentor-chat.tsx` — conversație OpenAI, stări de încărcare, erori și exemple de rezervă.
 - `src/lib/demo.ts` — exemple bilingve, exerciții și validarea datelor locale.
+- `src/lib/mentor-contract.ts` — validarea cererilor și a răspunsurilor mentorului.
+- `src/lib/openai-mentor.ts` — integrarea OpenAI exclusiv pe server.
 - `src/utils/supabase/` — configurare și clienți Supabase pentru browser, server și sesiuni.
 - `src/proxy.ts` — punctul de intrare pentru reîmprospătarea sesiunilor.
 - `src/app/api/health/supabase/route.ts` — verificare de conectivitate la Supabase Auth.
 - `tests/supabase.test.mjs` — verificări pentru cookie-uri, izolare între cereri și tratarea erorilor.
+- `tests/mentor.test.mjs` — validare, context AI, erori, referințe și limite de solicitări.
 
 ## Limite și continuare
 
-Acesta este un MVP demonstrativ local cu integrarea de bază Supabase configurată. Integrarea OpenAI pe server, interfața de autentificare, autorizarea între profesori, schema și persistența fișelor în Supabase și documentele încărcate sunt etape următoare. Textele simulate nu reprezintă răspunsuri AI în timp real; aprobarea fișei nu validează independent eficiența pedagogică. Designul respectă paleta aleasă: `#6954B8`, `#EEEAF8`, `#F49A83`, `#F7F6FB`, `#FFFFFF`, `#242334`.
+Acesta este un MVP demonstrativ local cu mentor OpenAI și integrarea de bază Supabase configurate. Interfața de autentificare, autorizarea între profesori, schema și persistența fișelor în Supabase și documentele încărcate sunt etape următoare. Diagnosticul, planul, activitățile, exercițiile și sinteza din fișa de experiență rămân exemple pregătite; doar conversația mentorului generează răspunsuri noi prin OpenAI. Aprobarea fișei nu validează independent eficiența pedagogică. Designul urmează noua referință vizuală: verde petrol `#153F43`, lime `#D5ED8C`, verde pentru acțiuni secundare `#23675C`, fundal `#F4F7F5`, suprafețe `#FFFFFF` și text `#203D3E`. Stilurile comune sunt în `globals.css`, iar tema este în `theme.css`.
 
-Fontul Manrope se încarcă de la Google Fonts; dacă nu există acces la internet se folosește Segoe UI sau Arial. Rularea demo-ului după instalarea dependențelor nu necesită un serviciu AI.
+Fontul Manrope se încarcă de la Google Fonts; dacă nu există acces la internet se folosește Segoe UI sau Arial. Răspunsurile reale ale mentorului necesită internet și un cont OpenAI cu acces API. Exemplele statice pot fi explorate și când apelul AI nu reușește.
 
 Documentație framework: [instalare Next.js](https://nextjs.org/docs/app/getting-started/installation).

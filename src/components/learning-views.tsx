@@ -26,13 +26,11 @@ import {
   courseSections,
   diagnostic,
   exercises,
-  prompts,
   reflectionExamples,
   synthesisExamples,
   type DemoProgress,
   type Difficulty,
   type Locale,
-  type PromptKey,
   type View,
 } from "@/lib/demo";
 import { Action, Badge, Heading } from "./ui";
@@ -158,172 +156,6 @@ export function CourseView({
             )}
           </p>
         </section>
-      </div>
-    </>
-  );
-}
-
-export function MentorView({ locale, go }: Props) {
-  const [conversation, setConversation] = useState<PromptKey[]>([]);
-  const t = (ro: string, ru: string) => (locale === "ro" ? ro : ru);
-  function ask(key: PromptKey) {
-    setConversation((previous) => [...previous, key]);
-  }
-  return (
-    <>
-      <Heading
-        eyebrow={t("AI MENTOR", "AI-НАСТАВНИК")}
-        title={t(
-          "Un spațiu pentru întrebările tale.",
-          "Место для ваших вопросов.",
-        )}
-        description={t(
-          "Explorează conversații pregătite pe baza materialului de curs.",
-          "Изучите готовые диалоги на основе материала курса.",
-        )}
-        action={
-          <Badge tone="coral">
-            <Sparkles size={13} />
-            {t("Răspunsuri simulate", "Симуляция ответов")}
-          </Badge>
-        }
-      />
-      <div className="mentor-layout">
-        <section
-          className="panel chat-panel"
-          aria-label={t("Conversație demonstrativă", "Демонстрационный диалог")}
-        >
-          <div className="chat-header">
-            <span className="mentor-avatar">
-              <Sparkles size={21} />
-            </span>
-            <div>
-              <h2>EduMentor</h2>
-              <span className="muted small">
-                {t(
-                  "Ecuații de gradul I · Material demonstrativ",
-                  "Линейные уравнения · Демоматериал",
-                )}
-              </span>
-            </div>
-            <span className="mode-dot" aria-hidden="true" />
-          </div>
-          <div
-            className="chat-messages"
-            aria-live="polite"
-            aria-relevant="additions text"
-          >
-            <div className="chat-message assistant">
-              <span className="message-label">
-                <Sparkles size={13} />
-                {t("Mentor · exemplu", "Наставник · пример")}
-              </span>
-              <p>
-                {t(
-                  "Bun venit! Hai să transformăm materialul despre ecuații într-o activitate potrivită clasei tale. Alege mai jos o întrebare exemplu pentru a explora conversația.",
-                  "Добро пожаловать! Давайте превратим материал об уравнениях в задание для вашего класса. Выберите готовый вопрос ниже, чтобы изучить диалог.",
-                )}
-              </p>
-            </div>
-            {conversation.map((key, index) => (
-              <div className="chat-turn" key={`${key}-${index}`}>
-                <div className="chat-message user">
-                  <span className="message-label">
-                    {t("Profesor · exemplu", "Учитель · пример")}
-                  </span>
-                  <p>{prompts[key].label[locale]}</p>
-                </div>
-                <div className="chat-message assistant">
-                  <span className="message-label">
-                    <Sparkles size={13} />
-                    {t(
-                      "Mentor · răspuns simulat",
-                      "Наставник · симуляция ответа",
-                    )}
-                  </span>
-                  <p>{prompts[key].answer[locale]}</p>
-                  <button className="source-link" onClick={() => go("course")}>
-                    <BookOpen size={13} />
-                    {prompts[key].source
-                      ? t(
-                          `Din material · Secțiunea ${prompts[key].source}`,
-                          `Из материала · Раздел ${prompts[key].source}`,
-                        )
-                      : t(
-                          "Recomandare demonstrativă · de verificat",
-                          "Демонстрационная рекомендация · проверьте",
-                        )}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="prompt-area">
-            <span className="eyebrow">
-              {t("ÎNCEARCĂ O ÎNTREBARE", "ПОПРОБУЙТЕ ВОПРОС")}
-            </span>
-            <div className="prompt-grid">
-              {(Object.keys(prompts) as PromptKey[]).map((key) => (
-                <button
-                  className="prompt-button"
-                  key={key}
-                  onClick={() => ask(key)}
-                >
-                  {prompts[key].label[locale]}
-                  <MessageCircle size={15} />
-                </button>
-              ))}
-            </div>
-            <p className="footnote">
-              <ShieldCheck size={13} />
-              {t(
-                "Conversație demonstrativă. Nu sunt trimise date către un model AI.",
-                "Демонстрационный диалог. Данные не отправляются AI-модели.",
-              )}
-            </p>
-            {conversation.length > 0 && (
-              <button
-                className="text-button"
-                onClick={() => setConversation([])}
-              >
-                <RotateCcw size={13} />
-                {t("Reia conversația", "Начать заново")}
-              </button>
-            )}
-          </div>
-        </section>
-        <aside className="stack">
-          <section className="panel">
-            <span className="icon-box">
-              <Lightbulb size={21} />
-            </span>
-            <h2>{t("Tu aduci contextul.", "Вы задаёте контекст.")}</h2>
-            <p className="muted">
-              {t(
-                "Mentorul ajută la structurarea ideilor. Profesorul verifică și alege ce folosește la clasă.",
-                "Наставник помогает структурировать идеи. Учитель проверяет и выбирает материал для класса.",
-              )}
-            </p>
-            <div className="quiet-divider" />
-            <h3>{t("În exemplul nostru", "В нашем примере")}</h3>
-            <ul className="clean-list">
-              <li>{t("Clasa a VII-a", "7 класс")}</li>
-              <li>
-                {t("Resurse simple, accesibile", "Простые доступные ресурсы")}
-              </li>
-              <li>
-                {t("Verificare prin substituție", "Проверка подстановкой")}
-              </li>
-            </ul>
-            <Action
-              secondary
-              onClick={() => go("activities")}
-              icon={WandSparkles}
-            >
-              {t("Explorează activitățile", "Изучить задания")}
-            </Action>
-          </section>
-        </aside>
       </div>
     </>
   );
