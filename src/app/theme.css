@@ -54,9 +54,12 @@
   margin-bottom: 13px;
 }
 .app-shell .main-nav {
+  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
 }
 .app-shell .main-nav button {
+  width: 100%;
+  min-width: 0;
   color: #c0d3cd;
   padding: 11px 12px;
   min-height: 43px;
@@ -64,6 +67,10 @@
   font-size: 12px;
   font-weight: 500;
   gap: 12px;
+}
+.app-shell .main-nav button > span {
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 .app-shell .main-nav button:hover {
   background: #214d50;
@@ -849,7 +856,7 @@
     display: none;
   }
   .app-shell .main-nav {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 4px;
   }
   .app-shell .main-nav button {

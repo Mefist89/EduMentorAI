@@ -1362,9 +1362,6 @@
   }
 }
 @media (max-width: 640px) {
-  .app-shell:not(.student-shell) .main-nav {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
   .app-shell .trasee-module .trasee-heading {
     align-items: flex-start;
     flex-direction: column;

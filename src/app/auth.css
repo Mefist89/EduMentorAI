@@ -351,9 +351,6 @@
   }
 }
 @media (max-width: 640px) {
-  .app-shell.student-shell .main-nav {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
   .auth-page {
     grid-template-columns: 1fr;
   }

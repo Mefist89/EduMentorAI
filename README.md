@@ -29,7 +29,15 @@ npm start
 5. **Experiența mea** — citește reflecția fictivă, afișează sinteza exemplu, salvează și aprobă fișa. Revino la ciornă sau copiază textul dacă dorești.
 6. **RO / RU** — schimbă limba interfeței, a materialelor și a exemplelor.
 
-Accesul necesită un cont Supabase cu rol EduMentor. Conținutul pedagogic și observațiile rămân exemple fictive. Fișele nu sunt încă salvate în baza de date.
+Accesul la cabinet necesită un cont Supabase cu rol EduMentor. Pagina informativă și linkurile către resurse externe sunt publice. Conținutul pedagogic și observațiile rămân exemple fictive. Fișele nu sunt încă salvate în baza de date.
+
+## Pagina publică
+
+Vizitatorii fără sesiune văd la `/` pagina de prezentare EduMentor, în română și rusă. Conturile autentificate păstrează cabinetul și adresele existente `/#mentor`, `/#trasee`, `/#expertiza` etc. Pagina `/despre` poate fi vizitată de oricine, inclusiv de utilizatorii conectați, prin linkul „Despre platformă” din subsolul cabinetului. Formularul de login include un link de întoarcere la pagina publică.
+
+Pagina prezintă cele șase direcții existente ale platformei, parcursul de învățare și rolurile profesor/elev/administrator. Exemplele demonstrative sunt identificate explicit. Resursele MEC, EduResurse, Educație Online, ANCE, INEL și eTwinning sunt linkuri către furnizori, disponibile fără cont EduMentor. Paginile au fost consultate la 8 noiembrie 2026; nu există sincronizare automată sau copiere a conținutului furnizorilor în baza aplicației. Schimbarea limbii acestei pagini nu modifică preferința de limbă a cabinetului.
+
+Nu au fost adăugate înregistrare publică, conturi noi sau acces anonim la datele comunității. API-urile protejate și zona de administrare își păstrează verificările de sesiune și rol. `npm run test:public` verifică separarea prezentării publice de cabinetul celor trei roluri.
 
 ## Autentificare și cele trei conturi
 

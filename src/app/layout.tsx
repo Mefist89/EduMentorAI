@@ -4,6 +4,7 @@ import "./theme.css";
 import "./auth.css";
 import "./trasee.css";
 import "./expertiza.css";
+import "./public.css";
 
 export const metadata: Metadata = {
   title: "EduMentor AI · Spațiul profesorului",

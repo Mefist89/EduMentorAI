@@ -287,6 +287,9 @@ export function MentorApp({ account }: { account: Account }) {
             />
           )}
           <footer className="page-footer">
+            <a href="/despre" className="footer-about">
+              {t("Despre platformă", "О платформе")}
+            </a>
             <span>
               EduMentor AI <span className="footer-dot">·</span>{" "}
               {t(

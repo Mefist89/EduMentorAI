@@ -699,9 +699,6 @@
     flex: 1;
     min-width: 150px;
   }
-  .app-shell .main-nav {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
 }
 @media (max-width: 520px) {
   .ex-heading {
@@ -786,11 +783,5 @@
   }
   .ex-bubble {
     max-width: 95%;
-  }
-}
-
-@media (max-width: 640px) {
-  .app-shell.student-shell .main-nav {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

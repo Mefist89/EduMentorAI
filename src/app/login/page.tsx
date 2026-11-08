@@ -1,5 +1,11 @@
 import { redirect } from "next/navigation";
-import { BookOpen, GraduationCap, ShieldCheck, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  GraduationCap,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import { getAccount } from "@/lib/auth";
 import { LoginForm } from "@/components/login-form";
 
@@ -10,7 +16,7 @@ export default async function LoginPage() {
   return (
     <main className="auth-page">
       <section className="auth-story" aria-labelledby="welcome-title">
-        <a href="/login" className="auth-brand">
+        <a href="/despre" className="auth-brand">
           <span>E</span> EduMentor
         </a>
         <div>
@@ -64,6 +70,10 @@ export default async function LoginPage() {
           <p className="auth-help">
             Nu ai datele de acces? Solicită-le administratorului platformei.
           </p>
+          <a className="auth-back-link" href="/despre">
+            <ArrowLeft size={16} aria-hidden="true" />
+            Înapoi la pagina publică
+          </a>
         </div>
       </section>
     </main>

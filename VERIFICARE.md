@@ -98,3 +98,14 @@ Pentru **Trasee pe Vercel**, este necesară acum și variabila privată `SUPABAS
 - axe-core: zero încălcări pentru regulile WCAG selectate pe Întrebări, Comunități, Profesori, Informații și Profilul meu; verificarea Mesaje a trecut după corecție. Nu reprezintă o certificare completă de accesibilitate.
 
 Persistența acestui MVP folosește documente JSON în Storage privat, cu permisiuni aplicate de API; nu au fost deschise politici publice sau create tabele SQL. Comunitatea este comună conturilor autentificate; instituția din profil este descriptivă. Fluxul și istoricul au limitele documentate în README. Configurația Supabase privată și OpenAI există pentru production/preview în proiectul Vercel EduMentor; noul modul nu necesită variabile suplimentare.
+
+## Pagina publică și navigarea
+
+- Adăugată pagina publică `/despre`, disponibilă fără cont, în română și rusă: descrierea platformei, șase module existente, parcursul de învățare, cele trei roluri și șase resurse externe. Linkurile MEC, EduResurse, Educație Online, ANCE, INEL și eTwinning au fost consultate la 8 noiembrie 2026. Nu sunt importate conturi sau date din versiunea `Downloads/Edumentor`.
+- `/` prezintă pagina publică vizitatorilor și păstrează cabinetul pentru conturile verificate. Loginul include întoarcerea la pagina publică, iar cabinetul include linkul „Despre platformă”. Adresele existente cu hash rămân disponibile utilizatorilor conectați.
+- Verificate în browser: accesul la `/despre` dintr-un cont conectat, intrarea în cabinet prin butonul public fără solicitarea repetată a parolei, logout, revenirea din login la pagina publică, deschiderea rădăcinii fără cont și autentificarea reală înapoi în cabinetul administratorului.
+- Cerere HTTP fără cookie: `/` răspunde cu 200 și pagina publică; `/api/expertiza/state` continuă să răspundă cu 401. Nu au fost schimbate permisiunile API sau rolurile.
+- 26 de variante responsive, RO/RU la 320, 360, 390, 520, 620, 640, 768, 820, 850, 900, 1024, 1280 și 1440 px. După limitarea desenului decorativ la propriul container: fără derulare orizontală, suprapuneri în antet sau text care depășește containerul în verificările efectuate.
+- Verificarea calculată a contrastului pentru 98 de elemente de text ale paginii în rusă a trecut pragurile selectate. Desenul decorativ și fundalurile cu gradient au fost excluse; nu este o evaluare completă de accesibilitate.
+- `npm run test:public` — două teste de separare public/cabinet, inclusiv cele trei roluri; împreună cu cele 47 existente, total 49 teste trecute. Buildul de producție și verificarea TypeScript au trecut.
+- Corectată navigarea laterală: o coloană peste 640 px și patru coloane numai în meniul mobil. Regulile care modificau meniul global din modulele Expertiză, Trasee și stilurile elevului au fost înlăturate. Verificate anterior 26 de variante RO/RU, fără suprapunerea butoanelor.
