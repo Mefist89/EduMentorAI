@@ -1,6 +1,6 @@
 import type { CourseDetail } from "../shared/rank";
 import type {
-  CoverageResponse,
+  CoverageResponse, Network,
   SearchRequest,
   SearchResponse,
 } from "../shared/types";
@@ -10,6 +10,7 @@ export interface Api {
   course(id: string): Promise<CourseDetail>;
   courses(ids: string[]): Promise<CourseDetail[]>;
   coverage(simulate: boolean): Promise<CoverageResponse>;
+  network(): Promise<Network>;
   state(): Promise<{
     done: { id: string; title: string }[];
     courses: number;
@@ -49,6 +50,7 @@ export const httpApi: Api = {
     fetch(`/api/trasee/coverage${simulate ? "?simulate=1" : ""}`).then((r) =>
       json<CoverageResponse>(r),
     ),
+  network: () => fetch("/api/trasee/network").then(json<Network>),
   state: () => fetch("/api/trasee/state").then((r) => json(r)),
   complete: (courseId, completed) =>
     fetch("/api/trasee/completed", {

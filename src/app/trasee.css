@@ -1,1256 +1,384 @@
-/* Consilier de formare · sistem de design */
+@font-face { font-family: "Trasee Heros"; src: url("/fonts/trasee-heros-cn-bold.woff") format("woff"); font-style: normal; font-weight: 700; font-display: swap; }
+/* Consilier de formare · sistem de design „harta traseelor”
+   Liniile colorate = grupuri de competențe; stațiile = centre de formare.
+   Titluri: grotesc condensat, ca pe indicatoarele de transport. Text: fontul sistemului. */
+
 .app-shell .trasee-module {
-  --bg: #f6f7f9;
+  --night: #0f2340;
+  --night-2: #17305a;
+  --night-ink: #e9eff8;
+  --night-muted: #9fb2cf;
+  --bg: #eef2f7;
   --surface: #ffffff;
-  --surface-2: #f1f4f6;
-  --ink: #0f1b2a;
-  --ink-2: #334155;
-  --muted: #5b6b7d;
-  --line: #e2e8ee;
-  --line-2: #cfd8e1;
-  --brand: #0e6b62;
-  --brand-ink: #ffffff;
-  --brand-soft: #e3f3f0;
-  --brand-strong: #0a524b;
-  --ok: #157347;
-  --ok-soft: #e4f4ea;
+  --surface-2: #f4f7fb;
+  --ink: #0f2340;
+  --ink-2: #34465f;
+  --muted: #5d6c83;
+  --line: #dce3ec;
+  --line-2: #c5d0de;
+  --l-ped: #0e8a79;
+  --l-dig: #2f6be6;
+  --l-dis: #7a4dd8;
+  --l-con: #c97810;
+  --lh-ped: #22c3a9;
+  --lh-dig: #5b95ff;
+  --lh-dis: #a784ff;
+  --lh-con: #f4a53c;
+  --signal: #d93a4e;
+  --signal-soft: #fbe4e7;
+  --ok: #11744f;
+  --ok-soft: #e1f3ea;
   --warn: #8a4b06;
-  --warn-soft: #fdf1dc;
-  --bad: #a3261f;
-  --bad-soft: #fbe5e3;
-  --focus: #1f6feb;
-  --radius: 14px;
+  --warn-soft: #fcf0da;
+  --focus: #2f6be6;
+  --radius: 16px;
   --radius-sm: 10px;
-  --shadow-sm: 0 1px 2px rgba(15, 27, 42, 0.06);
-  --shadow: 0 1px 2px rgba(15, 27, 42, 0.05), 0 8px 24px rgba(15, 27, 42, 0.07);
-  --shadow-lg: 0 20px 60px rgba(15, 27, 42, 0.22);
-  --font:
-    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  --shadow-sm: 0 1px 2px rgba(15, 35, 64, 0.06);
+  --shadow: 0 1px 2px rgba(15, 35, 64, 0.05), 0 10px 28px rgba(15, 35, 64, 0.08);
+  --shadow-lg: 0 30px 70px rgba(5, 14, 30, 0.35);
+  --display: "Trasee Heros", "Arial Narrow", sans-serif;
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
 }
 
-.app-shell .trasee-module *,
-.app-shell .trasee-module *::before,
-.app-shell .trasee-module *::after {
-  box-sizing: border-box;
-}
-.app-shell .trasee-module {
-  -webkit-text-size-adjust: 100%;
-}
-.app-shell .trasee-module {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font: 400 16px/1.55 var(--font);
-  -webkit-font-smoothing: antialiased;
-}
-.app-shell .trasee-module h1,
-.app-shell .trasee-module h2,
-.app-shell .trasee-module h3 {
-  margin: 0;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
-  text-wrap: balance;
-}
-.app-shell .trasee-module h1 {
-  font-size: clamp(30px, 4.4vw, 46px);
-  font-weight: 750;
-}
-.app-shell .trasee-module h2 {
-  font-size: 22px;
-  font-weight: 700;
-}
-.app-shell .trasee-module h3 {
-  font-size: 17px;
-  font-weight: 650;
-}
-.app-shell .trasee-module p {
-  margin: 0;
-}
-.app-shell .trasee-module a {
-  color: var(--brand);
-}
-.app-shell .trasee-module button,
-.app-shell .trasee-module input,
-.app-shell .trasee-module select,
-.app-shell .trasee-module textarea {
-  font: inherit;
-  color: inherit;
-}
-.app-shell .trasee-module :focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
-  border-radius: 6px;
-}
-.app-shell .trasee-module .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-.app-shell .trasee-module .muted {
-  color: var(--muted);
-}
-.app-shell .trasee-module .hint {
-  color: var(--muted);
-  font-size: 14px;
-}
-.app-shell .trasee-module .na {
-  color: var(--warn);
-  font-weight: 600;
-}
-
-.app-shell .trasee-module .container {
-  max-width: 1160px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-.app-shell .trasee-module .container--narrow {
-  max-width: 820px;
-}
+.app-shell .trasee-module *, .app-shell .trasee-module *::before, .app-shell .trasee-module *::after { box-sizing: border-box; }
+.app-shell .trasee-module { -webkit-text-size-adjust: 100%; }
+.app-shell .trasee-module { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.55 var(--font); -webkit-font-smoothing: antialiased; }
+.app-shell .trasee-module h1, .app-shell .trasee-module h2, .app-shell .trasee-module h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
+.app-shell .trasee-module h1 { font-size: clamp(30px, 4.4vw, 46px); font-weight: 750; letter-spacing: -0.015em; }
+.app-shell .trasee-module h2 { font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
+.app-shell .trasee-module h3 { font-size: 17px; font-weight: 650; }
+.app-shell .trasee-module p { margin: 0; }
+.app-shell .trasee-module a { color: var(--l-dig); }
+.app-shell .trasee-module button, .app-shell .trasee-module input, .app-shell .trasee-module select, .app-shell .trasee-module textarea { font: inherit; color: inherit; }
+.app-shell .trasee-module :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.app-shell .trasee-module .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.app-shell .trasee-module .muted { color: var(--muted); }
+.app-shell .trasee-module .hint { color: var(--muted); font-size: 14px; }
+.app-shell .trasee-module .na { color: var(--warn); font-weight: 600; }
+.app-shell .trasee-module .eyebrow { color: var(--muted); font-weight: 650; font-size: 14px; margin-bottom: 8px; }
+.app-shell .trasee-module .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.app-shell .trasee-module .container--narrow { max-width: 820px; }
+.app-shell .trasee-module .display { font-family: var(--display); font-weight: 700; font-size: clamp(46px, 6.4vw, 86px); line-height: 0.93; letter-spacing: -0.005em; color: #fff; text-wrap: balance; }
+.app-shell .trasee-module .display--md { font-size: clamp(38px, 4.8vw, 62px); }
 
 /* bara de sus */
-.app-shell .trasee-module .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: saturate(1.4) blur(10px);
-  border-bottom: 1px solid var(--line);
-}
-.app-shell .trasee-module .topbar__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 64px;
-}
-.app-shell .trasee-module .brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: var(--ink);
-}
-.app-shell .trasee-module .brand__mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  display: grid;
-  place-items: center;
-  background: var(--brand);
-  color: var(--brand-ink);
-  font-weight: 800;
-}
-.app-shell .trasee-module .brand__name {
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-.app-shell .trasee-module .nav {
-  display: flex;
-  gap: 4px;
-}
-.app-shell .trasee-module .nav a {
-  padding: 8px 12px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: var(--ink-2);
-  font-weight: 550;
-  font-size: 15px;
-}
-.app-shell .trasee-module .nav a:hover {
-  background: var(--surface-2);
-}
-.app-shell .trasee-module .nav a[aria-current="page"] {
-  color: var(--brand-strong);
-  background: var(--brand-soft);
+.app-shell .trasee-module .topbar { position: sticky; top: 0; z-index: 20; background: var(--night); color: var(--night-ink); border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+.app-shell .trasee-module .topbar__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
+.app-shell .trasee-module .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+.app-shell .trasee-module .brand__mark { width: 34px; height: 34px; border-radius: 10px; background: #fff; display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 0 7px; }
+.app-shell .trasee-module .brand__mark i { display: block; height: 4px; border-radius: 2px; }
+.app-shell .trasee-module .brand__mark i:nth-child(1) { background: var(--lh-dis); width: 70%; }
+.app-shell .trasee-module .brand__mark i:nth-child(2) { background: var(--l-ped); }
+.app-shell .trasee-module .brand__mark i:nth-child(3) { background: var(--l-dig); width: 82%; margin-left: auto; }
+.app-shell .trasee-module .brand__name { font-family: var(--display); font-size: 22px; letter-spacing: 0.005em; }
+.app-shell .trasee-module .nav { display: flex; gap: 4px; }
+.app-shell .trasee-module .nav a { padding: 8px 12px; border-radius: 8px; text-decoration: none; color: var(--night-muted); font-weight: 600; font-size: 15px; white-space: nowrap; }
+@media (max-width: 560px) { .app-shell .trasee-module .brand__name { display: none; } .app-shell .trasee-module .nav a { padding: 7px 9px; font-size: 14px; } .app-shell .trasee-module .routemap__legend { grid-template-columns: minmax(0, 1fr); } }
+.app-shell .trasee-module .nav a:hover { color: #fff; background: rgba(255, 255, 255, 0.07); }
+.app-shell .trasee-module .nav a[aria-current="page"] { color: #fff; background: rgba(255, 255, 255, 0.12); }
+
+/* erou: hârtie de hartă, bleumarin */
+.app-shell .trasee-module .hero { background-color: var(--night); color: var(--night-ink);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 44px 44px; background-position: -1px -1px; }
+.app-shell .trasee-module .hero__grid { display: grid; grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr); gap: 56px; align-items: center; padding-top: 56px; padding-bottom: 80px; }
+.app-shell .trasee-module .hero__copy { display: flex; flex-direction: column; min-width: 0; }
+.app-shell .trasee-module .hero .lead { color: #c9d6ea; }
+.app-shell .trasee-module .lead { color: var(--ink-2); font-size: 18.5px; line-height: 1.5; margin: 20px 0 28px; max-width: 34em; }
+.app-shell .trasee-module .trust { color: var(--night-muted); font-size: 14px; margin-top: 16px; }
+@media (max-width: 1000px) { .app-shell .trasee-module .hero__grid { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-top: 36px; padding-bottom: 48px; } }
+
+/* harta traseelor */
+.app-shell .trasee-module .routemap { margin: 0; min-width: 0; }
+.app-shell .trasee-module .routemap--empty { min-height: 380px; }
+.app-shell .trasee-module .routemap svg { display: block; width: 100%; height: auto; overflow: visible; }
+.app-shell .trasee-module .rline { fill: none; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: trasee-draw 1.6s cubic-bezier(0.55, 0.05, 0.25, 1) forwards; transition: opacity 0.2s; }
+.app-shell .trasee-module .rline--ped { stroke: var(--lh-ped); } .app-shell .trasee-module .rline--dig { stroke: var(--lh-dig); } .app-shell .trasee-module .rline--dis { stroke: var(--lh-dis); } .app-shell .trasee-module .rline--con { stroke: var(--lh-con); }
+.app-shell .trasee-module .rline.is-dim { opacity: 0.14; }
+@keyframes trasee-draw { to { stroke-dashoffset: 0; } }
+.app-shell .trasee-module .station { opacity: 0; animation: trasee-pop 0.45s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }
+.app-shell .trasee-module .station rect { fill: #fff; stroke: var(--night); stroke-width: 3.5; }
+.app-shell .trasee-module .station__name { fill: #dbe5f4; font-size: 14px; font-weight: 650; }
+.app-shell .trasee-module .station__count { fill: var(--night-muted); font-family: var(--display); font-size: 19px; }
+@keyframes trasee-pop { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.app-shell .trasee-module .routemap figcaption { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+.app-shell .trasee-module .routemap__legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
+.app-shell .trasee-module .legend-line { display: grid; grid-template-columns: 28px 1fr; align-items: center; column-gap: 10px; width: 100%; text-align: left; background: none; border: 0; padding: 6px 8px; border-radius: 10px; color: #fff; font-weight: 650; font-size: 14.5px; cursor: pointer; }
+.app-shell .trasee-module .legend-line:hover, .app-shell .trasee-module .legend-line[aria-pressed="true"] { background: rgba(255, 255, 255, 0.07); }
+.app-shell .trasee-module .legend-line i { grid-row: span 2; height: 7px; border-radius: 4px; }
+.app-shell .trasee-module .legend-line span { color: var(--night-muted); font-weight: 500; font-size: 13px; }
+.app-shell .trasee-module .legend-line--ped i { background: var(--lh-ped); } .app-shell .trasee-module .legend-line--dig i { background: var(--lh-dig); } .app-shell .trasee-module .legend-line--dis i { background: var(--lh-dis); } .app-shell .trasee-module .legend-line--con i { background: var(--lh-con); }
+.app-shell .trasee-module .routemap__note { color: var(--night-muted); font-size: 13px; max-width: 46em; }
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .trasee-module .rline { animation: none; stroke-dashoffset: 0; }
+  .app-shell .trasee-module .station { animation: none; opacity: 1; }
 }
 
-/* erou */
-.app-shell .trasee-module .hero {
-  padding: clamp(40px, 8vw, 88px) 0 56px;
-  background: radial-gradient(
-    1200px 400px at 50% -10%,
-    var(--brand-soft),
-    transparent 70%
-  );
+/* cum funcționează: trei stații pe o linie */
+.app-shell .trasee-module .how { padding: 56px 0 64px; }
+.app-shell .trasee-module .how__title { font-family: var(--display); font-size: 34px; font-weight: 700; letter-spacing: 0; margin-bottom: 26px; }
+.app-shell .trasee-module .how__steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; counter-reset: step; position: relative; }
+.app-shell .trasee-module .how__steps::before { content: ""; position: absolute; left: 18px; right: 18px; top: 17px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--l-dis), var(--l-ped) 50%, var(--l-dig)); }
+.app-shell .trasee-module .how__steps li { position: relative; display: flex; flex-direction: column; gap: 6px; padding-top: 56px; counter-increment: step; }
+.app-shell .trasee-module .how__steps li::before { content: counter(step); position: absolute; top: 0; left: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 4px solid var(--ink); display: grid; place-items: center; font-family: var(--display); font-size: 20px; color: var(--ink); }
+.app-shell .trasee-module .how__steps b { font-size: 18px; }
+.app-shell .trasee-module .how__steps span { color: var(--ink-2); }
+@media (max-width: 760px) {
+  .app-shell .trasee-module .how__steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .app-shell .trasee-module .how__steps::before { left: 17px; right: auto; top: 18px; bottom: 18px; width: 6px; height: auto; background: linear-gradient(180deg, var(--l-dis), var(--l-ped) 50%, var(--l-dig)); }
+  .app-shell .trasee-module .how__steps li { padding: 4px 0 0 60px; }
 }
-.app-shell .trasee-module .eyebrow {
-  color: var(--brand);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.app-shell .trasee-module .lead {
-  color: var(--ink-2);
-  font-size: 18px;
-  margin: 14px 0 28px;
-  max-width: 680px;
-}
-.app-shell .trasee-module .trust {
-  color: var(--muted);
-  font-size: 14px;
-  margin-top: 18px;
-}
+
+/* benzi bleumarin */
+.app-shell .trasee-module .band { background: var(--night); color: var(--night-ink); padding: 18px 0; }
+.app-shell .trasee-module .band--head { padding: 44px 0 0; }
+.app-shell .trasee-module .band--head .lead { color: #c9d6ea; margin-bottom: 0; }
 
 /* căutare */
-.app-shell .trasee-module .search {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 18px;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.app-shell .trasee-module .search__label {
-  font-weight: 650;
-}
-.app-shell .trasee-module .search__field {
-  position: relative;
-}
-.app-shell .trasee-module .input {
-  width: 100%;
-  border: 1.5px solid var(--line-2);
-  background: var(--surface);
-  border-radius: 12px;
-  padding: 12px 14px;
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s;
-}
-.app-shell .trasee-module .input:focus {
-  outline: none;
-  border-color: var(--brand);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 18%, transparent);
-}
-.app-shell .trasee-module .textarea {
-  resize: vertical;
-  min-height: 96px;
-  font-size: 17px;
-}
-.app-shell .trasee-module .search__row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: flex-end;
-}
-.app-shell .trasee-module .select-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1 1 180px;
-  min-width: 0;
-}
-.app-shell .trasee-module .select-wrap__label {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 600;
-}
-.app-shell .trasee-module .select {
-  appearance: none;
-  width: 100%;
-  border: 1.5px solid var(--line-2);
-  border-radius: 10px;
-  padding: 10px 36px 10px 12px;
-  background: var(--surface)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%235b6b7d' stroke-width='2'%3E%3Cpath d='m1 1 5 5 5-5'/%3E%3C/svg%3E")
-    no-repeat right 12px center;
-  min-height: 44px;
-}
-.app-shell .trasee-module .examples {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-.app-shell .trasee-module .examples__label {
-  font-size: 14px;
-  color: var(--muted);
-  margin-right: 2px;
-}
-.app-shell .trasee-module .search--compact {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  padding: 12px;
-  border-radius: 14px;
-  box-shadow: var(--shadow-sm);
-}
-.app-shell .trasee-module .search--compact .search__field {
-  flex: 2 1 320px;
-}
-.app-shell .trasee-module .search--compact .search__row {
-  flex: 3 1 480px;
-}
-.app-shell .trasee-module .search__icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--muted);
-  display: flex;
-}
-.app-shell .trasee-module .input--bare {
-  padding-left: 40px;
-  min-height: 44px;
-}
-.app-shell .trasee-module .searchbar {
-  padding: 20px 0 8px;
-}
+.app-shell .trasee-module .search { background: var(--surface); color: var(--ink); border-radius: 18px; padding: 20px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; gap: 14px; }
+.app-shell .trasee-module .search__label { font-weight: 700; font-size: 17px; }
+.app-shell .trasee-module .search__field { position: relative; }
+.app-shell .trasee-module .input { width: 100%; border: 1.5px solid var(--line-2); background: var(--surface); border-radius: 12px; padding: 12px 14px; transition: border-color 0.15s, box-shadow 0.15s; }
+.app-shell .trasee-module .input:focus { outline: none; border-color: var(--l-dig); box-shadow: 0 0 0 4px color-mix(in srgb, var(--l-dig) 20%, transparent); }
+.app-shell .trasee-module .textarea { resize: vertical; min-height: 100px; font-size: 17px; line-height: 1.45; }
+.app-shell .trasee-module .search__row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.app-shell .trasee-module .select-wrap { display: flex; flex-direction: column; gap: 4px; flex: 1 1 170px; min-width: 0; }
+.app-shell .trasee-module .select-wrap__label { font-size: 13px; color: var(--muted); font-weight: 650; }
+.app-shell .trasee-module .select { appearance: none; width: 100%; border: 1.5px solid var(--line-2); border-radius: 10px; padding: 10px 36px 10px 12px; background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%235d6c83' stroke-width='2'%3E%3Cpath d='m1 1 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 12px center; min-height: 46px; }
+.app-shell .trasee-module .examples { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-top: 2px; }
+.app-shell .trasee-module .examples__label { font-size: 14px; color: var(--muted); margin-right: 2px; width: 100%; }
+.app-shell .trasee-module .search--compact { flex-direction: row; flex-wrap: wrap; align-items: flex-end; padding: 12px; border-radius: 14px; box-shadow: none; }
+.app-shell .trasee-module .search--compact .search__field { flex: 2 1 320px; }
+.app-shell .trasee-module .search--compact .search__row { flex: 3 1 480px; }
+.app-shell .trasee-module .search__icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); display: flex; }
+.app-shell .trasee-module .input--bare { padding-left: 40px; min-height: 46px; }
 
 /* butoane */
-.app-shell .trasee-module .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 10px;
-  border: 1.5px solid transparent;
-  padding: 10px 16px;
-  font-weight: 650;
-  cursor: pointer;
-  text-decoration: none;
-  min-height: 44px;
-  transition:
-    background 0.15s,
-    border-color 0.15s,
-    transform 0.05s;
-  white-space: nowrap;
-}
-.app-shell .trasee-module .btn:active {
-  transform: translateY(1px);
-}
-.app-shell .trasee-module .btn[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.app-shell .trasee-module .btn--lg {
-  min-height: 48px;
-  padding: 12px 20px;
-}
-.app-shell .trasee-module .btn--primary {
-  background: var(--brand);
-  color: var(--brand-ink);
-}
-.app-shell .trasee-module .btn--primary:hover:not([disabled]) {
-  background: var(--brand-strong);
-}
-.app-shell .trasee-module .btn--secondary {
-  background: var(--surface);
-  border-color: var(--line-2);
-  color: var(--ink);
-}
-.app-shell .trasee-module .btn--secondary:hover {
-  border-color: var(--brand);
-  color: var(--brand-strong);
-}
-.app-shell .trasee-module .btn--ghost {
-  background: transparent;
-  color: var(--brand-strong);
-  padding-left: 0;
-}
-.app-shell .trasee-module .btn--inverse {
-  background: var(--surface);
-  color: var(--ink);
-}
-.app-shell .trasee-module .btn--ghost-inverse {
-  background: transparent;
-  color: inherit;
-  border-color: color-mix(in srgb, currentColor 35%, transparent);
-}
-.app-shell .trasee-module .icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  flex: none;
-}
-.app-shell .trasee-module .icon-btn:hover {
-  background: var(--surface-2);
-}
-.app-shell .trasee-module .linklike {
-  background: none;
-  border: 0;
-  padding: 0;
-  text-align: left;
-  cursor: pointer;
-  color: inherit;
-  font: inherit;
-}
-.app-shell .trasee-module .linklike:hover {
-  color: var(--brand-strong);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.app-shell .trasee-module .chip {
-  border: 1px solid var(--line-2);
-  background: var(--surface);
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 14px;
-  cursor: pointer;
-  color: var(--ink-2);
-}
-.app-shell .trasee-module .chip:hover {
-  border-color: var(--brand);
-  color: var(--brand-strong);
-  background: var(--brand-soft);
-}
-.app-shell .trasee-module .spinner {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2.5px solid color-mix(in srgb, currentColor 30%, transparent);
-  border-top-color: currentColor;
-  animation: spin 0.8s linear infinite;
-  display: inline-block;
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .app-shell .trasee-module .spinner {
-    animation: none;
-  }
-}
+.app-shell .trasee-module .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; border: 1.5px solid transparent; padding: 10px 18px; font-weight: 700; cursor: pointer; text-decoration: none; min-height: 46px; transition: background 0.15s, border-color 0.15s, transform 0.05s; white-space: nowrap; }
+.app-shell .trasee-module .btn:active { transform: translateY(1px); }
+.app-shell .trasee-module .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+.app-shell .trasee-module .btn--lg { min-height: 48px; padding: 12px 22px; font-size: 16.5px; }
+.app-shell .trasee-module .btn--primary { background: var(--ink); color: var(--surface); }
+.app-shell .trasee-module .btn--primary:hover:not([disabled]) { background: var(--night-2); color: #fff; }
+.app-shell .trasee-module .btn--secondary { background: var(--surface); border-color: var(--line-2); color: var(--ink); }
+.app-shell .trasee-module .btn--secondary:hover { border-color: var(--ink); }
+.app-shell .trasee-module .btn--ghost { background: transparent; color: var(--ink); padding-left: 0; text-decoration: underline; text-underline-offset: 4px; }
+.app-shell .trasee-module .btn--inverse { background: #fff; color: var(--night); }
+.app-shell .trasee-module .btn--ghost-inverse { background: transparent; color: inherit; border-color: rgba(255, 255, 255, 0.3); }
+.app-shell .trasee-module .icon-btn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; cursor: pointer; flex: none; }
+.app-shell .trasee-module .icon-btn:hover { background: var(--surface-2); }
+.app-shell .trasee-module .linklike { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; color: inherit; font: inherit; }
+.app-shell .trasee-module .linklike:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.app-shell .trasee-module .chip { border: 1px solid var(--line-2); background: var(--surface-2); border-radius: 999px; padding: 6px 12px; font-size: 14px; cursor: pointer; color: var(--ink-2); text-align: left; }
+.app-shell .trasee-module .chip:hover { border-color: var(--ink); color: var(--ink); background: var(--surface); }
+.app-shell .trasee-module .spinner { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid color-mix(in srgb, currentColor 30%, transparent); border-top-color: currentColor; animation: trasee-spin 0.8s linear infinite; display: inline-block; }
+@keyframes trasee-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .app-shell .trasee-module .spinner { animation: none; } }
 
 /* rezultate */
-.app-shell .trasee-module .results {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 12px 0 120px;
-}
-.app-shell .trasee-module .understood {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-}
-.app-shell .trasee-module .understood__icon {
-  color: var(--brand);
-  display: flex;
-  padding-top: 2px;
-}
-.app-shell .trasee-module .understood__body {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 0;
-}
-.app-shell .trasee-module .understood__text {
-  font-size: 16px;
-}
-.app-shell .trasee-module .pill {
-  display: inline-block;
-  margin-left: 8px;
-  font-size: 12px;
-  font-weight: 650;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  color: var(--muted);
-  vertical-align: 1px;
-}
-.app-shell .trasee-module .pill--ai {
-  background: var(--brand-soft);
-  color: var(--brand-strong);
-}
-.app-shell .trasee-module .tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.app-shell .trasee-module .tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 8px;
-  background: var(--brand-soft);
-  color: var(--brand-strong);
-}
-.app-shell .trasee-module .tag--muted {
-  background: var(--surface-2);
-  color: var(--ink-2);
-  font-weight: 500;
-}
-.app-shell .trasee-module .tag--warn {
-  background: var(--warn-soft);
-  color: var(--warn);
-}
-.app-shell .trasee-module .tag__x {
-  border: 0;
-  background: none;
-  cursor: pointer;
-  color: inherit;
-  display: flex;
-  padding: 0 0 0 2px;
-  opacity: 0.75;
-}
-.app-shell .trasee-module .tag__x:hover {
-  opacity: 1;
-}
-.app-shell .trasee-module .refine {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 24px;
-}
-.app-shell .trasee-module .seg {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.app-shell .trasee-module .seg__label {
-  font-size: 13px;
-  font-weight: 650;
-  color: var(--muted);
-}
-.app-shell .trasee-module .seg__track {
-  display: inline-flex;
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 3px;
-}
-.app-shell .trasee-module .seg__btn {
-  border: 0;
-  background: transparent;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink-2);
-  cursor: pointer;
-  min-height: 34px;
-}
-.app-shell .trasee-module .seg__btn[aria-pressed="true"] {
-  background: var(--surface);
-  color: var(--ink);
-  box-shadow: var(--shadow-sm);
-}
-.app-shell .trasee-module .done {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  font-size: 14px;
-  color: var(--muted);
-}
-.app-shell .trasee-module .notice {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  background: var(--warn-soft);
-  color: var(--warn);
-  border-radius: var(--radius-sm);
-  padding: 12px 16px;
-}
-.app-shell .trasee-module .notice p {
-  color: var(--ink);
-}
-.app-shell .trasee-module .notice--error {
-  background: var(--bad-soft);
-  color: var(--bad);
-}
-.app-shell .trasee-module .results__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.app-shell .trasee-module .empty {
-  text-align: center;
-  padding: 48px 20px;
-  background: var(--surface);
-  border: 1px dashed var(--line-2);
-  border-radius: var(--radius);
-}
-.app-shell .trasee-module .empty p {
-  color: var(--muted);
-  margin-top: 8px;
-}
+.app-shell .trasee-module .results { display: flex; flex-direction: column; gap: 20px; padding: 28px 0 120px; }
+.app-shell .trasee-module .understood { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
+.app-shell .trasee-module .understood__icon { color: var(--l-dig); display: flex; padding-top: 2px; }
+.app-shell .trasee-module .understood__body { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.app-shell .trasee-module .pill { display: inline-block; margin-left: 8px; font-size: 12px; font-weight: 650; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--muted); vertical-align: 1px; }
+.app-shell .trasee-module .pill--ai { background: color-mix(in srgb, var(--l-dig) 14%, var(--surface)); color: var(--l-dig); }
+.app-shell .trasee-module .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.app-shell .trasee-module .tag { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 650; padding: 5px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); }
+.app-shell .trasee-module .tag__dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.app-shell .trasee-module .tag--muted { font-weight: 500; color: var(--ink-2); }
+.app-shell .trasee-module .tag--warn { background: var(--warn-soft); color: var(--warn); }
+.app-shell .trasee-module .tag__x { border: 0; background: none; cursor: pointer; color: inherit; display: flex; padding: 0; opacity: 0.6; }
+.app-shell .trasee-module .tag__x:hover { opacity: 1; }
+.app-shell .trasee-module .refine { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.app-shell .trasee-module .seg { display: flex; align-items: center; gap: 10px; }
+.app-shell .trasee-module .seg__label { font-size: 13px; font-weight: 650; color: var(--muted); }
+.app-shell .trasee-module .seg__track { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 3px; }
+.app-shell .trasee-module .seg__btn { border: 0; background: transparent; padding: 6px 12px; border-radius: 9px; font-size: 14px; font-weight: 650; color: var(--ink-2); cursor: pointer; min-height: 34px; }
+.app-shell .trasee-module .seg__btn[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.app-shell .trasee-module .done { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); }
+.app-shell .trasee-module .notice { display: flex; gap: 12px; align-items: flex-start; background: var(--warn-soft); color: var(--warn); border-radius: var(--radius-sm); padding: 12px 16px; }
+.app-shell .trasee-module .notice p { color: var(--ink); }
+.app-shell .trasee-module .notice--error { background: var(--signal-soft); color: var(--signal); }
+.app-shell .trasee-module .results__head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.app-shell .trasee-module .results__head h2 { font-family: var(--display); font-size: 32px; font-weight: 700; letter-spacing: 0; }
+.app-shell .trasee-module .empty { text-align: center; padding: 48px 20px; background: var(--surface); border: 1px dashed var(--line-2); border-radius: var(--radius); }
+.app-shell .trasee-module .empty p { color: var(--muted); margin-top: 8px; }
 
-.app-shell .trasee-module .grid3 {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-@media (max-width: 980px) {
-  .app-shell .trasee-module .grid3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 680px) {
-  .app-shell .trasee-module .grid3 {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-.app-shell .trasee-module .card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow-sm);
-  transition:
-    box-shadow 0.2s,
-    transform 0.2s,
-    border-color 0.2s;
-}
-.app-shell .trasee-module .card:hover {
-  box-shadow: var(--shadow);
-  transform: translateY(-2px);
-}
-.app-shell .trasee-module .card--best {
-  border-color: color-mix(in srgb, var(--brand) 55%, var(--line));
-  box-shadow: var(--shadow);
-}
-.app-shell .trasee-module .card__ribbon {
-  position: absolute;
-  top: -11px;
-  left: 18px;
-  background: var(--brand);
-  color: var(--brand-ink);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 999px;
-}
-.app-shell .trasee-module .card__meta {
-  font-size: 12.5px;
-  font-weight: 650;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.app-shell .trasee-module .card__title {
-  font-size: 18px;
-  line-height: 1.3;
-}
-.app-shell .trasee-module .card__why {
-  color: var(--ink-2);
-  font-size: 14.5px;
-}
-.app-shell .trasee-module .facts {
-  list-style: none;
-  margin: 0;
-  padding: 12px 0 0;
-  border-top: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.app-shell .trasee-module .fact {
-  display: flex;
-  gap: 10px;
-  font-size: 14.5px;
-  color: var(--ink);
-  align-items: flex-start;
-}
-.app-shell .trasee-module .fact__icon {
-  color: var(--muted);
-  display: flex;
-  padding-top: 1px;
-}
-.app-shell .trasee-module .fact--ok .fact__icon,
-.app-shell .trasee-module .fact--ok {
-  color: var(--ok);
-}
-.app-shell .trasee-module .fact--warn {
-  color: var(--warn);
-}
-.app-shell .trasee-module .fact--muted {
-  color: var(--muted);
-}
-.app-shell .trasee-module .badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.app-shell .trasee-module .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12.5px;
-  font-weight: 650;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: var(--surface-2);
-  color: var(--ink-2);
-}
-.app-shell .trasee-module .badge svg {
-  width: 14px;
-  height: 14px;
-}
-.app-shell .trasee-module .badge--ok {
-  background: var(--ok-soft);
-  color: var(--ok);
-}
-.app-shell .trasee-module .badge--warn {
-  background: var(--warn-soft);
-  color: var(--warn);
-}
-.app-shell .trasee-module .card__actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: auto;
-  padding-top: 4px;
-}
-.app-shell .trasee-module .check {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink-2);
-  cursor: pointer;
-}
-.app-shell .trasee-module .check input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--brand);
-}
-.app-shell .trasee-module .card__done {
-  align-self: flex-start;
-  border: 0;
-  background: none;
-  color: var(--muted);
-  font-size: 13.5px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-  padding: 0;
-}
-.app-shell .trasee-module .card__done:hover {
-  color: var(--ink);
-}
+.app-shell .trasee-module .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
+@media (max-width: 1020px) { .app-shell .trasee-module .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 680px) { .app-shell .trasee-module .grid3 { grid-template-columns: minmax(0, 1fr); } }
+.app-shell .trasee-module .card { position: relative; display: flex; flex-direction: column; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 20px 18px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.app-shell .trasee-module .card--best { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink), var(--shadow); }
+.app-shell .trasee-module .rail { display: flex; height: 7px; margin: 0 -20px 6px; flex: none; }
+.app-shell .trasee-module .rail i { flex: 1; }
+.app-shell .trasee-module .card__top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.app-shell .trasee-module .station-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; color: var(--ink); min-width: 0; }
+.app-shell .trasee-module .station-tag i { width: 13px; height: 13px; border-radius: 50%; background: var(--surface); border: 3px solid var(--ink); flex: none; }
+.app-shell .trasee-module .card__type { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.app-shell .trasee-module .card__best { font-size: 12.5px; font-weight: 700; color: var(--surface); background: var(--ink); padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.app-shell .trasee-module .card__title { font-size: 19px; line-height: 1.25; font-weight: 750; letter-spacing: -0.01em; }
+.app-shell .trasee-module .card__why { color: var(--ink-2); font-size: 14.5px; }
+.app-shell .trasee-module .runtrack { display: flex; flex-direction: column; gap: 6px; }
+.app-shell .trasee-module .runtrack__head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 13.5px; }
+.app-shell .trasee-module .runtrack__when { font-weight: 700; }
+.app-shell .trasee-module .runtrack__status { color: var(--muted); text-align: right; }
+.app-shell .trasee-module .runtrack__track { position: relative; height: 30px; background: var(--surface-2); border-radius: 8px; overflow: hidden; }
+.app-shell .trasee-module .runtrack__track--none { background: repeating-linear-gradient(135deg, var(--surface-2) 0 7px, var(--line) 7px 8px); }
+.app-shell .trasee-module .runtrack__month { position: absolute; top: 0; bottom: 0; padding: 2px 0 0 6px; border-left: 1px solid var(--line); font-size: 11px; color: var(--muted); line-height: 1.2; }
+.app-shell .trasee-module .runtrack__month:first-child { border-left: 0; }
+.app-shell .trasee-module .runtrack__bar { position: absolute; bottom: 5px; height: 9px; border-radius: 5px; background: var(--ink); }
+.app-shell .trasee-module .runtrack__bar--open { background: linear-gradient(90deg, var(--ink) 60%, transparent); }
+.app-shell .trasee-module .runtrack__today { position: absolute; top: 15px; bottom: 2px; width: 2px; margin-left: -1px; background: var(--signal); }
+.app-shell .trasee-module .facts { list-style: none; margin: 0; padding: 12px 0 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.app-shell .trasee-module .fact { display: flex; gap: 10px; font-size: 14.5px; color: var(--ink); align-items: flex-start; }
+.app-shell .trasee-module .fact small { color: var(--muted); font-size: 13px; margin-left: 6px; }
+.app-shell .trasee-module .fact__icon { color: var(--muted); display: flex; padding-top: 1px; }
+.app-shell .trasee-module .fact--ok, .app-shell .trasee-module .fact--ok .fact__icon { color: var(--ok); }
+.app-shell .trasee-module .fact--warn { color: var(--warn); }
+.app-shell .trasee-module .fact--muted { color: var(--muted); }
+.app-shell .trasee-module .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.app-shell .trasee-module .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 650; padding: 3px 8px; border-radius: 6px; background: var(--surface-2); color: var(--ink-2); }
+.app-shell .trasee-module .badge svg { width: 14px; height: 14px; }
+.app-shell .trasee-module .badge--ok { background: var(--ok-soft); color: var(--ok); }
+.app-shell .trasee-module .badge--warn { background: var(--warn-soft); color: var(--warn); }
+.app-shell .trasee-module .card__actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 4px; }
+.app-shell .trasee-module .check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 650; color: var(--ink-2); cursor: pointer; }
+.app-shell .trasee-module .check input { width: 18px; height: 18px; accent-color: var(--ink); }
+.app-shell .trasee-module .card__done { align-self: flex-start; border: 0; background: none; color: var(--muted); font-size: 13.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 0; }
+.app-shell .trasee-module .card__done:hover { color: var(--ink); }
 
-.app-shell .trasee-module .more {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 8px 20px 16px;
-}
-.app-shell .trasee-module .more__title {
-  padding: 12px 0 4px;
-  font-size: 16px;
-}
-.app-shell .trasee-module .rows {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.app-shell .trasee-module .row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 120px 170px auto;
-  gap: 16px;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 14.5px;
-}
-.app-shell .trasee-module .row:last-child {
-  border-bottom: 0;
-}
-.app-shell .trasee-module .row__main {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-.app-shell .trasee-module .row__title {
-  font-weight: 650;
-}
-.app-shell .trasee-module .row__fact {
-  color: var(--ink-2);
-}
-@media (max-width: 760px) {
-  .app-shell .trasee-module .row {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-  .app-shell .trasee-module .row__fact {
-    display: none;
-  }
-}
+.app-shell .trasee-module .more { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 20px 16px; }
+.app-shell .trasee-module .more__title { padding: 12px 0 4px; font-size: 17px; }
+.app-shell .trasee-module .rows { list-style: none; margin: 0; padding: 0; }
+.app-shell .trasee-module .row { display: grid; grid-template-columns: 6px minmax(0, 1fr) 120px 170px auto; gap: 16px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+.app-shell .trasee-module .row:last-child { border-bottom: 0; }
+.app-shell .trasee-module .row .rail { flex-direction: column; width: 6px; height: auto; align-self: stretch; margin: 0; border-radius: 3px; overflow: hidden; }
+.app-shell .trasee-module .row__main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.app-shell .trasee-module .row__title { font-weight: 700; }
+.app-shell .trasee-module .row__fact { color: var(--ink-2); }
+@media (max-width: 760px) { .app-shell .trasee-module .row { grid-template-columns: 6px minmax(0, 1fr) auto; } .app-shell .trasee-module .row__fact { display: none; } }
 
 /* bara de comparare */
-.app-shell .trasee-module .comparebar {
-  position: fixed;
-  left: 50%;
-  bottom: 20px;
-  transform: translateX(-50%);
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background: var(--ink);
-  color: var(--bg);
-  padding: 10px 12px 10px 18px;
-  border-radius: 14px;
-  box-shadow: var(--shadow-lg);
-  width: max-content;
-  max-width: calc(100vw - 24px);
-  flex-wrap: wrap;
-}
-.app-shell .trasee-module .comparebar > span {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  font-weight: 600;
-}
-.app-shell .trasee-module .actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
+.app-shell .trasee-module .comparebar { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 30; display: flex; align-items: center; gap: 20px; background: var(--night); color: #fff; padding: 10px 12px 10px 18px; border-radius: 14px; box-shadow: var(--shadow-lg); width: max-content; max-width: calc(100vw - 24px); flex-wrap: wrap; }
+.app-shell .trasee-module .comparebar > span { display: inline-flex; gap: 8px; align-items: center; font-weight: 650; }
+.app-shell .trasee-module .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
 /* sertar și fereastră */
-.app-shell .trasee-module .overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  background: rgba(8, 15, 25, 0.45);
-  display: flex;
-  justify-content: flex-end;
-  animation: fade 0.15s ease-out;
-}
-.app-shell .trasee-module .overlay--center {
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-}
-.app-shell .trasee-module .drawer {
-  width: min(620px, 100%);
-  height: 100%;
-  background: var(--surface);
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow-lg);
-  animation: slide 0.2s ease-out;
-  outline: none;
-}
-@keyframes slide {
-  from {
-    transform: translateX(24px);
-    opacity: 0.6;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .app-shell .trasee-module .drawer,
-  .app-shell .trasee-module .overlay {
-    animation: none;
-  }
-}
-.app-shell .trasee-module .drawer__head {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: flex-start;
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid var(--line);
-}
-.app-shell .trasee-module .drawer__title {
-  font-size: 22px;
-  margin-top: 4px;
-}
-.app-shell .trasee-module .drawer__body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px 24px 24px;
-  display: flex;
-  flex-direction: column;
-}
-.app-shell .trasee-module .drawer__foot {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  padding: 14px 24px;
-  border-top: 1px solid var(--line);
-  flex-wrap: wrap;
-}
-.app-shell .trasee-module .sec {
-  padding: 18px 0;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.app-shell .trasee-module .sec:last-child {
-  border-bottom: 0;
-}
-.app-shell .trasee-module .sec__title {
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  font-weight: 700;
-}
-.app-shell .trasee-module .sec--accent {
-  background: var(--brand-soft);
-  margin: 16px -12px 0;
-  padding: 18px 12px;
-  border-radius: 12px;
-  border: 0;
-}
-.app-shell .trasee-module .kv {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 20px;
-  margin: 0;
-}
-.app-shell .trasee-module .kv > div {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-.app-shell .trasee-module .kv dt {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 600;
-}
-.app-shell .trasee-module .kv dt svg {
-  width: 16px;
-  height: 16px;
-}
-.app-shell .trasee-module .kv dd {
-  margin: 0;
-  font-weight: 550;
-}
-.app-shell .trasee-module .kv__wide {
-  grid-column: 1 / -1;
-}
-.app-shell .trasee-module .kv--plain dd {
-  font-weight: 400;
-}
-@media (max-width: 520px) {
-  .app-shell .trasee-module .kv {
-    grid-template-columns: 1fr;
-  }
-}
-.app-shell .trasee-module .ticks {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.app-shell .trasee-module .ticks li {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-}
-.app-shell .trasee-module .ticks svg {
-  color: var(--ok);
-  flex: none;
-  margin-top: 3px;
-  width: 16px;
-  height: 16px;
-}
-.app-shell .trasee-module .qs,
-.app-shell .trasee-module .steps {
-  margin: 0;
-  padding-left: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.app-shell .trasee-module .more-info summary {
-  cursor: pointer;
-  font-weight: 650;
-  color: var(--ink-2);
-}
-.app-shell .trasee-module .modal {
-  width: min(1040px, 100%);
-  max-height: calc(100vh - 40px);
-  background: var(--surface);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow-lg);
-  outline: none;
-}
-.app-shell .trasee-module .table-wrap {
-  overflow: auto;
-}
-.app-shell .trasee-module .cmp {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14.5px;
-  min-width: 640px;
-}
-.app-shell .trasee-module .cmp th,
-.app-shell .trasee-module .cmp td {
-  text-align: left;
-  vertical-align: top;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--line);
-}
-.app-shell .trasee-module .cmp thead th {
-  position: sticky;
-  top: 0;
-  background: var(--surface);
-  font-weight: 700;
-}
-.app-shell .trasee-module .cmp tbody th {
-  width: 170px;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 13.5px;
-}
-.app-shell .trasee-module .mini {
-  margin: 0;
-  padding-left: 18px;
-}
+.app-shell .trasee-module .overlay { position: fixed; inset: 0; z-index: 50; background: rgba(8, 18, 36, 0.5); display: flex; justify-content: flex-end; animation: trasee-fade 0.15s ease-out; }
+.app-shell .trasee-module .overlay--center { justify-content: center; align-items: center; padding: 20px; }
+@keyframes trasee-fade { from { opacity: 0; } }
+.app-shell .trasee-module .drawer { width: min(640px, 100%); height: 100%; background: var(--surface); display: flex; flex-direction: column; box-shadow: var(--shadow-lg); animation: trasee-slide 0.22s ease-out; outline: none; }
+@keyframes trasee-slide { from { transform: translateX(28px); opacity: 0.6; } }
+@media (prefers-reduced-motion: reduce) { .app-shell .trasee-module .drawer, .app-shell .trasee-module .overlay { animation: none; } }
+.app-shell .trasee-module .drawer__head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; padding: 22px 24px 18px; border-bottom: 1px solid var(--line); border-top: 7px solid var(--ink); }
+.app-shell .trasee-module .drawer__meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.app-shell .trasee-module .drawer__title { font-family: var(--display); font-size: 30px; line-height: 1.05; margin-top: 8px; letter-spacing: 0; }
+.app-shell .trasee-module .drawer__body { flex: 1; overflow-y: auto; padding: 8px 24px 24px; display: flex; flex-direction: column; }
+.app-shell .trasee-module .drawer__foot { display: flex; gap: 10px; justify-content: flex-end; padding: 14px 24px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.app-shell .trasee-module .sec { padding: 18px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+.app-shell .trasee-module .sec:last-child { border-bottom: 0; }
+.app-shell .trasee-module .sec__title { font-size: 15px; color: var(--ink); font-weight: 750; }
+.app-shell .trasee-module .sec--accent { background: color-mix(in srgb, var(--l-dig) 8%, var(--surface)); margin: 16px -12px 0; padding: 18px 12px; border-radius: 12px; border: 0; border-left: 5px solid var(--l-dig); }
+.app-shell .trasee-module .kv { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin: 0; }
+.app-shell .trasee-module .kv > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.app-shell .trasee-module .kv dt { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); font-weight: 600; }
+.app-shell .trasee-module .kv dt svg { width: 16px; height: 16px; }
+.app-shell .trasee-module .kv dd { margin: 0; font-weight: 600; }
+.app-shell .trasee-module .kv__wide { grid-column: 1 / -1; }
+.app-shell .trasee-module .kv--plain dd { font-weight: 400; }
+@media (max-width: 520px) { .app-shell .trasee-module .kv { grid-template-columns: 1fr; } }
+.app-shell .trasee-module .ticks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.app-shell .trasee-module .ticks li { display: flex; gap: 8px; align-items: flex-start; }
+.app-shell .trasee-module .ticks svg { color: var(--ok); flex: none; margin-top: 3px; width: 16px; height: 16px; }
+.app-shell .trasee-module .qs, .app-shell .trasee-module .steps { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+.app-shell .trasee-module .more-info summary { cursor: pointer; font-weight: 650; color: var(--ink-2); }
+.app-shell .trasee-module .modal { width: min(1060px, 100%); max-height: calc(100vh - 40px); background: var(--surface); border-radius: 18px; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); outline: none; overflow: hidden; }
+.app-shell .trasee-module .table-wrap { overflow: auto; }
+.app-shell .trasee-module .cmp { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 640px; }
+.app-shell .trasee-module .cmp th, .app-shell .trasee-module .cmp td { text-align: left; vertical-align: top; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.app-shell .trasee-module .cmp thead th { position: sticky; top: 0; background: var(--surface); font-weight: 750; }
+.app-shell .trasee-module .cmp tbody th { width: 170px; color: var(--muted); font-weight: 650; font-size: 13.5px; }
+.app-shell .trasee-module .mini { margin: 0; padding-left: 18px; }
 
 /* coordonatori */
-.app-shell .trasee-module .coord {
-  padding: 36px 20px 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.app-shell .trasee-module .coord__head .lead {
-  margin-bottom: 0;
-}
-.app-shell .trasee-module .kpis {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-}
+.app-shell .trasee-module .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 32px 0 0; border-top: 1px solid rgba(255, 255, 255, 0.14); }
+.app-shell .trasee-module .kpis > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 4px; padding: 18px 16px 26px 0; }
+.app-shell .trasee-module .kpis > div + div { padding-left: 20px; border-left: 1px solid rgba(255, 255, 255, 0.14); }
+.app-shell .trasee-module .kpis dd { margin: 0; font-family: var(--display); font-size: 54px; line-height: 0.95; color: #fff; }
+.app-shell .trasee-module .kpis dd small { font-size: 22px; color: var(--night-muted); }
+.app-shell .trasee-module .kpis dt { color: var(--night-muted); font-size: 14px; }
+@media (max-width: 760px) { .app-shell .trasee-module .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .app-shell .trasee-module .kpis > div:nth-child(3) { padding-left: 0; border-left: 0; } }
+.app-shell .trasee-module .coord { padding-top: 28px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 22px; }
+.app-shell .trasee-module .coord-loading { padding: 60px 24px; }
+.app-shell .trasee-module .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.app-shell .trasee-module .panel h2 { font-family: var(--display); font-size: 28px; font-weight: 700; letter-spacing: 0; }
+.app-shell .trasee-module .panel__head { display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; align-items: flex-start; }
+.app-shell .trasee-module .panel__head .hint { margin-top: 4px; max-width: 62em; }
+.app-shell .trasee-module .switch { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; font-weight: 650; color: var(--ink-2); }
+.app-shell .trasee-module .switch input { width: 18px; height: 18px; accent-color: var(--ink); }
+
+/* calendarul suprapunerilor */
+.app-shell .trasee-module .gantt { display: flex; flex-direction: column; gap: 6px; }
+.app-shell .trasee-module .gantt__axis, .app-shell .trasee-module .gantt__row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 210px; gap: 14px; align-items: center; }
+.app-shell .trasee-module .gantt__months { position: relative; height: 44px; }
+.app-shell .trasee-module .gantt__months span { position: absolute; top: 4px; padding-left: 5px; border-left: 1px solid var(--line-2); font-size: 12px; color: var(--muted); white-space: nowrap; }
+.app-shell .trasee-module .gantt__today { position: absolute; top: 22px; transform: translateX(-50%); background: var(--signal); color: #fff; font-size: 11.5px; font-weight: 700; padding: 1px 7px; border-radius: 999px; }
+.app-shell .trasee-module .gantt__group { border-top: 1px solid var(--line); padding: 10px 0 6px; display: flex; flex-direction: column; gap: 5px; }
+.app-shell .trasee-module .gantt__title { font-family: var(--display); font-size: 21px; font-weight: 700; letter-spacing: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+.app-shell .trasee-module .gantt__title span { font-family: var(--font); font-size: 13.5px; color: var(--muted); font-weight: 500; }
+.app-shell .trasee-module .gantt__who { font-size: 14px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-shell .trasee-module .gantt__track { position: relative; height: 22px; background: var(--surface-2); border-radius: 6px; }
+.app-shell .trasee-module .gantt__grid { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); }
+.app-shell .trasee-module .gantt__bar { position: absolute; top: 5px; height: 12px; border-radius: 4px; background: var(--ink); overflow: hidden; }
+.app-shell .trasee-module .gantt__clash { position: absolute; top: 0; bottom: 0; background: var(--signal); }
+.app-shell .trasee-module .gantt__todayline { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--signal); opacity: 0.55; }
+.app-shell .trasee-module .gantt__meta { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-shell .trasee-module .gantt__legend { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13.5px; color: var(--ink-2); margin-top: 6px; }
+.app-shell .trasee-module .gantt__key { display: inline-block; width: 26px; height: 10px; border-radius: 3px; background: var(--ink); }
+.app-shell .trasee-module .gantt__key--clash { background: var(--signal); margin-left: 14px; }
 @media (max-width: 760px) {
-  .app-shell .trasee-module .kpis {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-.app-shell .trasee-module .kpi {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-}
-.app-shell .trasee-module .kpi b {
-  font-size: 28px;
-  letter-spacing: -0.02em;
-}
-.app-shell .trasee-module .kpi span {
-  color: var(--muted);
-  font-size: 14px;
-}
-.app-shell .trasee-module .panel {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  min-width: 0;
-}
-.app-shell .trasee-module .panel__head {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.app-shell .trasee-module .switch {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink-2);
-}
-.app-shell .trasee-module .switch input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--brand);
-}
-.app-shell .trasee-module .legend {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.app-shell .trasee-module .status {
-  font-size: 12.5px;
-  font-weight: 650;
-  padding: 3px 9px;
-  border-radius: 6px;
-}
-.app-shell .trasee-module .status--exista {
-  background: var(--ok-soft);
-  color: var(--ok);
-}
-.app-shell .trasee-module .status--necunoscut {
-  background: var(--warn-soft);
-  color: var(--warn);
-}
-.app-shell .trasee-module .status--inexistent {
-  background: var(--bad-soft);
-  color: var(--bad);
-}
-.app-shell .trasee-module .matrix {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 4px;
-  min-width: 820px;
-  font-size: 13.5px;
-}
-.app-shell .trasee-module .matrix thead th {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 650;
-  text-align: left;
-  padding: 4px 6px;
-}
-.app-shell .trasee-module .matrix tbody th {
-  text-align: left;
-  font-weight: 600;
-  padding-right: 8px;
-  width: 230px;
-}
-.app-shell .trasee-module .matrix__group th {
-  padding-top: 14px;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted) !important;
-}
-.app-shell .trasee-module .cell {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 7px 9px;
-  border-radius: 8px;
-  min-height: 48px;
-}
-.app-shell .trasee-module .cell b {
-  font-size: 13px;
-}
-.app-shell .trasee-module .cell small {
-  font-size: 12px;
-  opacity: 0.85;
-  line-height: 1.3;
-}
-.app-shell .trasee-module .two {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-@media (max-width: 860px) {
-  .app-shell .trasee-module .two {
-    grid-template-columns: 1fr;
-  }
-}
-.app-shell .trasee-module .prov,
-.app-shell .trasee-module .bars {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.app-shell .trasee-module .prov li {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.app-shell .trasee-module .prov__top {
-  display: flex;
-  justify-content: space-between;
-}
-.app-shell .trasee-module .meter {
-  height: 8px;
-  border-radius: 99px;
-  background: var(--surface-2);
-  overflow: hidden;
-}
-.app-shell .trasee-module .meter i {
-  display: block;
-  height: 100%;
-  background: var(--brand);
-  border-radius: 99px;
-}
-.app-shell .trasee-module .bars li {
-  display: grid;
-  grid-template-columns: 200px 1fr 32px;
-  gap: 12px;
-  align-items: center;
-  font-size: 14px;
+  .app-shell .trasee-module .gantt__axis, .app-shell .trasee-module .gantt__row { grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
+  .app-shell .trasee-module .gantt__meta { display: none; }
+  .app-shell .trasee-module .gantt__who { font-size: 12.5px; }
 }
 
-.app-shell .trasee-module .footer {
-  border-top: 1px solid var(--line);
-  padding: 28px 0 40px;
-  background: var(--surface);
-}
-.app-shell .trasee-module .footer__inner {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
-  color: var(--ink-2);
-}
+/* harta tematică */
+.app-shell .trasee-module .heat-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--ink-2); align-items: center; }
+.app-shell .trasee-module .heat-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.app-shell .trasee-module .heat { width: 100%; border-collapse: separate; border-spacing: 5px; min-width: 860px; font-size: 14px; }
+.app-shell .trasee-module .heat thead th { font-size: 13px; color: var(--muted); font-weight: 650; text-align: left; padding: 4px 6px; }
+.app-shell .trasee-module .heat tbody th { text-align: left; font-weight: 600; padding-right: 10px; width: 240px; }
+.app-shell .trasee-module .heat__group th { padding-top: 16px; font-family: var(--display); font-size: 19px; font-weight: 700; color: var(--ink); }
+.app-shell .trasee-module .heat__group i { display: inline-block; width: 26px; height: 7px; border-radius: 4px; margin-right: 10px; vertical-align: 4px; }
+.app-shell .trasee-module .hcell { --c: var(--l-dig); display: flex; align-items: baseline; gap: 6px; min-height: 46px; padding: 10px 12px; border-radius: 9px; color: var(--ink); }
+.app-shell .trasee-module .hcell b { font-family: var(--display); font-size: 24px; line-height: 1; }
+.app-shell .trasee-module .hcell small { font-size: 12px; opacity: 0.85; }
+.app-shell .trasee-module .hcell--l1 { background: color-mix(in srgb, var(--c) 13%, var(--surface)); }
+.app-shell .trasee-module .hcell--l2 { background: color-mix(in srgb, var(--c) 30%, var(--surface)); }
+.app-shell .trasee-module .hcell--l3 { background: color-mix(in srgb, var(--c) 52%, var(--surface)); }
+.app-shell .trasee-module .hcell--l4 { background: var(--c); color: #fff; }
+.app-shell .trasee-module .hcell--l4.hcell--k-con { color: var(--night); }
+.app-shell .trasee-module .hcell--unknown { background: repeating-linear-gradient(135deg, var(--surface-2) 0 6px, var(--line) 6px 8px); color: var(--muted); }
+.app-shell .trasee-module .hcell--none { background: var(--signal-soft); color: var(--signal); box-shadow: inset 0 0 0 1.5px var(--signal); }
+.app-shell .trasee-module .hcell--key { display: inline-block; width: 22px; min-height: 0; height: 14px; padding: 0; border-radius: 4px; }
 
-/* EduMentor theme and layout integration. */
-.app-shell .trasee-module {
-  --bg: #f4f7f5;
-  --surface: #fff;
-  --surface-2: #edf3ee;
-  --ink: #203d3e;
-  --ink-2: #344e46;
-  --muted: #536a60;
-  --line: #e0e8e2;
-  --line-2: #c8d8cc;
-  --brand: #23675c;
-  --brand-strong: #174d45;
-  --brand-soft: #eaf2ed;
-  --focus: #23675c;
-  --radius: 10px;
-  --radius-sm: 8px;
-  --font: "Manrope", "Segoe UI", Arial, sans-serif;
-  font-size: 14px;
-  background: transparent;
-}
+.app-shell .trasee-module .two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+@media (max-width: 860px) { .app-shell .trasee-module .two { grid-template-columns: 1fr; } }
+.app-shell .trasee-module .prov, .app-shell .trasee-module .bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.app-shell .trasee-module .prov li { display: flex; flex-direction: column; gap: 6px; }
+.app-shell .trasee-module .prov__top { display: flex; justify-content: space-between; }
+.app-shell .trasee-module .prov__top span { font-family: var(--display); font-size: 20px; }
+.app-shell .trasee-module .meter { height: 9px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.app-shell .trasee-module .meter i { display: block; height: 100%; background: var(--ink); border-radius: 99px; }
+.app-shell .trasee-module .bars li { display: grid; grid-template-columns: 200px 1fr 32px; gap: 12px; align-items: center; font-size: 14px; }
+
+.app-shell .trasee-module .footer { background: var(--night); color: var(--night-muted); padding: 30px 0 44px; }
+.app-shell .trasee-module .footer__inner { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.app-shell .trasee-module .footer .muted { color: var(--night-muted); opacity: 0.8; }
+
+/* EduMentor shell and private account integration. */
 .app-shell .trasee-module .trasee-heading {
   display: flex;
   justify-content: space-between;
@@ -1282,23 +410,6 @@
   color: #153f43;
   font-weight: 800;
 }
-.app-shell .trasee-module .container {
-  padding-left: 0;
-  padding-right: 0;
-}
-.app-shell .trasee-module .hero {
-  padding: 30px;
-  background: white;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-}
-.app-shell .trasee-module .hero-title {
-  font-size: clamp(26px, 3vw, 38px);
-  margin: 12px 0 16px;
-}
-.app-shell .trasee-module .lead {
-  font-size: 15px;
-}
 .app-shell .trasee-module .btn--primary {
   background: #d5ed8c;
   color: #153f43;
@@ -1319,85 +430,27 @@
 .app-shell .trasee-module .saved-courses .tags {
   margin-top: 14px;
 }
-.app-shell .trasee-module .grid3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.app-shell .trasee-module .card {
-  min-width: 0;
-}
-.app-shell .trasee-module .panel {
-  padding: 24px;
-}
-.app-shell .trasee-module .searchbar {
-  margin: 0 0 20px;
-  padding: 20px;
-  background: white;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
-.app-shell .trasee-module .footer {
-  padding: 24px 0;
-  margin-top: 20px;
-  font-size: 11px;
-}
-.app-shell .trasee-module .overlay {
-  z-index: 80;
-}
-.app-shell .trasee-module .comparebar {
-  z-index: 60;
-}
-.app-shell .trasee-module .btn:disabled,
-.app-shell .trasee-module .chip:disabled {
-  opacity: 0.55;
-  cursor: wait;
-}
-.app-shell .trasee-module .journal-warning {
-  margin: 16px 0;
-  color: var(--warn);
-  font-size: 12px;
-}
-@media (max-width: 1100px) {
-  .app-shell .trasee-module .grid3 {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 640px) {
-  .app-shell .trasee-module .trasee-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .app-shell .trasee-module .trasee-heading h1 {
-    font-size: 25px;
-  }
-  .app-shell .trasee-module .hero {
-    padding: 20px 16px;
-  }
-  .app-shell .trasee-module .hero-title {
-    font-size: 27px;
-  }
-  .app-shell .trasee-module .searchbar {
-    padding: 16px;
-  }
-  .app-shell .trasee-module .panel {
-    padding: 16px;
-  }
-  .app-shell .trasee-module .refine {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .app-shell .trasee-module .row {
-    flex-wrap: wrap;
-    min-width: 0;
-  }
-  .app-shell .trasee-module .row__main {
-    min-width: 0;
-  }
-  .app-shell .trasee-module .kpis {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 
-.app-shell .trasee-module .cell small {
-  opacity: 1;
-}
+.app-shell .trasee-module { border-radius: 18px; overflow: clip; min-width: 0; }
+.app-shell .trasee-module .trasee-heading { padding: 22px 24px; background: var(--surface); margin: 0; }
+.app-shell .trasee-module .results-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.app-shell .trasee-module .overlay { z-index: 100; }
+.app-shell .trasee-module .comparebar { z-index: 70; }
+.app-shell .trasee-module .journal-warning { margin: 16px 0; color: var(--warn); }
+.app-shell .trasee-module .searchbar { padding: 24px 0; }
+.app-shell .trasee-module .hero__grid > *, .app-shell .trasee-module .grid3 > * { min-width: 0; }
+@media(max-width: 1100px) { .app-shell .trasee-module .hero__grid { grid-template-columns: minmax(0,1fr); } }
+@media(max-width: 640px) { .app-shell .trasee-module .trasee-heading { flex-direction: column; align-items: flex-start; gap: 16px; } .app-shell .trasee-module .module-tabs { flex-wrap: wrap; } .app-shell .trasee-module .container { padding-inline: 16px; } .app-shell .trasee-module .grid3 { grid-template-columns: minmax(0,1fr); } }
+
+.app-shell .trasee-module .hero { display: block; padding: 0; border: 0; border-radius: 0; gap: 0; }
+.app-shell .trasee-module .hero__grid { gap: 32px; padding: 40px 24px 48px; }
+.app-shell .trasee-module .display { font-size: clamp(40px,4.3vw,62px); }
+.app-shell .trasee-module .hero .eyebrow { color: var(--night-muted); max-width: none; margin: 0 0 16px; }
+.app-shell .trasee-module .module-tabs button { color: var(--ink); background: var(--surface); }
+.app-shell .trasee-module .how__steps li::marker { content: ''; }
+.app-shell .trasee-module .hero .lead { max-width: none; margin: 20px 0 24px; line-height: 1.55; font-size: 16px; }
+.app-shell .trasee-module .hero .trust { margin-top: 16px; max-width: none; color: var(--night-muted); font-size: 12px; }
+.app-shell .trasee-module .hero__copy > h2 { min-height: 0; }
+
+.app-shell .trasee-module .hero__grid > .routemap { align-self: start; margin-top: 90px; }
+@media(max-width: 1100px) { .app-shell .trasee-module .hero__grid > .routemap { margin-top: 0; } }

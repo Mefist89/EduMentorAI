@@ -160,3 +160,12 @@ Limite MVP: cel mult 100 de elevi per grup; selectarea conturilor deja existente
 - Elevul a deschis Continuitate fără bara celor trei etape ale profesorului și cu acces la curs/exerciții; Investigație a afișat numai cele cinci destinații permise. Reîncărcarea directă a paginii Investigație a păstrat submeniul extins. Restricțiile pentru Trasee, AI Mentor și Experiența mea rămân active.
 - Zece verificări responsive: RO/RU la 320, 640, 642, 820 și 1440 px, cu cinci butoane principale și șapte copii extinși, fără derulare orizontală sau suprapuneri ale butoanelor. Viewportul a fost resetat după verificări.
 - Patru teste noi: structura principală/submeniul și păstrarea rutelor; afișarea următoarei etape pentru 0/3, 1/3, 2/3 și a finalizării 3/3; continuarea elevului fără etapele private ale profesorului; pagina Investigație limitată la destinațiile primite. Total 79 de teste trecute, TypeScript și build de producție reușite.
+
+
+## Trasee: versiunea actualizată din consilier-formare (1), 08.11.2026
+
+- Importate harta centrelor/competențelor, calendarele cursurilor, harta termică și suprapunerile între centre. CSS limitat la `.trasee-module`, font local, fără efecte asupra meniului general.
+- API `GET /api/trasee/network`: cont profesor/administrator, catalog privat, răspuns fără cache; elevii și vizitatorii sunt respinși înainte de Storage. Panoul coordonatorului rămâne exclusiv administratorului.
+- Sursa și catalogul Supabase au aceleași 124 de cursuri și 8 centre; comparație integrală JSON, fără rescrierea datelor sau a marcajelor personale.
+- Verificate local: exemplu STEAM, recomandări, calendare, compararea a două cursuri, panoul administratorului cu 6 discipline cu ediții în paralel.
+- Teste noi: derivarea rețelei din catalog, excluderea datelor aproximative/înscrierilor din calendar, suprapuneri reale la centre distincte, autorizarea noii rute.

@@ -1,12 +1,11 @@
 /** Tipuri comune pentru server, client și demo. */
 
-export type Stage =
-  "prescolar" | "primar" | "gl" | "ipt" | "management" | "superior";
-export type SessionKind = "run" | "reg" | "month" | "approx" | "start";
-export type Evidence = "oficial" | "pagina" | "general" | "lista" | "inrudit";
-export type Accreditation = "anacec" | "declarat" | "neconfirmat";
-export type CourseType = "perf" | "micro" | "recal" | "modul" | "anunt";
-export type Format = "online" | "offline";
+export type Stage = 'prescolar' | 'primar' | 'gl' | 'ipt' | 'management' | 'superior';
+export type SessionKind = 'run' | 'reg' | 'month' | 'approx' | 'start';
+export type Evidence = 'oficial' | 'pagina' | 'general' | 'lista' | 'inrudit';
+export type Accreditation = 'anacec' | 'declarat' | 'neconfirmat';
+export type CourseType = 'perf' | 'micro' | 'recal' | 'modul' | 'anunt';
+export type Format = 'online' | 'offline';
 
 export interface Provider {
   id: string;
@@ -66,12 +65,7 @@ export interface Course {
   accreditationNote: string | null;
   conditions: string | null;
   verify: string | null;
-  links: {
-    fisa: string | null;
-    page: string | null;
-    source: string | null;
-    price: string | null;
-  };
+  links: { fisa: string | null; page: string | null; source: string | null; price: string | null };
   checkedOn: string;
   onDemand: boolean;
   ended: boolean;
@@ -89,12 +83,12 @@ export interface Catalog {
   courses: Course[];
 }
 
-export type When = "oricand" | "curand" | "pana-in-iunie";
-export type FormatFilter = "oricare" | "online" | "fata-in-fata";
+export type When = 'oricand' | 'curand' | 'pana-in-iunie';
+export type FormatFilter = 'oricare' | 'online' | 'fata-in-fata';
 
 export interface SearchRequest {
   text: string;
-  stage: Stage | "";
+  stage: Stage | '';
   discipline: string;
   when: When;
   format: FormatFilter;
@@ -106,18 +100,11 @@ export interface SearchRequest {
 export interface Interpretation {
   competencies: string[];
   summary: string;
-  source: "gemini" | "dictionar";
+  source: 'gemini' | 'dictionar';
 }
 
 export interface Availability {
-  kind:
-    | "curand"
-    | "mai-tarziu"
-    | "inscriere"
-    | "la-cerere"
-    | "in-desfasurare"
-    | "incheiat"
-    | "necunoscut";
+  kind: 'curand' | 'mai-tarziu' | 'inscriere' | 'la-cerere' | 'in-desfasurare' | 'incheiat' | 'necunoscut';
   date: string | null;
   label: string;
 }
@@ -142,6 +129,10 @@ export interface RankedCourse {
   why: string;
   missing: string[];
   score: number;
+  /** grupurile de competențe atinse (liniile de pe hartă) */
+  lines: string[];
+  /** următoarea ediție cu date publicate (sau cea în desfășurare) */
+  run: { start: string; end: string | null } | null;
 }
 
 export interface SearchResponse {
@@ -153,7 +144,7 @@ export interface SearchResponse {
   excludedEnded: number;
 }
 
-export type CellStatus = "exista" | "necunoscut" | "inexistent";
+export type CellStatus = 'exista' | 'necunoscut' | 'inexistent';
 export interface CoverageCell {
   status: CellStatus;
   active: number;
@@ -162,17 +153,18 @@ export interface CoverageCell {
 export interface CoverageResponse {
   stages: { id: Stage; label: string }[];
   rows: { id: string; label: string; group: string; cells: CoverageCell[] }[];
-  providers: {
-    id: string;
-    name: string;
-    courses: number;
-    completeness: number;
-    completeList: boolean;
-    note: string;
-  }[];
-  searches: {
-    total: number;
-    topCompetencies: { id: string; label: string; count: number }[];
-    withoutResults: number;
-  };
+  providers: { id: string; name: string; courses: number; completeness: number; completeList: boolean; note: string }[];
+  searches: { total: number; topCompetencies: { id: string; label: string; count: number }[]; withoutResults: number };
+  /** aceeași disciplină, la centre diferite, în perioade care se suprapun */
+  overlaps: OverlapGroup[];
+  window: { from: string; to: string; today: string };
+}
+
+export interface OverlapItem { courseId: string; providerId: string; providerName: string; title: string; start: string; end: string; credits: string | null; price: string | null }
+export interface OverlapGroup { key: string; label: string; providers: number; overlapDays: number; items: OverlapItem[] }
+
+/** harta traseelor: liniile = grupuri de competențe, stațiile = centre */
+export interface Network {
+  stations: { id: string; name: string; courses: number }[];
+  lines: { id: string; label: string; stops: string[]; courses: number }[];
 }

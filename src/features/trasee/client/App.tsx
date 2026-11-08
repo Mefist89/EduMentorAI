@@ -9,6 +9,7 @@ import { Coordinators } from "./components/Coordinators";
 import { CourseDrawer } from "./components/CourseDrawer";
 import { Results, type Filters } from "./components/Results";
 import { SearchForm, type Query } from "./components/SearchForm";
+import { RouteMap } from "./components/RouteMap";
 import { IconCompare } from "./icons";
 
 type Route = "cauta" | "coordonatori";
@@ -226,12 +227,14 @@ export function TraseeApp({
         ) : (
           <>
             {!result ? (
-              <section className="hero">
-                <div className="container container--narrow">
+              <>
+<section className="hero">
+                <div className="container hero__grid">
+<div className="hero__copy">
                   <p className="eyebrow">
                     Formare continuă pentru cadre didactice
                   </p>
-                  <h2 className="hero-title">
+                  <h2 className="display">
                     Găsește cursul potrivit pentru clasa ta
                   </h2>
                   <p className="lead">
@@ -251,7 +254,11 @@ export function TraseeApp({
                       : "Se încarcă catalogul din Supabase…"}
                   </p>
                 </div>
+                  {ready && <RouteMap api={api} />}
+                </div>
               </section>
+<section className="how" aria-labelledby="trasee-how-title"><div className="container"><h2 id="trasee-how-title" className="how__title">Cum alegi în trei pași</h2><ol className="how__steps"><li><b>Scrii ce vrei să schimbi la clasă</b><span>Cu cuvintele tale, pornind de la competențele pe care vrei să le dezvolți.</span></li><li><b>{ready ? `Comparăm ${counts.courses} de oferte` : "Comparăm ofertele de formare"}</b><span>{ready ? `Din ${counts.providers} centre: ` : "În același format: "} credite, preț, format și calendar.</span></li><li><b>Alegi din 3 recomandări</b><span>Compari cursurile și marchezi ce ai parcurs deja.</span></li></ol></div></section>
+</>
             ) : (
               <div className="container">
                 <div className="searchbar">

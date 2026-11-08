@@ -266,3 +266,48 @@ test("Storage failures are controlled and do not expose provider messages or sec
   assert.equal(res.status, 503);
   assert.ok(!(await res.text()).includes("private-provider-details"));
 });
+
+
+test("network is derived from catalog providers and excludes inferred-near competency links", () => {
+  const net = ranking.network(catalog);
+  assert.equal(net.stations.length, catalog.providers.length);
+  assert.equal(net.stations.reduce((sum, s) => sum + s.courses, 0), catalog.courses.length);
+  for (const line of net.lines) {
+    const expected = catalog.courses.filter(c => c.competencies.some(k => k.matchedBy !== "near" && dictionary.COMPETENCY_BY_ID[k.id]?.group === line.id));
+    assert.equal(line.courses, expected.length);
+    assert.deepEqual([...line.stops].sort(), [...new Set(expected.map(c => c.providerId))].sort());
+  }
+});
+
+test("run timelines omit registration and approximate dates and skip ended editions", () => {
+  const course = { ...catalog.courses[0], sessions: [
+    {kind:"reg",start:"2026-11-01",end:"2026-12-01"},
+    {kind:"approx",start:"2026-11-01",end:"2026-12-31"},
+    {kind:"run",start:"2026-10-01",end:"2026-10-05"},
+    {kind:"run",start:"2026-11-10",end:"2026-11-20"},
+  ] };
+  assert.equal(JSON.stringify(ranking.nextRun(course, new Date(2026,10,8))), JSON.stringify({start:"2026-11-10",end:"2026-11-20"}));
+  assert.equal(ranking.nextRun(course, new Date(2027,0,1)), null);
+});
+
+test("overlaps require matching disciplines at distinct centers and intersecting published dates", () => {
+  const c = catalog.courses[0];
+  const fixture = {...catalog, courses: [
+    {...c,id:"x1",title:"Matematică",providerId:catalog.providers[0].id,sessions:[{kind:"run",start:"2026-11-01",end:"2026-11-15"}]},
+    {...c,id:"x2",title:"Matematică",providerId:catalog.providers[1].id,sessions:[{kind:"run",start:"2026-11-10",end:"2026-11-20"}]},
+    {...c,id:"x3",title:"Fizică",providerId:catalog.providers[2].id,sessions:[{kind:"run",start:"2026-11-10",end:"2026-11-20"}]},
+  ]};
+  const result = ranking.overlaps(fixture, new Date(2026,10,8));
+  assert.equal(result.groups.length,1);
+  assert.equal(result.groups[0].overlapDays,6);
+  fixture.courses[1].sessions[0].start="2026-11-16";
+  assert.equal(ranking.overlaps(fixture,new Date(2026,10,8)).groups.length,0);
+});
+
+test("network endpoint uses private catalog behind the same teacher authorization boundary", async () => {
+  const response = await api(teacher).GET(request("network"), context("network"));
+  assert.equal(response.status,200);
+  assert.equal((await response.json()).stations.length,catalog.providers.length);
+  assert.equal((await api(null).GET(request("network"),context("network"))).status,401);
+  assert.equal((await api({...teacher,role:"elev"}).GET(request("network"),context("network"))).status,403);
+});

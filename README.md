@@ -118,7 +118,7 @@ Datele sunt păstrate în **Supabase Storage privat**, bucket `edumentor-trasee`
 - `users/<user-id>/completed/<course-id>.json` — marcajele personale, persistente după reîncărcare și între dispozitive;
 - `searches/` — evenimente cu competențe, treaptă și număr de rezultate; fără textul căutării, ID de utilizator sau IP.
 
-API-ul `/api/trasee/*` verifică fiecare sesiune și rolul pe server. Calea marcajelor este construită din ID-ul contului verificat, nu dintr-un ID primit de la browser. Harta și statisticile sunt rezervate administratorului. Accesul direct la bucket este refuzat pentru vizitatori și pentru conturile aplicației; operațiile autorizate trec prin server, cu cheia privată `SUPABASE_SECRET_KEY`. Nu sunt create politici publice de Storage și nu sunt modificate tabelele PostgreSQL ale aplicației.
+API-ul `/api/trasee/*` verifică fiecare sesiune și rolul pe server. Calea marcajelor este construită din ID-ul contului verificat, nu dintr-un ID primit de la browser. Harta tematică, suprapunerile și statisticile sunt rezervate administratorului; harta centrelor (`/api/trasee/network`) este disponibilă profesorilor și administratorului. Accesul direct la bucket este refuzat pentru vizitatori și pentru conturile aplicației; operațiile autorizate trec prin server, cu cheia privată `SUPABASE_SECRET_KEY`. Nu sunt create politici publice de Storage și nu sunt modificate tabelele PostgreSQL ale aplicației.
 
 Pentru configurarea într-un alt proiect, completează `.env.local`, apoi rulează cu Node.js 22.18+ sau 24:
 
@@ -234,3 +234,7 @@ Mesajele circulă exclusiv între conturile reale ale platformei. Serverul const
 Maria AI folosește configurația OpenAI existentă, pe server, numai după apăsarea explicită a butonului de trimitere către AI. Se transmit doar titlul și detaliile întrebării selectate, cu `store: false`, timeout 20 secunde, fără retry automat și maximum 900 tokeni de ieșire. Răspunsul real este salvat în comunitate și etichetat AI. Mesajele private și profilurile nu sunt trimise modelului. Erorile nu sunt înlocuite cu răspunsuri fictive. Referință: [OpenAI Responses API](https://developers.openai.com/api/docs/guides/migrate-to-responses).
 
 Acesta este un MVP pentru exemple: fluxul citește cele mai recente 200 de documente per categorie, 100 de mesaje per conversație, până la 1.000 de profiluri/conturi, aprecieri și înscrieri. Limitele de cereri (100/minut/cont, 5 apeluri Maria/10 minute/cont și 2 apeluri AI simultane) sunt în memoria procesului, fără cotă distribuită între instanțe Vercel. Pentru volum mai mare sunt necesare tabele cu RLS, paginare și limitare distribuită. Parolele și cheile private nu sunt în Git sau în bundle-ul public.
+
+### Actualizare Trasee — 8 noiembrie 2026
+
+Versiunea nouă `consilier-formare (1)` aduce designul cu hartă de transport: 4 linii de competențe și 8 centre, calendarul edițiilor în carduri, harta termică și suprapuneri calendaristice pentru coordonator. API-ul de rețea construiește harta din catalogul privat Supabase; aceeași autentificare și aceleași marcaje individuale se păstrează. Catalogul noii surse este identic cu cel existent (124 de cursuri), verificat și față de Storage; nu necesită reimport sau modificări de schemă. Nu se importă serverul PostgreSQL/Gemini ori API-ul demonstrativ al sursei.

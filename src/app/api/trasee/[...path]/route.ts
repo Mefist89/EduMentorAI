@@ -3,6 +3,7 @@ import { getAccount } from "@/lib/auth";
 import { canUseMentor } from "@/lib/accounts";
 import {
   courseDetail,
+  network,
   coverage,
   interpretByDictionary,
   search,
@@ -130,6 +131,7 @@ async function handle(request: Request, context: Context) {
     return json({ error: "Verifică textul și filtrele căutării." }, 400);
   try {
     const catalog = await loadCatalog();
+    if (route === "network" && request.method === "GET") return json(network(catalog));
     if (route === "state" && request.method === "GET")
       return json({
         done: await completedCourses(account.id, catalog),
