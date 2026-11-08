@@ -30,7 +30,21 @@ npm start
 5. **Experiența mea** — citește reflecția fictivă, afișează sinteza exemplu, salvează și aprobă fișa. Revino la ciornă sau copiază textul dacă dorești.
 6. **RO / RU** — schimbă limba interfeței, a materialelor și a exemplelor.
 
-Accesul la cabinet necesită un cont Supabase cu rol EduMentor. Pagina informativă și linkurile către resurse externe sunt publice. Conținutul pedagogic și observațiile rămân exemple fictive. Fișele nu sunt încă salvate în baza de date.
+Accesul la cabinet necesită un cont Supabase cu rol EduMentor. Pagina informativă și linkurile către resurse externe sunt publice. Materialul cursului și fișa din «Experiența mea» rămân exemple demonstrative în browser. Modulul separat «Practici pedagogice» salvează contribuțiile reale în Supabase și le publică numai după aprobare.
+
+## Publicarea și moderarea practicilor
+
+Deschide `/#practices` din meniul «Practici pedagogice» / «Практики». Toate rolurile autentificate pot citi și căuta biblioteca aprobată. Profesorii și administratorii au «Adaugă practică» și «Practicile mele»; numai administratorul vede «Moderare» și poate aproba sau respinge o propunere.
+
+1. Autorul completează titlul și salvează ciorna. Pentru trimitere sunt necesare și disciplina, nivelul/clasa, descrierea, problema pedagogică și metodele. Contextul, resursele și un link HTTPS sunt opționale; limba conținutului poate fi RO sau RU.
+2. În «Practicile mele», trimite versiunea salvată spre aprobare. Ciornele și propunerile în verificare nu apar în biblioteca celorlalți utilizatori. Versiunea trimisă nu poate fi modificată cât timp este verificată.
+3. Administratorul citește practica și o aprobă pentru publicare sau o respinge cu motiv obligatoriu. Autorul vede observația, istoricul și starea. Poate edita o practică respinsă, salva o ciornă nouă și retrimite. Practicile deja publicate sunt numai pentru citire în acest MVP.
+
+Inițializare: configurează cheia privată existentă `SUPABASE_SECRET_KEY` numai pe server și rulează `npm run setup:practices`. Scriptul creează/verifică bucketul privat `edumentor-practices`, fără a publica exemple. Nu este necesară o variabilă nouă pe Vercel. API-ul `/api/practices` verifică sesiunea Supabase prin `getUser()` și rolul din `app_metadata`, proprietarul, starea și versiunea; nu acceptă autor sau statut furnizat de client. Accesul direct la obiecte din browser rămâne interzis, inclusiv autorului; serverul returnează doar datele permise.
+
+Conținutul și istoricul deciziilor sunt documente JSON private în Supabase Storage, nu tabele SQL noi. Fiecare operație scrie o revizie imuabilă `entries/<UUID>/<versiune>.json`, cu `upsert: false`; două operații pe aceeași versiune nu se pot suprascrie. Un conflict răspunde HTTP 409 și cere reîncărcarea versiunii actuale. Biblioteca elimină observațiile și istoricul de moderare din răspunsul pentru cititori. Datele sunt citite fără cache și listele sunt paginate intern; lectura fiecărei ultime revizii este potrivită unui MVP cu volum mic. Pentru un catalog mare se recomandă un repository SQL indexat și paginare pe server. Limita unei practici este 250 de operații în acest MVP. Nu sunt implementate atașamente, ștergere, retragerea publicației sau notificări prin email.
+
+`npm run test:practices` verifică validarea, drepturile, tranzițiile, izolarea datelor, conflictele concurente și limita HTTP. Instrucțiuni și verificări Supabase Storage: [Access control](https://supabase.com/docs/guides/storage/security/access-control).
 
 ## Pagina publică
 

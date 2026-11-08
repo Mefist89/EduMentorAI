@@ -1,5 +1,6 @@
 export type Locale = "ro" | "ru";
 export type View =
+  | "practices"
   | "puntea"
   | "dashboard"
   | "course"
@@ -16,6 +17,7 @@ export const text = (ro: string, ru: string): Bilingual => ({ ro, ru });
 export const navigation = [
   { id: "puntea", label: text("Puntea Edu · Catalog", "Puntea Edu · Catalog") },
   { id: "dashboard", label: text("Prezentare", "Обзор") },
+  { id: "practices", label: text("Practici pedagogice", "Практики") },
   { id: "course", label: text("Cursul meu", "Мой курс") },
   { id: "mentor", label: text("AI Mentor", "AI Mentor") },
   { id: "activities", label: text("Activități", "Задания") },
