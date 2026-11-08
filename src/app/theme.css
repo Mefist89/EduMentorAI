@@ -1115,3 +1115,15 @@
 .app-shell .lori-guide ol { padding-left: 19px; font-size: 12px; line-height: 1.9; margin: 18px 0; }
 .app-shell .lori-guide small { display: block; margin-top: 14px; color: #61756f; font-size: 10px; }
 @media(max-width: 540px) { .app-shell .chat-header { flex-wrap: wrap; } .app-shell .mentor-mode-switch { margin-left: 0; width: 100%; } .app-shell .chat-header .mode-dot { display: none; } .app-shell .lori-criterion-heading { flex-direction: column; gap: 6px; } }
+.app-shell .mentor-attachments { margin-top: 15px; }
+.app-shell .mentor-attach-button { display: inline-flex; gap: 7px; align-items: center; background: #fff; border: 1px solid #cddbd2; color: #23675c; border-radius: 9px; padding: 9px 13px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.app-shell .mentor-attach-button:disabled { opacity: .5; cursor: default; }
+.app-shell .mentor-attach-button:focus-visible, .app-shell .mentor-file-list button:focus-visible { outline: 3px solid #b5d5c4; outline-offset: 2px; }
+.app-shell .mentor-files-hint { color: #61756f; font-size: 10px; line-height: 1.6; margin-top: 7px; }
+.app-shell .mentor-file-list { display: grid; gap: 7px; list-style: none; padding: 0; margin: 12px 0; }
+.app-shell .mentor-file-list li { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 9px 11px; background: #eef4ec; border: 1px solid #dce6d8; border-radius: 9px; font-size: 11px; }
+.app-shell .mentor-file-list li > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.app-shell .mentor-file-list small { color: #61756f; margin-left: 7px; }
+.app-shell .mentor-file-list button { display: flex; flex-shrink: 0; padding: 7px; border: 0; background: transparent; color: #335f52; cursor: pointer; border-radius: 5px; }
+.app-shell .mentor-file-error { font-size: 12px; color: #a03027; margin-top: 10px; }
+.app-shell .mentor-sent-files { padding-left: 15px; color: #61756f; font-size: 11px; overflow-wrap: anywhere; }

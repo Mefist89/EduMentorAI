@@ -246,3 +246,11 @@ Versiunea nouă `consilier-formare (1)` aduce designul cu hartă de transport: 4
 Rubrica (`src/lib/lori-rubric.ts`) conține cele nouă criterii, cu paginile originale 3–11. Se păstrează scala 1–5; aplicația distinge între date insuficiente și criteriu neaplicabil, ambele fără notă, ca elaborare a opțiunii NA din manual. Folosirea LORI pentru planul unei lecții este o adaptare a instrumentului pentru resurse educaționale, nu certificare sau observație a unui curs efectiv predat. Nu se calculează o medie fără dovezi.
 
 Răspunsul structurat conține un rezumat și nouă aprecieri cu dovezi și îmbunătățiri. Serverul respinge criterii lipsă/duplicate, scoruri nevalide și referințe inventate la cursul demonstrativ. Lori nu primește materialul fictiv despre ecuații sau profilul demo. OpenAI folosește aceeași cheie server, `store: false`, timeout 30 s și maximum 4500 tokeni de ieșire. PDF-ul complet nu este publicat și nu este trimis repetat modelului; doar rubrica verificată și textul introdus sunt folosite. Nicio modificare Supabase sau variabilă nouă nu este necesară.
+
+### Fișiere în EduMentor și AI Lori
+
+Ambele moduri au butonul „Atașează fișier” / „Прикрепить файл”, listă de fișiere și eliminare individuală. Sunt acceptate PDF, DOCX, TXT, PNG și JPG: maximum trei fișiere, 3.000.000 de octeți în total. Limita permite trimiterea Base64 și a istoricului prin API-ul Vercel fără depășirea limitei cererii. Formatele, numele, semnăturile binare, Base64 și dimensiunea cumulată sunt validate și pe server.
+
+Fișierele fiecărui mod rămân în memoria paginii și sunt trimise către OpenAI la fiecare mesaj până la eliminare sau resetarea dialogului. Nu se salvează în Storage, nu au URL public și nu sunt incluse în istoricul trimis în mod duplicat. Reîncercarea păstrează fișierele exacte ale mesajului eșuat. Se poate trimite numai fișierul, fără întrebare: interfața furnizează o cerere de analiză potrivită modului. PDF/DOCX sunt transmise ca `input_file`, imaginile ca `input_image`, iar TXT ca text UTF-8. `store: false` rămâne activ. Sursele și comenzile din documente sunt tratate drept date, fără autoritate asupra instrucțiunilor aplicației.
+
+Referință: [OpenAI file inputs](https://developers.openai.com/api/docs/guides/file-inputs).

@@ -25,12 +25,15 @@ import {
   type MentorQuestion,
 } from "@/lib/mentor-contract";
 import { LORI_CRITERIA } from "@/lib/lori-rubric";
+import type { MentorAttachment } from "@/lib/mentor-attachments";
+import { MentorAttachments } from "./mentor-attachments";
 import { LoriAnalysis } from "./lori-report";
 import { Action, Badge, Heading } from "./ui";
 
 type Turn = MentorQuestion & {
   id: string;
   mode: MentorMode;
+  attachments?: MentorAttachment[];
   locale: Locale;
   status: "loading" | "done" | "error";
   reply?: MentorAnswer;
@@ -94,10 +97,13 @@ export function MentorChat({
 }) {
   const [conversation, setConversation] = useState<Turn[]>([]);
   const [busy, setBusy] = useState(false);
+  const [reading, setReading] = useState(false);
+  const [filesByMode, setFilesByMode] = useState<Record<MentorMode, MentorAttachment[]>>({ mentor: [], lori: [] });
   const [mode, setMode] = useState<MentorMode>("mentor");
   const [drafts, setDrafts] = useState({ mentor: "", lori: "" });
   const draft = drafts[mode];
   const setDraft = (value: string) => setDrafts(previous => ({ ...previous, [mode]: value }));
+  const attachments = filesByMode[mode];
   const lori = mode === "lori";
   const questionLimit = lori ? MAX_LESSON_LENGTH : MAX_QUESTION_LENGTH;
   const visibleConversation = conversation.filter(turn => turn.mode === mode);
@@ -112,7 +118,8 @@ export function MentorChat({
   );
 
   async function ask(question: MentorQuestion, retryId?: string) {
-    if (controllerRef.current) return;
+    if (controllerRef.current || reading) return;
+    const files = retryId ? conversation.find(turn => turn.id === retryId)?.attachments ?? [] : attachments;
     const controller = new AbortController();
     controllerRef.current = controller;
     setBusy(true);
@@ -148,7 +155,7 @@ export function MentorChat({
           )
         : [
             ...previous,
-            { ...question, id, mode, locale: turnLocale, status: "loading" },
+            { ...question, id, mode, attachments: files, locale: turnLocale, status: "loading" },
           ],
     );
 
@@ -156,7 +163,7 @@ export function MentorChat({
       const response = await fetch("/api/mentor/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...question, mode, locale: turnLocale, history }),
+        body: JSON.stringify({ ...question, mode, attachments: files, locale: turnLocale, history }),
         signal: controller.signal,
       });
       const data: unknown = await response.json();
@@ -236,6 +243,7 @@ export function MentorChat({
     setBusy(false);
     setConversation(previous => previous.filter(turn => turn.mode !== mode));
     setDraft("");
+    setFilesByMode(previous => ({ ...previous, [mode]: [] }));
   }
 
   return (
@@ -276,7 +284,7 @@ export function MentorChat({
                 )}
               </span>
             </div>
-            <label className="mentor-mode-switch"><span>{t("Asistent", "Помощник")}</span><select aria-label={t("Alege asistentul AI", "Выберите AI-помощника")} value={mode} disabled={busy} onChange={event => setMode(event.target.value as MentorMode)}><option value="mentor">EduMentor</option><option value="lori">AI Lori</option></select></label>
+            <label className="mentor-mode-switch"><span>{t("Asistent", "Помощник")}</span><select aria-label={t("Alege asistentul AI", "Выберите AI-помощника")} value={mode} disabled={busy || reading} onChange={event => setMode(event.target.value as MentorMode)}><option value="mentor">EduMentor</option><option value="lori">AI Lori</option></select></label>
             <span className="mode-dot" aria-hidden="true" />
           </div>
           <div
@@ -306,6 +314,7 @@ export function MentorChat({
                     )}
                   </span>
                   <p>{mentorQuestionText(turn, turn.locale)}</p>
+                  {Boolean(turn.attachments?.length) && <ul className="mentor-sent-files">{turn.attachments!.map((file, index) => <li key={index}>{file.name}</li>)}</ul>}
                 </div>
                 <div className="chat-message assistant">
                   <span className="message-label">
@@ -342,7 +351,7 @@ export function MentorChat({
                           <RotateCcw size={14} />
                           {t("Reîncearcă", "Повторить")}
                         </button>
-                        {turn.promptKey && <button
+                        {turn.promptKey && !turn.attachments?.length && <button
                           className="text-button"
                           onClick={() => useExample(turn.id)}
                         >
@@ -395,9 +404,9 @@ export function MentorChat({
               onSubmit={(event) => {
                 event.preventDefault();
                 const question = draft.trim();
-                if (!question || question.length > questionLimit || controllerRef.current) return;
+                if ((!question && !attachments.length) || question.length > questionLimit || controllerRef.current || reading) return;
                 setDraft("");
-                void ask({ question });
+                void ask({ question: question || (lori ? t("Analizează lecția din fișierele atașate după LORI.", "Проанализируй урок из приложенных файлов по LORI.") : t("Analizează materialele atașate și explică ideile principale.", "Проанализируй приложенные материалы и объясни основные идеи.")) });
               }}
             >
               <label htmlFor="mentor-question">{lori ? t("Planul sau descrierea lecției", "План или описание урока") : t("Întrebarea ta", "Ваш вопрос")}</label>
@@ -411,7 +420,7 @@ export function MentorChat({
                   placeholder={t("Scrie ce vrei să întrebi mentorul…", "Напишите вопрос наставнику…")}
                   aria-describedby="mentor-question-hint"
                 />}
-                <button type="submit" disabled={busy || !draft.trim()}>
+                <button type="submit" disabled={busy || reading || (!draft.trim() && !attachments.length)}>
                   {busy ? <LoaderCircle size={17} className="spinner" aria-hidden="true" /> : <Send size={17} aria-hidden="true" />}
                   {lori ? t("Analizează lecția", "Анализировать урок") : t("Trimite", "Отправить")}
                 </button>
@@ -420,6 +429,7 @@ export function MentorChat({
                 <span>{lori ? t("Lipiți planul, apoi apăsați «Analizează lecția»", "Вставьте план и нажмите «Анализировать урок»") : t("Enter pentru a trimite", "Enter — отправить")}</span>
                 <span>{draft.length}/{questionLimit}</span>
               </p>
+              <MentorAttachments key={mode} value={attachments} onChange={files => setFilesByMode(previous => ({ ...previous, [mode]: files }))} locale={locale} disabled={busy} onReadingChange={setReading} />
             </form>
             {!lori && <>
             <span className="eyebrow">
@@ -447,7 +457,7 @@ export function MentorChat({
               )}
             </p>
             {visibleConversation.length > 0 && (
-              <button className="text-button" onClick={reset}>
+              <button className="text-button" disabled={reading} onClick={reset}>
                 <RotateCcw size={13} />
                 {t("Reia conversația", "Начать заново")}
               </button>

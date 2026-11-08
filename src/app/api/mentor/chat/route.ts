@@ -8,7 +8,8 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 const headers = { "Cache-Control": "private, no-store" };
 const quota = { windowStart: 0, used: 0, active: 0 };
-const MAX_BODY_BYTES = 320_000;
+// Base64 of 3 MB + bounded dialogue fits below Vercel's request payload limit.
+const MAX_BODY_BYTES = 4_350_000;
 
 async function readBody(request: Request): Promise<unknown> {
   if (!request.body) return null;

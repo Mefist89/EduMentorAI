@@ -186,3 +186,11 @@ Limite MVP: cel mult 100 de elevi per grup; selectarea conturilor deja existente
 - Comutator în antet EduMentor / AI Lori. Verificat că ciorna EduMentor rămâne când se revine din Lori; dialogurile nu se combină în contextul modelului.
 - Test real local: plan fictiv de biologie, clasa VII, fotosinteză; răspuns OpenAI cu toate cele nouă criterii, note justificate, recomandări și lipsa datelor pentru standardele tehnice. Fără trimiteri la cursul fictiv despre ecuații.
 - Validarea modului, lungimea planului, integritatea rubricii, scala 1–5 / null și izolarea contextului sunt acoperite de teste. Build reușit; 89 de teste trec.
+
+
+## Fișiere pentru ambii asistenți — 08.11.2026
+
+- Build de producție reușit și toate cele 91 de teste trec. Testele acoperă limitele de număr și octeți, nume nevalide, MIME/extensie, semnături, Base64 și conținutul real trimis către OpenAI în ambele moduri.
+- Verificare reală locală EduMentor: DOCX fictiv cu marker ИРИС-482 și lecție despre structura florii. Modelul a identificat exact markerul și tema din document; nicio copiere manuală a textului în întrebare.
+- Verificare reală locală AI Lori: TXT cu planul lecției, trimis fără text suplimentar; raport cu 9 criterii, fără erori. Vechiul DOCX din EduMentor nu apare în lista Lori. După eliminarea TXT, trimiterea fără text este din nou dezactivată.
+- Fără modificări în Supabase, chei noi, fișiere publice sau dependențe suplimentare. Fișierele de probă sunt în afara Git.

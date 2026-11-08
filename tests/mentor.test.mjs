@@ -33,6 +33,8 @@ function load(path, dependencies = {}, globals = {}) {
         },
       },
       TextDecoder,
+      Buffer,
+      atob,
       Headers,
       URL,
       AbortSignal,
@@ -45,7 +47,8 @@ function load(path, dependencies = {}, globals = {}) {
 const demo = load("src/lib/demo.ts");
 const accounts = load("src/lib/accounts.ts");
 const lori = load("src/lib/lori-rubric.ts");
-const contract = load("src/lib/mentor-contract.ts", { "./demo": demo, "./lori-rubric": lori });
+const attachments = load("src/lib/mentor-attachments.ts");
+const contract = load("src/lib/mentor-contract.ts", { "./demo": demo, "./lori-rubric": lori, "./mentor-attachments": attachments });
 const normalized = (value) => JSON.parse(JSON.stringify(value));
 const validRequest = { promptKey: "start", locale: "ro", history: [] };
 
@@ -338,7 +341,7 @@ test("invalid, oversized and cross-origin requests are rejected without generati
     400,
   );
   assert.equal(
-    (await api.POST(request({ long: "x".repeat(320001) }))).status,
+    (await api.POST(request({ long: "x".repeat(4350001) }))).status,
     413,
   );
   assert.equal(
@@ -503,5 +506,46 @@ test("Lori rejects reports with invented course references or missing rubric row
   ]) {
     const generator=service(async()=>({...completed(),output_text:JSON.stringify(body)}));
     await assert.rejects(generator.generateMentorReply({mode:"lori",locale:"ru",question:"План урока",history:[]}),error=>error.code==="invalid_response");
+  }
+});
+
+
+const attachment = (name, mime, data) => ({name,mime,data:Buffer.from(data).toString("base64")});
+
+test("attachments validate counts, cumulative bytes, names, types, base64 and signatures", () => {
+  const pdf=attachment("lesson.pdf","application/pdf","%PDF-1.4\nexample");
+  assert.equal(attachments.parseAttachments([pdf]).length,1);
+  assert.equal(attachments.parseAttachments(Array(4).fill(pdf)),null);
+  for(const file of [
+    {...pdf,name:"../lesson.pdf"}, {...pdf,name:"lesson.exe"}, {...pdf,mime:"image/png"},
+    {...pdf,data:"not base64!"}, {...pdf,data:""}, {...pdf,data:Buffer.from("not a pdf").toString("base64")},
+    {...pdf,data:Buffer.alloc(3000001).toString("base64")},
+    {name:"file.unknown",mime:null,data:"eA=="},
+  ]) assert.equal(attachments.parseAttachments([file]),null);
+  const first=attachment("a.txt","text/plain",Buffer.alloc(2000000,65));
+  const second=attachment("b.txt","text/plain",Buffer.alloc(1000001,65));
+  assert.equal(attachments.parseAttachments([first,second]),null);
+  assert.equal(attachments.attachmentBytes(attachment("a.txt","text/plain","Привет")),Buffer.byteLength("Привет"));
+});
+
+test("both assistants receive actual PDF, image and text content as user input without public file URLs", async () => {
+  const pdf=attachment("lesson.pdf","application/pdf","%PDF-1.4\nexample");
+  const png=attachment("scheme.png","image/png",Buffer.from([137,80,78,71,13,10,26,10,0]));
+  const txt=attachment("notes.txt","text/plain","Урок: вода и испарение");
+  for(const mode of ["mentor","lori"]) {
+    const parsed=contract.parseMentorRequest({question:"Проанализируй файлы",locale:"ru",mode,attachments:[pdf,png,txt],history:[]});
+    assert.equal(parsed.attachments.length,3);
+    const generator=service(async input => {
+      const content=input.input.at(-1).content;
+      assert.equal(content[0].type,"input_text");
+      assert.equal(content[1].type,"input_file");
+      assert.equal(content[1].file_data,"data:application/pdf;base64,"+pdf.data);
+      assert.equal(content[2].type,"input_image");
+      assert.ok(content[2].image_url.startsWith("data:image/png;base64,"));
+      assert.ok(content[3].text.includes("Урок: вода и испарение"));
+      assert.equal(input.store,false);
+      return mode==="mentor"?completed():{...completed(),output_text:JSON.stringify({answer:"Report",sourceSections:[],loriReport:loriReport()})};
+    });
+    assert.equal((await generator.generateMentorReply(parsed)).provider,"openai");
   }
 });

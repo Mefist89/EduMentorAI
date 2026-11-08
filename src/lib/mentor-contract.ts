@@ -1,5 +1,6 @@
 import { prompts, type Locale, type PromptKey } from "./demo";
 import { parseLoriReport, type LoriReport } from "./lori-rubric";
+import { parseAttachments, type MentorAttachment } from "./mentor-attachments";
 
 export const MAX_HISTORY_TURNS = 4;
 export const MAX_ANSWER_LENGTH = 4000;
@@ -16,6 +17,7 @@ export type MentorHistoryTurn = MentorQuestion & {
   answer: string;
 };
 export type MentorRequest = MentorQuestion & {
+  attachments?: MentorAttachment[];
   mode?: MentorMode;
   locale: Locale;
   history: MentorHistoryTurn[];
@@ -68,6 +70,8 @@ export function parseMentorRequest(value: unknown): MentorRequest | null {
     return null;
   const mode = value.mode === undefined ? "mentor" : value.mode;
   if (mode !== "mentor" && mode !== "lori") return null;
+  const attachments = parseAttachments(value.attachments);
+  if (!attachments) return null;
   const question = parseQuestion(value, mode === "lori" ? MAX_LESSON_LENGTH : MAX_QUESTION_LENGTH);
   if (!question) return null;
   if (mode === "lori" && question.promptKey) return null;
@@ -95,6 +99,7 @@ export function parseMentorRequest(value: unknown): MentorRequest | null {
   }
   return {
     ...question,
+    ...(attachments.length ? { attachments } : {}),
     ...(value.mode !== undefined ? { mode } : {}),
     locale: value.locale,
     history: parsedHistory,
