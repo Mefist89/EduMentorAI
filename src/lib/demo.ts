@@ -27,7 +27,7 @@ export const navigation = [
   { id: "practices", label: text("Practici pedagogice", "Практики") },
   { id: "course", label: text("Cursul meu", "Мой курс") },
   { id: "activities", label: text("Activități", "Задания") },
-  { id: "cohorts", label: text("Cohorte", "Когорты") },
+  { id: "cohorts", label: text("Clasa mea", "Мой класс") },
   { id: "mentor", label: text("AI Mentor", "AI Mentor") },
   { id: "experience", label: text("Experiența mea", "Мой опыт") },
 ] as const;

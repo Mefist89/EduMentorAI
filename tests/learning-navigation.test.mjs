@@ -49,6 +49,6 @@ test("Investigation hub renders only provided sections, in the submenu order", (
   const html = renderToStaticMarkup(React.createElement(views.InvestigationView, { locale: "ru", views: allowed, student: true, go: () => {} }));
   assert.equal((html.match(/class="ln-card"/g) ?? []).length, 5);
   const titles = [...html.matchAll(/<h2>(.*?)<\/h2>/g)].map(match => match[1]);
-  assert.equal(JSON.stringify(titles), JSON.stringify(["Обзор", "Практики", "Мой курс", "Задания", "Когорты"]));
+  assert.equal(JSON.stringify(titles), JSON.stringify(["Обзор", "Практики", "Мой курс", "Задания", "Мой класс"]));
   assert.doesNotMatch(html, /AI Mentor|Мой опыт/);
 });
