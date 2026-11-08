@@ -1,5 +1,7 @@
 export type Locale = "ro" | "ru";
 export type View =
+  | "continuitate"
+  | "investigatie"
   | "cohorts"
   | "practices"
   | "puntea"
@@ -18,15 +20,20 @@ export const text = (ro: string, ru: string): Bilingual => ({ ro, ru });
 export const navigation = [
   { id: "puntea", label: text("Puntea Edu · Catalog", "Puntea Edu · Каталог") },
   { id: "expertiza", label: text("Expertiză", "Экспертиза") },
-  { id: "dashboard", label: text("Prezentare", "Обзор") },
+  { id: "continuitate", label: text("Continuitate", "Continuitate") },
   { id: "trasee", label: text("Trasee", "Маршруты") },
+  { id: "investigatie", label: text("Investigație", "Investigație") },
+  { id: "dashboard", label: text("Prezentare", "Обзор") },
   { id: "practices", label: text("Practici pedagogice", "Практики") },
-  { id: "cohorts", label: text("Cohorte", "Когорты") },
   { id: "course", label: text("Cursul meu", "Мой курс") },
-  { id: "mentor", label: text("AI Mentor", "AI Mentor") },
   { id: "activities", label: text("Activități", "Задания") },
+  { id: "cohorts", label: text("Cohorte", "Когорты") },
+  { id: "mentor", label: text("AI Mentor", "AI Mentor") },
   { id: "experience", label: text("Experiența mea", "Мой опыт") },
 ] as const;
+
+export const primaryViews = ["puntea", "expertiza", "continuitate", "trasee", "investigatie"] as const;
+export const investigationViews = ["dashboard", "practices", "course", "activities", "cohorts", "mentor", "experience"] as const;
 
 export const steps = [
   {

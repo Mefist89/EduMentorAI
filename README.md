@@ -64,6 +64,14 @@ Pagina prezintă cele șase direcții existente ale platformei, parcursul de în
 
 Nu au fost adăugate înregistrare publică, conturi noi sau acces anonim la datele comunității. API-urile protejate și zona de administrare își păstrează verificările de sesiune și rol. `npm run test:public` verifică separarea prezentării publice de cabinetul celor trei roluri.
 
+## Meniu: Continuitate și Investigație
+
+Pentru profesor și administrator, meniul principal are cinci puncte: Puntea Edu, Expertiză, **Continuitate**, Trasee, **Investigație**. Investigație se deschide/închide ca submeniu și oferă și o pagină cu acces rapid la secțiuni, în ordinea: Prezentare, Practici pedagogice, Cursul meu, Activități, Cohorte, AI Mentor, Experiența mea. Adresele existente `/#dashboard`, `/#practices`, `/#course`, `/#activities`, `/#cohorts`, `/#mentor` și `/#experience` se păstrează; deschiderea unei secțiuni extinde automat submeniul.
+
+`/#continuitate` arată progresul demonstrativ existent al contului în browser și următoarea etapă neparcursă. Butonul de continuare deschide cursul, activitatea sau reflecția, în funcție de cele trei etape. După finalizare sunt disponibile revenirea la reflecție și repetarea etapelor, fără resetare automată. Nu introduce o stocare separată și nu înlocuiește progresul din paginile existente.
+
+Elevul are numai secțiunile permise rolului său: Prezentare, Practici, Curs, Exerciții și Cohorte în Investigație. Continuitate îi oferă acces la curs și exerciții, fără progresul celor trei etape specifice profesorului. Trasee, AI Mentor și Experiența mea își păstrează restricțiile existente. Pe mobil submeniul se afișează sub butoanele principale, fără suprapunerea lor. Denumirile Continuitate și Investigație sunt păstrate în ambele limbi, iar descrierile și conținutul sunt RO/RU.
+
 ## Catalogul Puntea Edu
 
 Datele provin din fișierele `frontend/src/puntea/catalog.mjs` și `resources.mjs` ale proiectului Edumentor furnizat. Au fost extrase ca date, fără executarea scripturilor proiectului-sursă. Snapshotul normalizat este `src/features/puntea/catalog.json`: 49 de ID-uri unice, 9 categorii și 14 referințe suplimentare. Au fost completate categoriile lipsă pentru 12 fișe și transformate referințele în perechi etichetă–URL. Fișierele din Downloads nu sunt modificate.

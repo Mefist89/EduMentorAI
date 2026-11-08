@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   BookMarked,
   Compass,
+  ChevronDown,
+  FlaskConical,
+  GitBranch,
   NotebookPen,
   Users,
   MessagesSquare,
@@ -22,6 +25,8 @@ import {
 import {
   initialProgress,
   navigation,
+  primaryViews,
+  investigationViews,
   parseProgress,
   STORAGE_KEY,
   type DemoProgress,
@@ -34,6 +39,7 @@ import { type Account, roleLabels } from "@/lib/accounts";
 import { LogoutButton } from "./login-form";
 import { StudentLearning } from "./student-learning";
 import { httpApi } from "@/features/trasee/client/api";
+import { ContinuityView, InvestigationView } from "./learning-navigation";
 
 const TraseeApp = dynamic(
   () =>
@@ -66,6 +72,8 @@ const CohortsApp = dynamic(
 );
 
 const navIcons = {
+  continuitate: GitBranch,
+  investigatie: FlaskConical,
   cohorts: Users,
   practices: NotebookPen,
   puntea: Compass,
@@ -83,19 +91,23 @@ export function MentorApp({ account }: { account: Account }) {
   const allowedNavigation = navigation.filter(
     (item) =>
       !student ||
-      ["cohorts", "practices", "puntea", "dashboard", "course", "activities", "expertiza"].includes(
+      ["continuitate", "investigatie", "cohorts", "practices", "puntea", "dashboard", "course", "activities", "expertiza"].includes(
         item.id,
       ),
   );
+  const topNavigation = allowedNavigation.filter(item => primaryViews.some(id => id === item.id));
+  const investigationNavigation = allowedNavigation.filter(item => investigationViews.some(id => id === item.id));
   const storageKey = `${STORAGE_KEY}:${account.id}`;
   const [progress, setProgress] = useState<DemoProgress>(initialProgress);
   const [view, setView] = useState<View>("dashboard");
+  const [investigationOpen, setInvestigationOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
   const [toast, setToast] = useState("");
   const locale = progress.locale;
   const t = (ro: string, ru: string) => (locale === "ro" ? ro : ru);
   const selected = navigation.find((item) => item.id === view)!;
+  const inInvestigation = view === "investigatie" || investigationViews.some(id => id === view);
   useEffect(() => {
     try {
       setProgress(parseProgress(localStorage.getItem(storageKey)));
@@ -108,12 +120,13 @@ export function MentorApp({ account }: { account: Account }) {
       if (
         navigation.some((item) => item.id === id) &&
         (!student ||
-          ["cohorts", "practices", "puntea", "dashboard", "course", "activities", "expertiza"].includes(
+          ["continuitate", "investigatie", "cohorts", "practices", "puntea", "dashboard", "course", "activities", "expertiza"].includes(
             id,
           ))
-      )
+      ) {
         setView(id as View);
-      else setView("dashboard");
+        setInvestigationOpen(id === "investigatie" || investigationViews.some(child => child === id));
+      } else { setView("dashboard"); setInvestigationOpen(true); }
     };
     readHash();
     window.addEventListener("hashchange", readHash);
@@ -144,6 +157,7 @@ export function MentorApp({ account }: { account: Account }) {
   }
   function go(next: View) {
     setView(next);
+    setInvestigationOpen(next === "investigatie" || investigationViews.some(id => id === next));
     window.location.hash = next;
     window.scrollTo({ top: 0, behavior: "instant" });
     window.requestAnimationFrame(() =>
@@ -196,21 +210,33 @@ export function MentorApp({ account }: { account: Account }) {
           className="main-nav"
           aria-label={t("Navigare principală", "Основная навигация")}
         >
-          {allowedNavigation.map((item) => {
+          {topNavigation.map((item) => {
             const Icon = navIcons[item.id];
+            const group = item.id === "investigatie";
             return (
+              <Fragment key={item.id}>
               <button
-                key={item.id}
-                onClick={() => go(item.id)}
+                className={group ? `nav-section-button${inInvestigation ? " nav-section-active" : ""}` : undefined}
+                onClick={() => {
+                  if (!group) go(item.id);
+                  else if (!inInvestigation) go("investigatie");
+                  else setInvestigationOpen(previous => !previous);
+                }}
                 aria-current={view === item.id ? "page" : undefined}
+                aria-expanded={group ? investigationOpen : undefined}
+                aria-controls={group ? "investigation-menu" : undefined}
               >
-                <Icon size={19} strokeWidth={1.7} />
-                <span>
-                  {student && item.id === "activities"
-                    ? t("Exerciții", "Задания")
-                    : item.label[locale]}
-                </span>
+                <Icon size={19} strokeWidth={1.7} aria-hidden="true" />
+                <span>{item.label[locale]}</span>
+                {group && <ChevronDown className={`nav-disclosure${investigationOpen ? " is-open" : ""}`} aria-hidden="true" />}
               </button>
+              {group && investigationOpen && <div className="nav-submenu" id="investigation-menu" role="group" aria-label="Investigație">
+                {investigationNavigation.map(child => {
+                  const ChildIcon = navIcons[child.id];
+                  return <button key={child.id} onClick={() => go(child.id)} aria-current={view === child.id ? "page" : undefined}><ChildIcon size={17} strokeWidth={1.7} aria-hidden="true" /><span>{student && child.id === "activities" ? t("Exerciții", "Задания") : child.label[locale]}</span></button>;
+                })}
+              </div>}
+              </Fragment>
             );
           })}
         </nav>
@@ -296,13 +322,15 @@ export function MentorApp({ account }: { account: Account }) {
               )}
             </p>
           )}
-          {student && !["expertiza", "puntea", "practices", "cohorts"].includes(view) && (
+          {student && !["expertiza", "puntea", "practices", "cohorts", "continuitate", "investigatie"].includes(view) && (
             <StudentLearning locale={locale} view={view} go={go} />
           )}
           {view === "expertiza" && <ExpertizaApp />}
           {view === "puntea" && <PunteaCatalog locale={locale} />}
           {view === "practices" && <PracticesApp locale={locale} account={account} />}
           {view === "cohorts" && <CohortsApp locale={locale} account={account} />}
+          {view === "continuitate" && <ContinuityView locale={locale} progress={progress} go={go} student={student} />}
+          {view === "investigatie" && <InvestigationView locale={locale} views={investigationNavigation.map(item => item.id)} go={go} student={student} />}
           {!student && view === "dashboard" && (
             <Dashboard locale={locale} progress={progress} go={go} />
           )}
@@ -330,7 +358,11 @@ export function MentorApp({ account }: { account: Account }) {
             <span>
               <CircleHelp size={13} />
               {t(
-                view === "cohorts"
+                view === "continuitate"
+                  ? "Traseu demonstrativ · Progres salvat în acest browser"
+                  : view === "investigatie"
+                    ? "Secțiunile spațiului de învățare"
+                    : view === "cohorts"
                   ? "Cohorte · Grupuri și componență salvate în Supabase"
                   : view === "practices"
                   ? "Practici · Publicare cu moderare · Salvare în Supabase"
@@ -341,7 +373,11 @@ export function MentorApp({ account }: { account: Account }) {
                     : view === "trasee"
                       ? "Catalog de formare · Marcaje salvate în cont"
                       : "Date fictive · Salvare în acest browser",
-                view === "cohorts"
+                view === "continuitate"
+                  ? "Демомаршрут · Прогресс сохранён в этом браузере"
+                  : view === "investigatie"
+                    ? "Разделы учебного пространства"
+                    : view === "cohorts"
                   ? "Когорты · Группы и состав сохранены в Supabase"
                   : view === "practices"
                   ? "Практики · Публикация с модерацией · Сохранение в Supabase"

@@ -152,3 +152,11 @@ Limite MVP: practica publicată rămâne numai pentru citire, fără atașamente
 - Componența și meniul verificate în RO/RU la 320, 640, 642, 820 și 1440 px: fără derulare orizontală, suprapuneri ale butoanelor sau controale care depășesc containerul. Formularul de editare a trecut și verificarea la 320 px. Viewportul a fost resetat după testare.
 
 Limite MVP: cel mult 100 de elevi per grup; selectarea conturilor deja existente, fără invitații email sau conturi noi; fără ștergerea ori transferul grupului sau atribuirea lecțiilor. Pentru un volum mare de grupuri este recomandat un repository SQL indexat. Grupurile temporare QA se elimină după verificarea publicării, fără modificarea altor date.
+
+## Continuitate și gruparea Investigație
+
+- Ordinea principală pentru profesor/administrator: Puntea Edu, Expertiză, Continuitate, Trasee, Investigație. Cele șapte secțiuni de învățare sunt grupate în submeniu: Prezentare, Practici, Curs, Activități, Cohorte, AI Mentor, Experiența mea. Pagina Investigație oferă aceleași șapte destinații.
+- Continuitate folosește progresul demonstrativ existent, fără resetare sau date Supabase noi. Verificat în browser: 0/3, următoarea etapă «Уточните цель», butonul «Продолжить маршрут» deschide `/#course` și extinde submeniul. Submeniul se poate închide/redeschide păstrând pagina curentă.
+- Elevul a deschis Continuitate fără bara celor trei etape ale profesorului și cu acces la curs/exerciții; Investigație a afișat numai cele cinci destinații permise. Reîncărcarea directă a paginii Investigație a păstrat submeniul extins. Restricțiile pentru Trasee, AI Mentor și Experiența mea rămân active.
+- Zece verificări responsive: RO/RU la 320, 640, 642, 820 și 1440 px, cu cinci butoane principale și șapte copii extinși, fără derulare orizontală sau suprapuneri ale butoanelor. Viewportul a fost resetat după verificări.
+- Patru teste noi: structura principală/submeniul și păstrarea rutelor; afișarea următoarei etape pentru 0/3, 1/3, 2/3 și a finalizării 3/3; continuarea elevului fără etapele private ale profesorului; pagina Investigație limitată la destinațiile primite. Total 79 de teste trecute, TypeScript și build de producție reușite.

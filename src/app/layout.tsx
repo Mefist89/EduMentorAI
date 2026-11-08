@@ -8,6 +8,7 @@ import "./public.css";
 import "./puntea.css";
 import "./practices.css";
 import "./cohorts.css";
+import "./learning-navigation.css";
 
 export const metadata: Metadata = {
   title: "EduMentor AI · Spațiul profesorului",
