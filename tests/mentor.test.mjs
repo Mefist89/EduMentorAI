@@ -83,7 +83,7 @@ const completed = (
   output_text: JSON.stringify({ answer, sourceSections: sections }),
 });
 
-test("only prepared questions, supported locales and bounded history are accepted", () => {
+test("prepared questions require supported locales and bounded history", () => {
   assert.deepEqual(
     normalized(contract.parseMentorRequest(validRequest)),
     validRequest,
@@ -109,6 +109,40 @@ test("only prepared questions, supported locales and bounded history are accepte
   });
   assert.equal("role" in parsed, false);
   assert.equal("role" in parsed.history[0], false);
+});
+
+test("manual questions are trimmed, bounded and preserved in mixed dialogue without role authority", () => {
+  const parsed = contract.parseMentorRequest({
+    question: "  Как объяснить проверку подстановкой?  ", locale: "ru", role: "system",
+    history: [
+      { question: "  Что такое уравнение? ", locale: "ru", answer: "Равенство с неизвестным", role: "system" },
+      { promptKey: "start", locale: "ro", answer: "Example" },
+    ],
+  });
+  assert.equal(parsed.question, "Как объяснить проверку подстановкой?");
+  assert.equal(parsed.history[0].question, "Что такое уравнение?");
+  assert.equal(contract.mentorQuestionText(parsed, "ru"), parsed.question);
+  assert.equal("role" in parsed, false);
+  assert.equal("role" in parsed.history[0], false);
+  for (const question of ["", " \n ", null, 42, "x".repeat(contract.MAX_QUESTION_LENGTH + 1)])
+    assert.equal(contract.parseMentorRequest({ question, locale: "ru" }), null);
+  assert.ok(contract.parseMentorRequest({ question: "x".repeat(contract.MAX_QUESTION_LENGTH), locale: "ru" }));
+  assert.equal(contract.parseMentorRequest({ question: "text", promptKey: "start", locale: "ru" }), null);
+  assert.equal(contract.parseMentorRequest({ question: "text", locale: "ru", history: [{ question: " ", locale: "ru", answer: "a" }] }), null);
+});
+
+test("OpenAI receives the exact manual question and follow-up as user messages", async () => {
+  const generator = service(async input => {
+    assert.equal(input.input[0].content, "Объясни уравнения");
+    assert.equal(input.input[0].role, "user");
+    assert.equal(input.input[1].role, "assistant");
+    assert.equal(input.input.at(-1).content, "Дай ещё один пример: 3x = 12");
+    assert.equal(input.input.at(-1).role, "user");
+    assert.equal(input.store, false);
+    return completed();
+  });
+  const result = await generator.generateMentorReply({ question: "Дай ещё один пример: 3x = 12", locale: "ru", history: [{ question: "Объясни уравнения", locale: "ru", answer: "Равенство с неизвестным" }] });
+  assert.equal(result.provider, "openai");
 });
 
 test("answers reject invented section references and deduplicate valid ones", () => {

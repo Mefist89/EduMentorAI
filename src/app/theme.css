@@ -1083,3 +1083,15 @@
 .app-shell .content > .page-bottom-action {
   margin-bottom: 28px;
 }
+.app-shell .mentor-composer { margin-bottom: 24px; }
+.app-shell .mentor-composer > label { display: block; margin-bottom: 9px; font-size: 13px; font-weight: 750; color: #203d3e; }
+.app-shell .mentor-composer-row { display: flex; gap: 10px; align-items: stretch; }
+.app-shell .mentor-composer-row input { flex: 1; min-width: 0; width: 100%; border: 1px solid #cddbd2; border-radius: 12px; padding: 13px 15px; background: #fff; color: #203d3e; font: inherit; font-size: 14px; }
+.app-shell .mentor-composer-row input::placeholder { color: #71827b; }
+.app-shell .mentor-composer-row input:focus-visible { outline: 3px solid #b5d5c4; outline-offset: 2px; border-color: #23675c; }
+.app-shell .mentor-composer-row button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #23675c; border-radius: 12px; background: #23675c; color: #fff; padding: 12px 18px; font: inherit; font-size: 13px; font-weight: 750; cursor: pointer; }
+.app-shell .mentor-composer-row button:disabled { opacity: .5; cursor: default; }
+.app-shell .mentor-composer-row button:focus-visible { outline: 3px solid #b5d5c4; outline-offset: 2px; }
+.app-shell .mentor-composer-hint { display: flex; justify-content: space-between; gap: 12px; margin: 8px 0 0; font-size: 11px; color: #61756f; }
+.app-shell .chat-message.user p { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 540px) { .app-shell .mentor-composer-row { flex-direction: column; } .app-shell .mentor-composer-row button { min-height: 44px; } }

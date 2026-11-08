@@ -7,6 +7,7 @@ import {
   LoaderCircle,
   MessageCircle,
   RotateCcw,
+  Send,
   ShieldCheck,
   Sparkles,
   WandSparkles,
@@ -14,15 +15,17 @@ import {
 import { prompts, type Locale, type PromptKey, type View } from "@/lib/demo";
 import {
   MAX_HISTORY_TURNS,
+  MAX_QUESTION_LENGTH,
+  mentorQuestionText,
   parseMentorReply,
   type MentorAnswer,
   type MentorErrorCode,
+  type MentorQuestion,
 } from "@/lib/mentor-contract";
 import { Action, Badge, Heading } from "./ui";
 
-type Turn = {
+type Turn = MentorQuestion & {
   id: string;
-  promptKey: PromptKey;
   locale: Locale;
   status: "loading" | "done" | "error";
   reply?: MentorAnswer;
@@ -86,6 +89,7 @@ export function MentorChat({
 }) {
   const [conversation, setConversation] = useState<Turn[]>([]);
   const [busy, setBusy] = useState(false);
+  const [draft, setDraft] = useState("");
   const controllerRef = useRef<AbortController | null>(null);
   const t = (ro: string, ru: string) => (locale === "ro" ? ro : ru);
 
@@ -96,7 +100,7 @@ export function MentorChat({
     [],
   );
 
-  async function ask(promptKey: PromptKey, retryId?: string) {
+  async function ask(question: MentorQuestion, retryId?: string) {
     if (controllerRef.current) return;
     const controller = new AbortController();
     controllerRef.current = controller;
@@ -118,7 +122,9 @@ export function MentorChat({
       )
       .slice(-MAX_HISTORY_TURNS)
       .map((turn) => ({
-        promptKey: turn.promptKey,
+        ...(turn.question !== undefined
+          ? { question: turn.question }
+          : { promptKey: turn.promptKey! }),
         locale: turn.locale,
         answer: turn.reply!.answer,
       }));
@@ -131,7 +137,7 @@ export function MentorChat({
           )
         : [
             ...previous,
-            { id, promptKey, locale: turnLocale, status: "loading" },
+            { ...question, id, locale: turnLocale, status: "loading" },
           ],
     );
 
@@ -139,7 +145,7 @@ export function MentorChat({
       const response = await fetch("/api/mentor/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ promptKey, locale: turnLocale, history }),
+        body: JSON.stringify({ ...question, locale: turnLocale, history }),
         signal: controller.signal,
       });
       const data: unknown = await response.json();
@@ -197,7 +203,7 @@ export function MentorChat({
   function useExample(id: string) {
     setConversation((previous) =>
       previous.map((turn) => {
-        if (turn.id !== id) return turn;
+        if (turn.id !== id || !turn.promptKey) return turn;
         const example = prompts[turn.promptKey];
         return {
           ...turn,
@@ -218,6 +224,7 @@ export function MentorChat({
     controllerRef.current = null;
     setBusy(false);
     setConversation([]);
+    setDraft("");
   }
 
   return (
@@ -229,8 +236,8 @@ export function MentorChat({
           "Место для ваших вопросов.",
         )}
         description={t(
-          "Alege o întrebare exemplu. Mentorul răspunde pe baza materialului de curs.",
-          "Выберите готовый вопрос. Наставник ответит на основе материала курса.",
+          "Scrie întrebarea ta sau alege un exemplu. Mentorul te ajută să aplici ideile la clasă.",
+          "Напишите свой вопрос или выберите пример. Наставник поможет применить идеи на занятиях.",
         )}
         action={
           <Badge>
@@ -272,8 +279,8 @@ export function MentorChat({
               </span>
               <p>
                 {t(
-                  "Bun venit! Hai să transformăm materialul despre ecuații într-o activitate potrivită clasei tale. Alege mai jos o întrebare pentru a începe.",
-                  "Добро пожаловать! Давайте превратим материал об уравнениях в задание для вашего класса. Выберите вопрос ниже, чтобы начать.",
+                  "Bun venit! Hai să transformăm materialul despre ecuații într-o activitate potrivită clasei tale. Scrie întrebarea ta mai jos sau pornește de la un exemplu.",
+                  "Добро пожаловать! Давайте превратим материал об уравнениях в задание для вашего класса. Напишите свой вопрос ниже или начните с примера.",
                 )}
               </p>
             </div>
@@ -281,12 +288,12 @@ export function MentorChat({
               <div className="chat-turn" key={turn.id}>
                 <div className="chat-message user">
                   <span className="message-label">
-                    {t(
+                    {turn.question !== undefined ? t("Profesor · întrebarea ta", "Учитель · ваш вопрос") : t(
                       "Profesor · întrebare exemplu",
                       "Учитель · пример вопроса",
                     )}
                   </span>
-                  <p>{prompts[turn.promptKey].label[turn.locale]}</p>
+                  <p>{mentorQuestionText(turn, turn.locale)}</p>
                 </div>
                 <div className="chat-message assistant">
                   <span className="message-label">
@@ -318,12 +325,12 @@ export function MentorChat({
                         <button
                           className="text-button"
                           disabled={busy}
-                          onClick={() => ask(turn.promptKey, turn.id)}
+                          onClick={() => ask(turn.question !== undefined ? { question: turn.question } : { promptKey: turn.promptKey! }, turn.id)}
                         >
                           <RotateCcw size={14} />
                           {t("Reîncearcă", "Повторить")}
                         </button>
-                        <button
+                        {turn.promptKey && <button
                           className="text-button"
                           onClick={() => useExample(turn.id)}
                         >
@@ -332,7 +339,7 @@ export function MentorChat({
                             "Vezi răspunsul exemplu",
                             "Показать пример ответа",
                           )}
-                        </button>
+                        </button>}
                       </div>
                     </div>
                   )}
@@ -370,6 +377,37 @@ export function MentorChat({
             ))}
           </div>
           <div className="prompt-area">
+            <form
+              className="mentor-composer"
+              onSubmit={(event) => {
+                event.preventDefault();
+                const question = draft.trim();
+                if (!question || question.length > MAX_QUESTION_LENGTH || controllerRef.current) return;
+                setDraft("");
+                void ask({ question });
+              }}
+            >
+              <label htmlFor="mentor-question">{t("Întrebarea ta", "Ваш вопрос")}</label>
+              <div className="mentor-composer-row">
+                <input
+                  id="mentor-question"
+                  type="text"
+                  value={draft}
+                  onChange={(event) => setDraft(event.target.value)}
+                  maxLength={MAX_QUESTION_LENGTH}
+                  placeholder={t("Scrie ce vrei să întrebi mentorul…", "Напишите вопрос наставнику…")}
+                  aria-describedby="mentor-question-hint"
+                />
+                <button type="submit" disabled={busy || !draft.trim()}>
+                  {busy ? <LoaderCircle size={17} className="spinner" aria-hidden="true" /> : <Send size={17} aria-hidden="true" />}
+                  {t("Trimite", "Отправить")}
+                </button>
+              </div>
+              <p id="mentor-question-hint" className="mentor-composer-hint">
+                <span>{t("Enter pentru a trimite", "Enter — отправить")}</span>
+                <span>{draft.length}/{MAX_QUESTION_LENGTH}</span>
+              </p>
+            </form>
             <span className="eyebrow">
               {t("ÎNCEARCĂ O ÎNTREBARE", "ПОПРОБУЙТЕ ВОПРОС")}
             </span>
@@ -379,7 +417,7 @@ export function MentorChat({
                   className="prompt-button"
                   key={key}
                   disabled={busy}
-                  onClick={() => ask(key)}
+                  onClick={() => ask({ promptKey: key })}
                 >
                   {prompts[key].label[locale]}
                   <MessageCircle size={15} />

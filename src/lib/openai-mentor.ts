@@ -1,8 +1,9 @@
 import "server-only";
 import OpenAI from "openai";
-import { courseSections, diagnostic, prompts } from "./demo";
+import { courseSections, diagnostic } from "./demo";
 import {
   parseMentorAnswer,
+  mentorQuestionText,
   type MentorErrorCode,
   type MentorReply,
   type MentorRequest,
@@ -30,6 +31,7 @@ export async function generateMentorReply(
     "You are EduMentor, a pedagogical assistant for teachers, not a replacement for professional judgement.",
     `Respond only in ${request.locale === "ro" ? "Romanian" : "Russian"}. Use a clear, warm, professional tone.`,
     "This is a demonstration for grade VII mathematics, linear equations. Never claim classroom activities actually happened or invent students, outcomes, percentages, research or references.",
+    "Answer the teacher's own question, including follow-up questions. For pedagogical topics beyond the supplied course, give clearly labelled recommendations without claiming they appear in the course material.",
     "Give a practical answer of at most 200 words in plain text with line breaks, without markdown or HTML.",
     "Separate information from the supplied course material, your recommendations, and things to verify, using three short labelled paragraphs in the requested language.",
     "Explain mathematical transformations accurately and verify solutions by substitution. Activities with AI must also offer an alternative without AI. Do not assign fixed labels to pupils or make individual diagnoses.",
@@ -62,13 +64,13 @@ export async function generateMentorReply(
           ...request.history.flatMap((turn) => [
             {
               role: "user" as const,
-              content: prompts[turn.promptKey].label[turn.locale],
+              content: mentorQuestionText(turn, turn.locale),
             },
             { role: "assistant" as const, content: turn.answer },
           ]),
           {
             role: "user",
-            content: prompts[request.promptKey].label[request.locale],
+            content: mentorQuestionText(request, request.locale),
           },
         ],
         store: false,

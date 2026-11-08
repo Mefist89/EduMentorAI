@@ -169,3 +169,12 @@ Limite MVP: cel mult 100 de elevi per grup; selectarea conturilor deja existente
 - Sursa și catalogul Supabase au aceleași 124 de cursuri și 8 centre; comparație integrală JSON, fără rescrierea datelor sau a marcajelor personale.
 - Verificate local: exemplu STEAM, recomandări, calendare, compararea a două cursuri, panoul administratorului cu 6 discipline cu ediții în paralel.
 - Teste noi: derivarea rețelei din catalog, excluderea datelor aproximative/înscrierilor din calendar, suprapuneri reale la centre distincte, autorizarea noii rute.
+
+
+## AI Mentor — întrebări proprii, 08.11.2026
+
+- Formular RO/RU cu input liber (maximum 2000 de caractere), trimitere prin Enter sau buton; textul gol nu poate fi trimis. Întrebările pregătite rămân disponibile.
+- Contractul serverului acceptă exact unul dintre `question` și `promptKey`; istoric mixt de maximum patru schimburi, fără roluri controlate de client. Întrebarea proprie ajunge ca mesaj `user` în OpenAI Responses API, cu `store: false`.
+- Reîncercarea păstrează textul întrebării. Pentru întrebările proprii nu se afișează răspunsuri statice inventate.
+- Verificat în browser: întrebare manuală despre `3x + 6 = 18`, trimitere prin Enter, răspuns real OpenAI cu `x = 4`; întrebare de continuare trimisă prin buton, răspuns relevant; input și buton fără depășirea lățimii la 390 px.
+- Build de producție reușit; toate cele 85 de teste trec, inclusiv validarea textului, istoricul mixt și transmiterea mesajelor proprii către model.
