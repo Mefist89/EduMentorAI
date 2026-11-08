@@ -325,7 +325,7 @@ export function MentorApp({ account }: { account: Account }) {
           {student && !["expertiza", "puntea", "practices", "cohorts", "continuitate", "investigatie"].includes(view) && (
             <StudentLearning locale={locale} view={view} go={go} />
           )}
-          {view === "expertiza" && <ExpertizaApp />}
+          {view === "expertiza" && <ExpertizaApp locale={locale} />}
           {view === "puntea" && <PunteaCatalog locale={locale} />}
           {view === "practices" && <PracticesApp locale={locale} account={account} />}
           {view === "cohorts" && <CohortsApp locale={locale} account={account} />}

@@ -20,6 +20,7 @@ import {
   Users,
 } from "lucide-react";
 import { roleLabels } from "@/lib/accounts";
+import type { Locale } from "@/lib/demo";
 import type { Command, ExpertizaState, Message, Question } from "../shared";
 
 type Tab =
@@ -117,7 +118,8 @@ function Stamp({ name, kind }: { name: string; kind: string }) {
 }
 type Mutate = (command: Command) => Promise<boolean>;
 
-export function ExpertizaApp() {
+export function ExpertizaApp({ locale = "ro" }: { locale?: Locale }) {
+  const t = (ro: string, ru: string) => locale === "ro" ? ro : ru;
   const [state, setState] = useState<ExpertizaState | null>(null),
     [tab, setTab] = useState<Tab>("questions"),
     [error, setError] = useState(""),
@@ -179,17 +181,17 @@ export function ExpertizaApp() {
     ) || 0;
   return (
     <section className="expertiza" lang="ro" aria-busy={pending || loading}>
-      <header className="ex-heading">
+      <header className="ex-heading" lang={locale}>
         <div>
-          <p className="eyebrow">COMUNITATEA EDUMENTOR</p>
+          <p className="eyebrow">{t("COMUNITATEA EDUMENTOR", "СООБЩЕСТВО EDUMENTOR")}</p>
           <h1 id="page-title" tabIndex={-1}>
-            Expertiză
+            {t("Expertiză", "Экспертиза")}
           </h1>
-          <p>Întreabă. Împărtășește. Creștem împreună.</p>
+          <p>{t("Întreabă. Împărtășește. Creștem împreună.", "Спрашивайте. Делитесь. Развиваемся вместе.")}</p>
         </div>
         <span className="ex-connected">
           <span />{" "}
-          {state ? "Date încărcate din Supabase" : "Se verifică datele…"}
+          {state ? t("Date încărcate din Supabase", "Данные загружены из Supabase") : t("Se verifică datele…", "Проверяем данные…")}
         </span>
       </header>
       <div className="ex-hero">
