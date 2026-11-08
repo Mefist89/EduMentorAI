@@ -55,7 +55,7 @@ export function PunteaCatalog({ locale }: { locale: Locale }) {
             )}
           </p>
           <h1 id="page-title" tabIndex={-1}>
-            {t("ЭдуМост · Catalog", "ЭдуМост · Каталог")}
+            {t("ЭдуМост", "ЭдуМост")}
           </h1>
           <p>
             {t(

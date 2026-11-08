@@ -22,7 +22,7 @@ npm start
 
 ## Ce poți încerca
 
-0. **ЭдуМост · Catalog** — primul buton din meniu, disponibil tuturor rolurilor la `/#puntea`. Cele 49 de fișe includ cursuri, concursuri, granturi, evenimente, resurse, comunități, mentorat, proiecte și activități. Caută fără diacritice, combină categoria și publicul și ascunde edițiile încheiate. Linkurile și referințele se deschid la furnizor, într-o filă nouă.
+0. **ЭдуМост** — primul buton din meniu, disponibil tuturor rolurilor la `/#puntea`. Cele 49 de fișe includ cursuri, concursuri, granturi, evenimente, resurse, comunități, mentorat, proiecte și activități. Caută fără diacritice, combină categoria și publicul și ascunde edițiile încheiate. Linkurile și referințele se deschid la furnizor, într-o filă nouă.
 1. **Prezentare** — banner introductiv, resurse demonstrative și traseu cu progres real al interacțiunilor din demonstrație.
 2. **Cursul meu** — material demonstrativ în trei secțiuni și trei răspunsuri de diagnostic pregătite. Apasă „Folosește acest exemplu”.
 3. **AI Mentor** — alege întrebările pregătite pentru răspunsuri reale OpenAI. Mentorul primește materialul cursului și contextul demonstrativ. Referințele afișate deschid materialul cursului. Dacă serviciul nu răspunde, poți reîncerca sau alege explicit un răspuns static, etichetat drept exemplu.
