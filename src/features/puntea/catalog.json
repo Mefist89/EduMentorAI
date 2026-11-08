@@ -1,0 +1,1047 @@
+{
+  "version": 1,
+  "source": "Puntea Edu MD / provided Edumentor snapshot",
+  "importedAt": "2026-11-08",
+  "entries": [
+    {
+      "id": "concurs-european-eseuri",
+      "title": "Concursul european de eseuri",
+      "audience": [
+        "Elevi",
+        "Profesori",
+        "Școli"
+      ],
+      "kind": "Concurs",
+      "status": "deadline",
+      "deadline": "2026-11-15",
+      "deadlineLabel": "Preînscriere",
+      "when": "Eseul și prezentarea video se trimit până la 15 decembrie 2026.",
+      "provider": "CICDE · APPF",
+      "source": "https://cicde.md/2026/11/concurs-european-de-eseuri-pentru-scolile-din-republica-moldova-clasa-castigatoare-va-vizita-parlamentul-european/",
+      "summary": "O clasă din fiecare instituție poate participa la concursul european. Profesorul coordonează preînscrierea.",
+      "eligible": "Câte o clasă per instituție. Elevii participanți au minimum 16 ani, iar clasa lucrează cu unul sau doi profesori.",
+      "next": "Profesorul coordonator urmează instrucțiunile din apel. Eseul și materialul video se pregătesc după preînscriere.",
+      "keywords": "parlament europa democratie eseuri video liceu",
+      "category": "concursuri",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "tekwill-incluziune-financiara",
+      "title": "Educație digitală și incluziune financiară",
+      "audience": [
+        "Școli"
+      ],
+      "kind": "Program",
+      "category": "proiecte",
+      "status": "deadline",
+      "deadline": "2026-11-20",
+      "when": "Sesiuni în anul școlar 2026–2027.",
+      "provider": "Tekwill în fiecare școală",
+      "source": "https://tekwill.online/40-de-licee-din-republica-moldova-vor-beneficia-de-sesiuni-de-educatie-digitala-si-incluziune-financiara-printr-un-parteneriat-intre-tekwill-in-fiecare-scoala-cu-mastercard-si-payne/",
+      "summary": "Apel pentru licee care vor să găzduiască sesiuni despre serviciile financiare digitale.",
+      "eligible": "Licee din Republica Moldova. Aplicația este depusă de instituție.",
+      "next": "Conducerea liceului consultă condițiile și completează formularul din anunțul organizatorului.",
+      "keywords": "liceu tekwill educatie digitala financiar bani",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "dor-de-traditii",
+      "title": "DOR de Tradiții",
+      "audience": [
+        "Elevi"
+      ],
+      "kind": "Program",
+      "category": "evenimente",
+      "status": "deadline",
+      "deadline": "2026-11-30",
+      "when": "27–29 decembrie 2026",
+      "event": [
+        "2026-12-27",
+        "2026-12-29"
+      ],
+      "provider": "Biroul relații cu diaspora",
+      "source": "https://brd.gov.md/apel-de-lansare-a-programului-dor-de-traditii-editia-a-iii-a/2026/",
+      "summary": "Program de iarnă pentru adolescenți din diaspora care vor să descopere tradiții din Republica Moldova.",
+      "eligible": "Tineri din diaspora, 13–17 ani, cu română la nivel conversațional de bază.",
+      "cost": "Participare gratuită. Transportul și asigurarea medicală sunt în sarcina participanților.",
+      "next": "Citește criteriile și folosește formularul din apel. Locurile se acordă în ordinea înscrierii, în limita capacității.",
+      "keywords": "iarna traditii limba romana tabara diaspora bursa",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "scoala-etwinning",
+      "title": "Webinar „Școala eTwinning”",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "kind": "Formare",
+      "status": "check",
+      "when": "17 noiembrie 2026, ora 14:30",
+      "event": [
+        "2026-11-17"
+      ],
+      "provider": "eTwinning Moldova · UTM",
+      "source": "https://e-twinning.utm.md/2026/11/04/apel-de-participare-la-webinarul-scoala-etwinning-recunoastere-europeana-si-excelenta-educationala-17-noiembrie-2026-ora-1430/",
+      "summary": "Sesiune online despre recunoașterea instituțiilor implicate în eTwinning.",
+      "eligible": "Cadre didactice și manageri din învățământul preuniversitar.",
+      "next": "Consultă apelul și formularul. Organizatorul publică data webinarului, iar termenul de înscriere rămâne de confirmat.",
+      "keywords": "online colaborare proiect scoala manager echipa",
+      "category": "formari",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "parteneri-etwinning",
+      "title": "Parteneri pentru primul proiect eTwinning",
+      "audience": [
+        "Profesori"
+      ],
+      "kind": "Comunitate",
+      "status": "check",
+      "when": "16 noiembrie, 7 și 14 decembrie 2026, 8 februarie 2027",
+      "provider": "eTwinning Moldova · UTM",
+      "source": "https://e-twinning.utm.md/2026/11/03/apel-de-participare-la-seria-de-webinare-etwinning-dedicate-identificarii-partenerilor-de-proiect-etwinning/",
+      "summary": "Serie de întâlniri online pentru învățători care caută parteneri pentru primul proiect.",
+      "eligible": "Cadre didactice din învățământul primar, la început de parcurs eTwinning.",
+      "next": "Deschide apelul și verifică formularul, condițiile și fusul orar. Sursa indică ora Bruxelles.",
+      "keywords": "primar online proiect schimb colaborare practica cerc",
+      "category": "comunitati",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "mold-sef-2027",
+      "title": "Mold SEF 2027",
+      "audience": [
+        "Elevi",
+        "Școli"
+      ],
+      "kind": "Concurs",
+      "status": "calendar",
+      "when": "15–17 ianuarie 2027",
+      "event": [
+        "2027-01-15",
+        "2027-01-17"
+      ],
+      "provider": "ANCE · Ordinul MEC nr. 2093",
+      "source": "https://ance.gov.md/sites/default/files/2026.10.20_anexa-ord.mec_2093_aprobare_program_sustinere_olimp-2027.pdf#page=2",
+      "summary": "Concurs din calendarul republican, pentru proiecte de știință și inginerie.",
+      "eligible": "Elevi din clasele VII–XII, conform calendarului aprobat.",
+      "next": "Discută cu profesorul coordonator și urmărește anunțul ANCE privind înscrierea.",
+      "keywords": "stiinta inginerie proiect steam robotica competitie",
+      "category": "concursuri",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "matematica-2027",
+      "title": "Olimpiada Republicană la Matematică",
+      "audience": [
+        "Elevi",
+        "Școli"
+      ],
+      "kind": "Concurs",
+      "status": "calendar",
+      "when": "22–25 ianuarie 2027",
+      "event": [
+        "2027-01-22",
+        "2027-01-25"
+      ],
+      "provider": "ANCE · Ordinul MEC nr. 2093",
+      "source": "https://ance.gov.md/sites/default/files/2026.10.20_anexa-ord.mec_2093_aprobare_program_sustinere_olimp-2027.pdf#page=2",
+      "summary": "Etapa republicană are calendar aprobat. Etapa raională, municipală sau zonală cu teste unice este la 6 decembrie 2026.",
+      "eligible": "Elevi din clasele VII–XII la etapa republicană, conform ordinului.",
+      "next": "Întreabă profesorul de matematică despre selecția locală și consultă calendarul oficial.",
+      "keywords": "mate matematica raion liceu gimnaziu selectie concurs",
+      "category": "concursuri",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "management-proiecte-upsc",
+      "title": "Managementul proiectelor",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "kind": "Formare",
+      "status": "check",
+      "when": "18, 23 și 24 noiembrie 2026",
+      "provider": "UPSC · Centrul de Formare Continuă și Leadership",
+      "source": "https://cfcl.upsc.md/inscriere-la-module-tematice-de-formare-continua/",
+      "summary": "Modul tematic online din oferta de formare continuă, cu 3 credite indicate de furnizor.",
+      "eligible": "Cadre didactice și cadre de conducere.",
+      "next": "Verifică modulul în lista UPSC și folosește formularul indicat de furnizor după confirmarea locurilor.",
+      "keywords": "upsc online manager proiect formare credite",
+      "category": "formari",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "mentorat-inel",
+      "title": "Mentorat online INEL",
+      "audience": [
+        "Profesori"
+      ],
+      "kind": "Mentorat",
+      "status": "resource",
+      "provider": "Institutul Național pentru Educație și Leadership",
+      "source": "https://mentoratinel.org/",
+      "summary": "Serviciu-pilot unde poți cere sprijin pentru o problemă concretă de la clasă.",
+      "eligible": "Cadre didactice din învățământul general.",
+      "next": "Descrie problema în cererea oficială INEL. Coordonatorul o direcționează în funcție de domeniu și disponibilitate.",
+      "keywords": "mentor mentorat sprijin evaluare formativa incluziune adaptare debutant",
+      "category": "mentorat",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "clasa-viitorului",
+      "title": "Catalogul de formări Clasa Viitorului",
+      "audience": [
+        "Profesori"
+      ],
+      "kind": "Formare",
+      "status": "resource",
+      "provider": "Clasa Viitorului · UPSC",
+      "source": "https://www.clasaviitorului.md/lista-de-programe-2/",
+      "summary": "Programe de dezvoltare profesională cu informații despre format, limbă, ore și credite unde sunt publicate.",
+      "eligible": "Cadre didactice. Publicul și condițiile depind de program.",
+      "next": "Alege un program și verifică dacă există o ediție cu înscriere anunțată.",
+      "keywords": "formare curs digital credite profesori stem",
+      "category": "formari",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "granturi-scolare",
+      "title": "Programul de Granturi Școlare",
+      "audience": [
+        "Școli"
+      ],
+      "kind": "Finanțare",
+      "status": "resource",
+      "provider": "Ministerul Educației și Cercetării",
+      "source": "https://mec.gov.md/ro/content/programul-de-granturi-scolare-pgs",
+      "summary": "Pagina de implementare a programului, cu manual operațional și documente pentru instituțiile școlare.",
+      "eligible": "Instituții de învățământ general. Pagina consultată descrie proiecte deja selectate.",
+      "next": "Consultă documentele și urmărește la MEC anunțul unei noi selecții.",
+      "keywords": "finantare sponsori grant buget scoala proiect",
+      "category": "finantari",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "plan-formare-2026",
+      "title": "Planul de formare continuă 2026",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "kind": "Plan",
+      "status": "resource",
+      "provider": "Ministerul Educației și Cercetării",
+      "source": "https://www.mec.gov.md/ro/node/16574",
+      "summary": "Planul național include programe obligatorii și opționale. Apelurile sunt anunțate etapizat.",
+      "eligible": "Cadre didactice și cadre de conducere. Consultă apelul fiecărei ediții.",
+      "next": "Identifică programul și urmărește apelul public cu termenul și modalitatea de aplicare.",
+      "keywords": "plan calendar formare minister mec inel crap",
+      "category": "formari",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "digiprof-ab",
+      "title": "DigiProf A și B",
+      "audience": [
+        "Profesori"
+      ],
+      "kind": "Formare",
+      "status": "deadline",
+      "deadline": "2026-10-30",
+      "provider": "Ministerul Educației și Cercetării",
+      "source": "https://mec.gov.md/ro/content/mec-invita-cadrele-didactice-sa-se-inscrie-la-programele-gratuite-de-formare-competentelor",
+      "summary": "Program gratuit pentru dezvoltarea competențelor digitale ale cadrelor didactice.",
+      "eligible": "Cadre didactice din preșcolar, primar, gimnazial și liceal.",
+      "cost": "Gratuit, conform apelului.",
+      "next": "Termenul ediției publicate a trecut. Pentru o ediție nouă, urmărește apelurile MEC sau catalogul Clasa Viitorului.",
+      "keywords": "digital digiprof calculator curs",
+      "category": "formari",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "steam-idei-care-misca",
+      "title": "STEAMˣ „Idei care mișcă”",
+      "audience": [
+        "Elevi",
+        "Profesori",
+        "Școli"
+      ],
+      "kind": "Concurs",
+      "status": "deadline",
+      "deadline": "2026-11-05",
+      "provider": "Clasa Viitorului",
+      "source": "https://www.clasaviitorului.md/steam-idei-care-mi-c-nceput-nscrierea-la-concursul-na-ional-steam-pentru-elevi-profesori/",
+      "summary": "Concurs național de proiecte STEAM pentru echipe de elevi, cu sprijinul unui profesor mentor.",
+      "eligible": "Echipe din clasele V–XII, alături de un profesor mentor.",
+      "next": "Consultă apelul arhivat și urmărește organizatorul pentru ediția următoare.",
+      "keywords": "steam stem concurs proiect elev mentor tehnologie",
+      "category": "concursuri",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "id": "scoala-de-toamna-etwinning",
+      "title": "Școala de Toamnă eTwinning 2026",
+      "audience": [
+        "Profesori"
+      ],
+      "kind": "Formare",
+      "category": "evenimente",
+      "status": "conflict",
+      "when": "28 noiembrie 2026 · UTM, Chișinău",
+      "event": [
+        "2026-11-28"
+      ],
+      "provider": "eTwinning Moldova · UTM",
+      "source": "https://e-twinning.utm.md/2026/10/30/apel-de-inscriere-la-scoala-de-toamna-etwinning-editia-2026/",
+      "summary": "Apelul afișează evenimentul în 2026 și un termen de înscriere în 2025.",
+      "eligible": "Cadre didactice. Detaliile se verifică la organizator.",
+      "cost": "Participare gratuită, conform apelului.",
+      "next": "Confirmă termenul direct la organizator înainte de a pregăti candidatura.",
+      "keywords": "termen contradictie conflict toamna etwinning curs",
+      "checkedAt": "2026-11-07",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "busola-curriculara",
+      "title": "Busola Curriculară",
+      "provider": "Lappsus",
+      "source": "https://curriculum.lappsus.com/",
+      "summary": "Caută discipline, unități și competențe din curriculumul Republicii Moldova.",
+      "next": "Caută o competență pe clasă și verifică ediția în documentul aprobat de MEC. Busola este un index independent.",
+      "keywords": "moldova competenta uc proiectare planificare programa clasa",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Curriculum oficial MEC",
+          "https://www.mec.gov.md/ro/content/curriculumul-national"
+        ]
+      ]
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori, Școli.",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "id": "curriculum-national-mec",
+      "title": "Curriculumul național",
+      "provider": "Ministerul Educației și Cercetării",
+      "source": "https://www.mec.gov.md/ro/content/curriculumul-national",
+      "summary": "Documente curriculare oficiale pentru învățământul primar, gimnazial și liceal.",
+      "next": "Alege treapta și disciplina. Folosește documentul aprobat pentru a valida codul competenței și ediția.",
+      "keywords": "moldova programa competente discipline optionale planificare",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "eduresurse",
+      "title": "EduResurse · Biblioteca națională",
+      "provider": "MEC · UNICEF · PNUD",
+      "source": "https://www.eduresurse.gov.md/catalog",
+      "summary": "Catalog de manuale, lecții și materiale didactice pentru școlile din Republica Moldova.",
+      "next": "Filtrează după treaptă sau disciplină și deschide materialul de care ai nevoie.",
+      "keywords": "manuale biblioteca digitala fise lectii moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori, Școli.",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "id": "proiecte-didactice-mec",
+      "title": "Modele de proiectare didactică",
+      "provider": "Ministerul Educației și Cercetării",
+      "source": "https://www.mec.gov.md/ro/content/proiecte-didactice-de-lunga-durata",
+      "summary": "Exemple de proiecte didactice de lungă durată, organizate pe discipline și clase.",
+      "next": "Alege modelul potrivit și adaptează ordinea unităților și ritmul pentru clasa ta.",
+      "keywords": "planificare anuala semestriala plan didactic curriculum moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "educatie-online",
+      "title": "Educație Online · Lecții video",
+      "provider": "Biblioteca Digitală Educație Online",
+      "source": "https://educatieonline.md/",
+      "summary": "Lecții video pentru clasele I–XII, inclusiv materiale în română și rusă.",
+      "next": "Caută clasa și tema. Alege un fragment scurt pentru recapitulare sau studiu individual.",
+      "keywords": "video online romana rusa elev lectii biblioteca moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "ance-programe-examene",
+      "title": "Programe oficiale pentru examene",
+      "provider": "ANCE",
+      "source": "https://www.ance.gov.md/content/programe-de-examene",
+      "summary": "Programe și cerințe de evaluare pentru absolvirea gimnaziului și bacalaureat.",
+      "next": "Alege examenul și disciplina, apoi verifică sesiunea indicată în document.",
+      "keywords": "bac bacalaureat examene clasa 9 12 gimnaziu programa moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "ance-gimnaziu-2026",
+      "title": "Examene de gimnaziu 2026 · Teste și bareme",
+      "provider": "ANCE",
+      "source": "https://ance.gov.md/clasa-sesiunea-examen/sesiunea-2026-0?field_categoriia_value=All",
+      "summary": "Subiecte și bareme oficiale din sesiunea 2026, utile pentru antrenament.",
+      "next": "Rezolvă un test din arhivă, apoi compară răspunsurile cu baremul aferent.",
+      "keywords": "examen clasa 9 teste bareme subiecte gimnaziu arhiva moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "concursuri",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "ance-teste-unice-matematica",
+      "title": "Teste unice la matematică 2026",
+      "provider": "ANCE",
+      "source": "https://ance.gov.md/content/teste-unice-matematic%C4%83-2026",
+      "summary": "Subiecte și bareme de matematică pentru clasele VII–XII, în română și rusă.",
+      "next": "Alege clasa și limba. Folosește testul din arhivă pentru pregătirea la olimpiadă.",
+      "keywords": "olimpiada matematica antrenament romana rusa barem 2026 moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori, Școli.",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "id": "eduresurse-incluziune",
+      "title": "Resurse pentru educație incluzivă",
+      "provider": "EduResurse",
+      "source": "https://eduresurse.gov.md/catalog?education_category_id=11",
+      "summary": "Selecție de materiale pentru individualizarea predării și sprijinul elevilor.",
+      "next": "Alege un ghid potrivit nevoii clasei și verifică pentru ce vârstă a fost scris.",
+      "keywords": "incluziune ces logopedie individualizare adaptare moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori, Școli.",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "id": "inel-resurse",
+      "title": "Ghiduri și instrumente pentru profesori",
+      "provider": "INEL",
+      "source": "https://inel.md/ro/resurse",
+      "summary": "Materiale despre mentorat, reflecție pedagogică, valori și siguranță online.",
+      "next": "Alege un instrument de reflecție și discută cu un coleg o situație concretă de la clasă.",
+      "keywords": "formare continua mentorat reflectie siguranta online moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori, Școli.",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "id": "plan-cadru-2026-2027",
+      "title": "Planul-cadru 2026–2027",
+      "provider": "Ministerul Educației și Cercetării",
+      "source": "https://www.mec.gov.md/ro/content/mec-aprobat-planul-cadru-pentru-viitorul-de-studii-noi-oportunitati-pentru-elevi-si-mai",
+      "summary": "Anunțul de aprobare și documentul pentru organizarea anului de studii 2026–2027.",
+      "next": "Deschide documentul din anunț și consultă secțiunea relevantă pentru instituția ta.",
+      "keywords": "plan cadru 2026 2027 calendar orar an scolar moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "biologie-viii-eduresurse",
+      "title": "Biologie clasa a VIII-a · Manual digital",
+      "provider": "EduResurse",
+      "source": "https://www.eduresurse.gov.md/resource/biologia-clasa-a-viii-a",
+      "summary": "Manual digital cu capitole de biologie și materiale pentru consolidare.",
+      "next": "Deschide unitatea despre ecosisteme pentru a recapitula relațiile trofice.",
+      "keywords": "biologie clasa 8 ecosisteme relatii trofice manual moldova",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori.",
+      "audience": [
+        "Profesori"
+      ],
+      "id": "tpack",
+      "title": "TPACK · Tehnologie, pedagogie și disciplină",
+      "provider": "Punya Mishra · coautor TPACK",
+      "source": "https://punyamishra.com/research/tpack/",
+      "summary": "Cadru pentru alegerea tehnologiei în funcție de conținutul lecției și metoda didactică.",
+      "next": "Pornește de la ce trebuie să învețe elevul. Alege apoi metoda și instrumentul digital care o susține.",
+      "keywords": "tpack pedagogie digitala proiectare lectie formare",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Introducere TPACK",
+          "https://educationaltechnology.net/technological-pedagogical-content-knowledge-tpack-framework/"
+        ]
+      ]
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori.",
+      "audience": [
+        "Profesori"
+      ],
+      "id": "lori",
+      "title": "LORI · Evaluarea resurselor de învățare",
+      "provider": "Tracey Leacock și John Nesbit · SFU",
+      "source": "https://www.sfu.ca/~jcnesbit/articles/LeacockNesbit2007.pdf",
+      "summary": "Cadru pentru a evalua calitatea resurselor multimedia, inclusiv corectitudinea și accesibilitatea.",
+      "next": "Aplică aceleași criterii la două materiale înainte să alegi unul pentru clasă.",
+      "keywords": "lori grila evaluare materiale multimedia accesibilitate calitate",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Grila LORI 1.5",
+          "https://www.slideshare.net/slideshow/lori-learning-object-review-instrument/243950974"
+        ]
+      ]
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori.",
+      "audience": [
+        "Profesori"
+      ],
+      "id": "kirkpatrick",
+      "title": "Kirkpatrick · Evaluarea formării",
+      "provider": "Kirkpatrick Partners",
+      "source": "https://www.kirkpatrickpartners.com/the-kirkpatrick-model/",
+      "summary": "Model care urmărește reacția, învățarea, aplicarea și rezultatele unei formări.",
+      "next": "Notează ce ar trebui să poată face profesorii după curs și ce dovadă ar arăta că aplică la clasă.",
+      "keywords": "kirkpatrick evaluare impact formare rezultate comportament transfer",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori.",
+      "audience": [
+        "Profesori"
+      ],
+      "id": "udl-cast",
+      "title": "UDL · Design universal pentru învățare",
+      "provider": "CAST",
+      "source": "https://udlguidelines.cast.org/",
+      "summary": "Repere pentru a oferi mai multe moduri de participare, înțelegere și exprimare.",
+      "next": "Alege o lecție și oferă două moduri de a accesa conținutul sau de a arăta ce s-a învățat.",
+      "keywords": "udl incluziune accesibilitate diferentiere ces cast",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori.",
+      "audience": [
+        "Profesori"
+      ],
+      "id": "digcompedu",
+      "title": "DigCompEdu · Competențe digitale didactice",
+      "provider": "Comisia Europeană · JRC",
+      "source": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/digcompedu_en",
+      "summary": "Cadrul european care descrie 22 de competențe digitale pentru educatori.",
+      "next": "Alege o competență pe care vrei să o dezvolți și folosește-o când cauți o formare.",
+      "keywords": "digcompedu competenta digitala profesori autoevaluare curs",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori.",
+      "audience": [
+        "Profesori"
+      ],
+      "id": "selfie-profesori",
+      "title": "SELFIE · Autoevaluare pentru profesori",
+      "provider": "Comisia Europeană",
+      "source": "https://selfie-in-education.ec.europa.eu/educators/",
+      "summary": "Instrument de autoevaluare a practicilor digitale, cu raport personal și opțiune în română.",
+      "next": "Începe autoevaluarea cu EU Login și alege o prioritate din raport.",
+      "keywords": "selfie chestionar autoevaluare digital romana formare",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori.",
+      "audience": [
+        "Profesori"
+      ],
+      "id": "unesco-competente-ia",
+      "title": "Competențe IA pentru profesori",
+      "provider": "UNESCO",
+      "source": "https://www.unesco.org/en/articles/ai-competency-framework-teachers",
+      "summary": "Cadru UNESCO pentru folosirea responsabilă a inteligenței artificiale în educație.",
+      "next": "Compară activitatea planificată cu reperele despre etică, pedagogie și competențe IA.",
+      "keywords": "unesco ia ai inteligenta artificiala etica formare digital",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Profesori.",
+      "audience": [
+        "Profesori"
+      ],
+      "id": "eef-feedback",
+      "title": "Feedback care sprijină învățarea",
+      "provider": "Education Endowment Foundation",
+      "source": "https://d2tic4wvo1iusb.cloudfront.net/production/eef-guidance-reports/feedback/EEF_Feedback_Recommendations_Poster.pdf",
+      "summary": "Sinteză de o pagină despre feedbackul pe care elevii îl pot folosi pentru a progresa.",
+      "next": "Lasă timp în lecție pentru ca elevii să corecteze o lucrare folosind feedbackul primit.",
+      "keywords": "evaluare formativa feedback cercetare dovezi progres eef",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Ghidul complet EEF",
+          "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/feedback"
+        ]
+      ]
+    },
+    {
+      "kind": "Resursă",
+      "category": "activitati",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "phet-simulari",
+      "title": "PhET · Simulări în română",
+      "provider": "University of Colorado Boulder",
+      "source": "https://phet.colorado.edu/ro/",
+      "summary": "Simulări interactive de matematică și științe, cu interfață disponibilă în română.",
+      "next": "Alege o simulare și formulează o întrebare pe care elevii o pot testa schimbând o variabilă.",
+      "keywords": "phet simulare fizica chimie matematica stiinte steam romana",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Resursă",
+      "category": "resurse",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "learning-corner-ue",
+      "title": "Learning Corner · Materiale didactice în română",
+      "provider": "Comisia Europeană",
+      "source": "https://learning-corner.learning.europa.eu/learning-materials_ro",
+      "summary": "Jocuri și materiale despre Uniunea Europeană, cu filtre pentru vârstă și temă.",
+      "next": "Alege limba și vârsta elevilor, apoi adaptează materialul la obiectivul lecției.",
+      "keywords": "europa ue educatie civica romana lectii jocuri",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Concurs",
+      "category": "concursuri",
+      "status": "deadline",
+      "eligible": "Elevi din Republica Moldova și profesori coordonatori. Clasele și condițiile diferă după probă.",
+      "audience": [
+        "Elevi",
+        "Profesori",
+        "Școli"
+      ],
+      "id": "tekwill-junior-ambassadors",
+      "title": "Tekwill Junior Ambassadors",
+      "provider": "Tekwill în fiecare școală",
+      "source": "https://tja.md/",
+      "deadline": "2026-12-31",
+      "deadlineLabel": "Înregistrarea echipelor",
+      "summary": "Competiție de proiecte digitale pentru elevi din Republica Moldova.",
+      "next": "Alege categoria, consultă regulamentul ediției și folosește formularul probei.",
+      "keywords": "tja tekwill concurs proiect it programare liceu gimnaziu",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Regulamentul ediției VII",
+          "https://tja.md/assets/documents/Regulament_TJA.pdf"
+        ]
+      ]
+    },
+    {
+      "kind": "Resursă",
+      "category": "proiecte",
+      "status": "resource",
+      "eligible": "Elevi, Profesori, Școli.",
+      "audience": [
+        "Elevi",
+        "Profesori",
+        "Școli"
+      ],
+      "id": "consiliile-elevilor",
+      "title": "Consiliile elevilor · Ghiduri și modele",
+      "provider": "Agenția Națională pentru Tineret",
+      "source": "https://tineret.gov.md/programe/programul-de-asistenta-pentru-consolidarea-consiliilor-elevilor/",
+      "summary": "Materiale de lucru pentru organizarea consiliilor elevilor și implicarea lor în viața școlii.",
+      "next": "Consultă ghidurile și modelele pentru a planifica o activitate sau o consultare în școală.",
+      "keywords": "consiliul elevilor participare reprezentare proiect voluntariat",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Concurs",
+      "category": "concursuri",
+      "status": "deadline",
+      "eligible": "Elevi din clasele VI–XII.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "quant-2026",
+      "title": "QUANT 2026 · Fizică aplicată și astronomie",
+      "provider": "DGETS Chișinău",
+      "source": "https://t.me/dgetschisinau/20845",
+      "deadline": "2026-11-11",
+      "when": "13–15 noiembrie 2026 · Liceul Teoretic „Hyperion”, Durlești",
+      "event": [
+        "2026-11-13",
+        "2026-11-15"
+      ],
+      "cost": "Participare gratuită, conform anunțului.",
+      "summary": "Concurs de fizică aplicată și astronomie pentru elevi din clasele VI–XII.",
+      "next": "Consultă formularul din anunțul DGETS. Ora-limită publicată este 20:00, ora Republicii Moldova.",
+      "keywords": "quant fizica astronomie concurs stiinte dgets durlesti",
+      "checkedAt": "2026-11-08",
+      "references": []
+    },
+    {
+      "kind": "Program",
+      "category": "evenimente",
+      "status": "deadline",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "sigmoid-lmml-2026",
+      "title": "Learning Marathon of Machine Learning 2.0",
+      "provider": "Sigmoid AI",
+      "source": "https://unde.io/events/1908-learning-",
+      "deadline": "2026-11-14",
+      "deadlineLabel": "Bilete",
+      "when": "14–15 noiembrie 2026 · Online și la Clasa Viitorului, Chișinău",
+      "event": [
+        "2026-11-14",
+        "2026-11-15"
+      ],
+      "summary": "Maraton de provocări de machine learning, cu participare individuală sau în echipe de până la cinci persoane.",
+      "next": "Verifică programul și disponibilitatea biletelor gratuite la organizator.",
+      "keywords": "sigmoid lmml ai ia machine learning python hackathon chisinau",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Anunțul Sigmoid pe Telegram",
+          "https://t.me/sigmo_ai/372"
+        ]
+      ]
+    },
+    {
+      "kind": "Telegram",
+      "category": "comunitati",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "telegram-sigmoid",
+      "title": "Sigmoid AI",
+      "provider": "Sigmoid AI",
+      "source": "https://t.me/sigmo_ai",
+      "summary": "Canal public cu noutăți și anunțuri despre ateliere și evenimente de inteligență artificială.",
+      "next": "Urmărește canalul și verifică detaliile evenimentului la organizator înainte de înscriere.",
+      "keywords": "telegram sigmoid ai ia machine learning python atelier chisinau",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Linkurile Sigmoid",
+          "https://linktr.ee/sigmoid"
+        ]
+      ]
+    },
+    {
+      "kind": "Telegram",
+      "category": "comunitati",
+      "status": "resource",
+      "eligible": "Elevi.",
+      "audience": [
+        "Elevi"
+      ],
+      "id": "telegram-matematica-md",
+      "title": "Matematica.md · Grupul de exerciții",
+      "provider": "Matematica.md",
+      "source": "https://t.me/+KF1hNZOyhMkzNjAy",
+      "summary": "Grup cu acces prin invitație, pentru întrebări, exerciții rezolvate și pregătire la matematică.",
+      "next": "Folosește invitația publicată de Matematica.md. Pentru cerințele examenelor, consultă programele ANCE.",
+      "keywords": "telegram matematicamd matematica bac examen exercitii teme grup",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Pagina Matematica.md",
+          "https://matematica.md/"
+        ]
+      ]
+    },
+    {
+      "kind": "Telegram",
+      "category": "comunitati",
+      "status": "resource",
+      "eligible": "Elevi, Profesori, Școli.",
+      "audience": [
+        "Elevi",
+        "Profesori",
+        "Școli"
+      ],
+      "id": "telegram-dgets",
+      "title": "DGETS Chișinău",
+      "provider": "DGETS Chișinău",
+      "source": "https://t.me/dgetschisinau",
+      "summary": "Anunțuri municipale despre educație, concursuri, proiecte de tineret și sport.",
+      "next": "Verifică în fiecare anunț localitatea, publicul și termenul.",
+      "keywords": "telegram dgets primarie chisinau educatie tineret sport concurs",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Anunțul DETS Centru",
+          "https://detscentru.md/2026/09/23/vrei-sa-fii-primul-care-afla-ce-se-intampla-in-educatie-tineret-si-sport-in-municipiul-chisinau/"
+        ]
+      ]
+    },
+    {
+      "kind": "Telegram",
+      "category": "comunitati",
+      "status": "resource",
+      "eligible": "Elevi.",
+      "audience": [
+        "Elevi"
+      ],
+      "id": "telegram-centrul-tineret",
+      "title": "Centrul Municipal de Tineret Chișinău",
+      "provider": "Centrul Municipal de Tineret Chișinău",
+      "source": "https://t.me/centrultineretchisinau",
+      "summary": "Canal cu activități, ateliere și oportunități pentru tineri în Chișinău.",
+      "next": "Verifică vârsta, locul și condițiile de participare din anunțul activității.",
+      "keywords": "telegram tineret chisinau atelier voluntariat eveniment oportunitati",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Anunțul DGETS",
+          "https://old2025.chisinauedu.md/programului-de-dezvoltare-personala-neurostiinta-comunicarii/"
+        ]
+      ]
+    },
+    {
+      "kind": "Telegram",
+      "category": "comunitati",
+      "status": "resource",
+      "eligible": "Elevi, Profesori, Școli.",
+      "audience": [
+        "Elevi",
+        "Profesori",
+        "Școli"
+      ],
+      "id": "telegram-mec",
+      "title": "Ministerul Educației și Cercetării",
+      "provider": "Ministerul Educației și Cercetării",
+      "source": "https://t.me/+gBMS5S82NEc2NjAy",
+      "summary": "Canalul de Telegram indicat în buletinul oficial al Ministerului.",
+      "next": "Folosește invitația din buletin. Pentru un apel, verifică și pagina oficială de pe mec.gov.md.",
+      "keywords": "telegram mec minister moldova noutati apeluri profesor elev scoala",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Buletinul informativ MEC",
+          "https://mec.gov.md/sites/default/files/document/attachments/buletin_informativ_mai_2026_.pdf"
+        ]
+      ]
+    },
+    {
+      "kind": "Telegram",
+      "category": "comunitati",
+      "status": "resource",
+      "eligible": "Elevi.",
+      "audience": [
+        "Elevi"
+      ],
+      "id": "telegram-diez",
+      "title": "#diez Oportunități",
+      "provider": "#diez",
+      "source": "https://t.me/oportunitatidiez",
+      "summary": "Grup al publicației #diez pentru anunțuri despre burse, stagii și conferințe pentru tineri.",
+      "next": "Verifică pe pagina organizatorului condițiile și termenul oricărei oportunități distribuite.",
+      "keywords": "telegram diez burse oportunitati stagii tineret conferinte",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Anunțul de lansare #diez",
+          "https://diez.md/2019/10/19/oportunitati-diez-grupul-de-telegram-unde-poti-afla-stiri-despre-burse-stagii-si-conferinte-interesante-pentru-tineri/"
+        ]
+      ]
+    },
+    {
+      "kind": "Telegram",
+      "category": "comunitati",
+      "status": "resource",
+      "eligible": "Profesori, Școli.",
+      "audience": [
+        "Profesori",
+        "Școli"
+      ],
+      "id": "telegram-civic",
+      "title": "CIVIC.MD · Oportunități civice",
+      "provider": "CIVIC.MD",
+      "source": "https://t.me/s/portalcivic",
+      "summary": "Canal cu anunțuri despre granturi, formări și voluntariat în societatea civilă.",
+      "next": "Caută anunțurile potrivite unui proiect școlar și verifică cine poate aplica.",
+      "keywords": "telegram civic societate civila granturi formare proiect voluntariat",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Pagina CIVIC.MD",
+          "https://stiri.civic.md/despre.html"
+        ]
+      ]
+    },
+    {
+      "kind": "Telegram",
+      "category": "comunitati",
+      "status": "resource",
+      "eligible": "Elevi, Profesori.",
+      "audience": [
+        "Elevi",
+        "Profesori"
+      ],
+      "id": "telegram-voluntar",
+      "title": "VOLUNTAR.MD · Centrul de Voluntariat RVC",
+      "provider": "Centrul de Voluntariat RVC",
+      "source": "https://t.me/s/rvcmd",
+      "summary": "Canal cu apeluri la voluntariat, evenimente și ateliere comunitare.",
+      "next": "Verifică locul și vârsta minimă din anunț înainte de a aplica.",
+      "keywords": "telegram rvc voluntariat voluntar tineret festival atelier",
+      "checkedAt": "2026-11-08",
+      "references": [
+        [
+          "Pagina centrului RVC",
+          "https://rvc.md/ro/"
+        ]
+      ]
+    }
+  ]
+}

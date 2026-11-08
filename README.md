@@ -22,6 +22,7 @@ npm start
 
 ## Ce poți încerca
 
+0. **Puntea Edu · Catalog** — primul buton din meniu, disponibil tuturor rolurilor la `/#puntea`. Cele 49 de fișe includ cursuri, concursuri, granturi, evenimente, resurse, comunități, mentorat, proiecte și activități. Caută fără diacritice, combină categoria și publicul și ascunde edițiile încheiate. Linkurile și referințele se deschid la furnizor, într-o filă nouă.
 1. **Prezentare** — banner introductiv, resurse demonstrative și traseu cu progres real al interacțiunilor din demonstrație.
 2. **Cursul meu** — material demonstrativ în trei secțiuni și trei răspunsuri de diagnostic pregătite. Apasă „Folosește acest exemplu”.
 3. **AI Mentor** — alege întrebările pregătite pentru răspunsuri reale OpenAI. Mentorul primește materialul cursului și contextul demonstrativ. Referințele afișate deschid materialul cursului. Dacă serviciul nu răspunde, poți reîncerca sau alege explicit un răspuns static, etichetat drept exemplu.
@@ -38,6 +39,16 @@ Vizitatorii fără sesiune văd la `/` pagina de prezentare EduMentor, în româ
 Pagina prezintă cele șase direcții existente ale platformei, parcursul de învățare și rolurile profesor/elev/administrator. Exemplele demonstrative sunt identificate explicit. Resursele MEC, EduResurse, Educație Online, ANCE, INEL și eTwinning sunt linkuri către furnizori, disponibile fără cont EduMentor. Paginile au fost consultate la 8 noiembrie 2026; nu există sincronizare automată sau copiere a conținutului furnizorilor în baza aplicației. Schimbarea limbii acestei pagini nu modifică preferința de limbă a cabinetului.
 
 Nu au fost adăugate înregistrare publică, conturi noi sau acces anonim la datele comunității. API-urile protejate și zona de administrare își păstrează verificările de sesiune și rol. `npm run test:public` verifică separarea prezentării publice de cabinetul celor trei roluri.
+
+## Catalogul Puntea Edu
+
+Datele provin din fișierele `frontend/src/puntea/catalog.mjs` și `resources.mjs` ale proiectului Edumentor furnizat. Au fost extrase ca date, fără executarea scripturilor proiectului-sursă. Snapshotul normalizat este `src/features/puntea/catalog.json`: 49 de ID-uri unice, 9 categorii și 14 referințe suplimentare. Au fost completate categoriile lipsă pentru 12 fișe și transformate referințele în perechi etichetă–URL. Fișierele din Downloads nu sunt modificate.
+
+Interfața folosește limba RO/RU a cabinetului, iar textele fișelor păstrează româna sursei. Căutarea combină termenii cu AND, ignoră diacriticele și include titlul, organizatorul, rezumatul, eligibilitatea, pașii următori, cuvintele-cheie și denumirile categoriilor/publicului. Toate fișele sunt afișate inițial; filtrele sunt temporare și pot fi resetate.
+
+Termenele sunt comparate cu ziua calendaristică Europe/Bucharest, inclusiv la schimbarea zilei cât timp pagina rămâne deschisă. Data-limită de înscriere are prioritate față de o dată ulterioară a evenimentului. Nu se presupune ora-limită și nu se afirmă că un apel este deschis doar pentru că data nu a trecut. Contradicția din fișa Școlii de Toamnă eTwinning este marcată separat. Datele de consultare 7–8 noiembrie 2026 sunt cele declarate în sursă; cele 49 de oferte nu au fost reverificate online la import și nu se sincronizează automat.
+
+Catalogul este o colecție statică de informații și linkuri, încărcată numai la deschiderea modulului. Nu creează înscrieri, nu înlocuiește Trasee și nu introduce date personale sau stocare Supabase nouă. `npm run test:puntea` verifică datele, categoriile, referințele, filtrele, datele calendaristice și ordinea meniului.
 
 ## Autentificare și cele trei conturi
 

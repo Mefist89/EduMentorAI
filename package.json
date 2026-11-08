@@ -16,7 +16,8 @@
     "test:trasee": "node --test tests/trasee.test.mjs",
     "setup:expertiza": "node scripts/setup-expertiza.mjs",
     "test:expertiza": "node --test tests/expertiza.test.mjs",
-    "test:public": "node --test tests/public.test.mjs"
+    "test:public": "node --test tests/public.test.mjs",
+    "test:puntea": "node --test tests/puntea.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   BookMarked,
+  Compass,
   MessagesSquare,
   BookOpen,
   Check,
@@ -44,8 +45,16 @@ const ExpertizaApp = dynamic(
     ),
   { loading: () => <p role="status">Se încarcă Expertiză…</p> },
 );
+const PunteaCatalog = dynamic(
+  () =>
+    import("@/features/puntea/PunteaCatalog").then(
+      (module) => module.PunteaCatalog,
+    ),
+  { loading: () => <p role="status">Se încarcă Puntea Edu…</p> },
+);
 
 const navIcons = {
+  puntea: Compass,
   dashboard: LayoutDashboard,
   course: BookOpen,
   mentor: MessageCircle,
@@ -60,7 +69,9 @@ export function MentorApp({ account }: { account: Account }) {
   const allowedNavigation = navigation.filter(
     (item) =>
       !student ||
-      ["dashboard", "course", "activities", "expertiza"].includes(item.id),
+      ["puntea", "dashboard", "course", "activities", "expertiza"].includes(
+        item.id,
+      ),
   );
   const storageKey = `${STORAGE_KEY}:${account.id}`;
   const [progress, setProgress] = useState<DemoProgress>(initialProgress);
@@ -83,7 +94,9 @@ export function MentorApp({ account }: { account: Account }) {
       if (
         navigation.some((item) => item.id === id) &&
         (!student ||
-          ["dashboard", "course", "activities", "expertiza"].includes(id))
+          ["puntea", "dashboard", "course", "activities", "expertiza"].includes(
+            id,
+          ))
       )
         setView(id as View);
       else setView("dashboard");
@@ -269,10 +282,11 @@ export function MentorApp({ account }: { account: Account }) {
               )}
             </p>
           )}
-          {student && view !== "expertiza" && (
+          {student && view !== "expertiza" && view !== "puntea" && (
             <StudentLearning locale={locale} view={view} go={go} />
           )}
           {view === "expertiza" && <ExpertizaApp />}
+          {view === "puntea" && <PunteaCatalog locale={locale} />}
           {!student && view === "dashboard" && (
             <Dashboard locale={locale} progress={progress} go={go} />
           )}
@@ -300,16 +314,20 @@ export function MentorApp({ account }: { account: Account }) {
             <span>
               <CircleHelp size={13} />
               {t(
-                view === "expertiza"
-                  ? "Comunitate · Contribuții salvate în Supabase"
-                  : view === "trasee"
-                    ? "Catalog de formare · Marcaje salvate în cont"
-                    : "Date fictive · Salvare în acest browser",
-                view === "expertiza"
-                  ? "Сообщество · Данные сохранены в Supabase"
-                  : view === "trasee"
-                    ? "Каталог курсов · Отметки сохранены в аккаунте"
-                    : "Вымышленные данные · Хранение в браузере",
+                view === "puntea"
+                  ? "Puntea Edu · Catalog informativ · Surse externe"
+                  : view === "expertiza"
+                    ? "Comunitate · Contribuții salvate în Supabase"
+                    : view === "trasee"
+                      ? "Catalog de formare · Marcaje salvate în cont"
+                      : "Date fictive · Salvare în acest browser",
+                view === "puntea"
+                  ? "Puntea Edu · Информационный каталог · Внешние источники"
+                  : view === "expertiza"
+                    ? "Сообщество · Данные сохранены в Supabase"
+                    : view === "trasee"
+                      ? "Каталог курсов · Отметки сохранены в аккаунте"
+                      : "Вымышленные данные · Хранение в браузере",
               )}
             </span>
             <button className="footer-reset text-button" onClick={reset}>

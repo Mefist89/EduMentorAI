@@ -109,3 +109,14 @@ Persistența acestui MVP folosește documente JSON în Storage privat, cu permis
 - Verificarea calculată a contrastului pentru 98 de elemente de text ale paginii în rusă a trecut pragurile selectate. Desenul decorativ și fundalurile cu gradient au fost excluse; nu este o evaluare completă de accesibilitate.
 - `npm run test:public` — două teste de separare public/cabinet, inclusiv cele trei roluri; împreună cu cele 47 existente, total 49 teste trecute. Buildul de producție și verificarea TypeScript au trecut.
 - Corectată navigarea laterală: o coloană peste 640 px și patru coloane numai în meniul mobil. Regulile care modificau meniul global din modulele Expertiză, Trasee și stilurile elevului au fost înlăturate. Verificate anterior 26 de variante RO/RU, fără suprapunerea butoanelor.
+
+## Puntea Edu · Catalog
+
+- Adăugat primul buton al meniului pentru administrator, profesor și elev, cu adresă directă `/#puntea`; prezentarea rămâne disponibilă la adresa existentă. Modulul se încarcă separat, la deschidere.
+- Importate toate cele 49 de fișe din proiectul Edumentor furnizat. Snapshotul conține 9 categorii și 14 perechi de referințe. Cele 12 categorii lipsă au fost completate fără a pierde cardurile originale. Nu a fost executată autentificarea sau logica serverului din sursă.
+- În browser: 49 de fișe inițial; 5 cursuri/formări; 4 după ascunderea edițiilor încheiate; filtrul finanțări combinat cu publicul profesori a afișat starea fără rezultate. Resetarea a restabilit cele 49 de fișe. Căutarea „PHET fizică” a găsit fișa PhET. Referința Busola a afișat eticheta „Curriculum oficial MEC” și URL-ul complet corect. Cele două termene de înscriere anterioare datei de 8 noiembrie 2026 au fost marcate încheiate.
+- Autentificare reală în browser pentru elev, profesor și administrator: primul punct al meniului este Puntea Edu · Catalog, toate cele 49 de fișe sunt accesibile, iar ecranul conține un singur titlu principal. Elevul a păstrat accesul după reîncărcarea directă la `/#puntea`.
+- 26 de variante responsive, RO/RU la 320, 360, 390, 520, 640, 642, 768, 820, 850, 900, 1024, 1440 și 1600 px: fără derulare orizontală, suprapuneri ale butoanelor meniului sau text care depășește containerele în verificările efectuate.
+- 6 teste Puntea trecute: cele 49 de identități, categorii utilizabile și referințe normalizate; refuzul URL-urilor nesigure și al datelor invalide; căutare și filtre combinate; date expirate, evenimente și contradicții; calendarul București iarna/vara; primul punct al meniului. Împreună cu cele 49 existente: total 55 teste trecute. Buildul de producție și TypeScript au trecut.
+
+Datele sunt un snapshot informativ al fișierelor furnizate, nu confirmări în timp real ale înscrierilor. Conținutul sursei este în română, interfața de navigare și filtrare este bilingvă. Nu au fost necesare variabile de mediu sau politici Supabase suplimentare.
