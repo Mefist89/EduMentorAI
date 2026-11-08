@@ -55,7 +55,7 @@ export function PunteaCatalog({ locale }: { locale: Locale }) {
             )}
           </p>
           <h1 id="page-title" tabIndex={-1}>
-            {t("Puntea Edu · Catalog", "Puntea Edu · Каталог")}
+            {t("ЭдуМост · Catalog", "ЭдуМост · Каталог")}
           </h1>
           <p>
             {t(
@@ -236,8 +236,8 @@ export function PunteaCatalog({ locale }: { locale: Locale }) {
           </h2>
           <p>
             {t(
-              "Catalog importat din proiectul Puntea Edu furnizat; datele de consultare din fișiere sunt 7–8 noiembrie 2026. Condițiile și termenele nu sunt sincronizate automat. O fișă fără termen expirat nu confirmă că înscrierile sunt deschise. Verifică informația direct la organizator.",
-              "Каталог перенесён из предоставленного проекта Puntea Edu; в файлах указаны даты проверки 7–8 ноября 2026 года. Условия и сроки не обновляются автоматически. Отсутствие отметки об истёкшем сроке не означает, что набор открыт. Проверяйте информацию у организатора.",
+              "Catalog importat din proiectul furnizat; datele de consultare din fișiere sunt 7–8 noiembrie 2026. Condițiile și termenele nu sunt sincronizate automat. O fișă fără termen expirat nu confirmă că înscrierile sunt deschise. Verifică informația direct la organizator.",
+              "Каталог перенесён из предоставленного проекта; в файлах указаны даты проверки 7–8 ноября 2026 года. Условия и сроки не обновляются автоматически. Отсутствие отметки об истёкшем сроке не означает, что набор открыт. Проверяйте информацию у организатора.",
             )}
           </p>
         </div>

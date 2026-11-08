@@ -22,7 +22,7 @@ npm start
 
 ## Ce poți încerca
 
-0. **Puntea Edu · Catalog** — primul buton din meniu, disponibil tuturor rolurilor la `/#puntea`. Cele 49 de fișe includ cursuri, concursuri, granturi, evenimente, resurse, comunități, mentorat, proiecte și activități. Caută fără diacritice, combină categoria și publicul și ascunde edițiile încheiate. Linkurile și referințele se deschid la furnizor, într-o filă nouă.
+0. **ЭдуМост · Catalog** — primul buton din meniu, disponibil tuturor rolurilor la `/#puntea`. Cele 49 de fișe includ cursuri, concursuri, granturi, evenimente, resurse, comunități, mentorat, proiecte și activități. Caută fără diacritice, combină categoria și publicul și ascunde edițiile încheiate. Linkurile și referințele se deschid la furnizor, într-o filă nouă.
 1. **Prezentare** — banner introductiv, resurse demonstrative și traseu cu progres real al interacțiunilor din demonstrație.
 2. **Cursul meu** — material demonstrativ în trei secțiuni și trei răspunsuri de diagnostic pregătite. Apasă „Folosește acest exemplu”.
 3. **AI Mentor** — alege întrebările pregătite pentru răspunsuri reale OpenAI. Mentorul primește materialul cursului și contextul demonstrativ. Referințele afișate deschid materialul cursului. Dacă serviciul nu răspunde, poți reîncerca sau alege explicit un răspuns static, etichetat drept exemplu.
@@ -66,13 +66,13 @@ Nu au fost adăugate înregistrare publică, conturi noi sau acces anonim la dat
 
 ## Meniu: Continuitate și Investigație
 
-Pentru profesor și administrator, meniul principal are cinci puncte: Puntea Edu, Expertiză, **Continuitate**, Trasee, **Investigație**. Investigație se deschide/închide ca submeniu și oferă și o pagină cu acces rapid la secțiuni, în ordinea: Prezentare, Practici pedagogice, Cursul meu, Activități, Cohorte, AI Mentor, Experiența mea. Adresele existente `/#dashboard`, `/#practices`, `/#course`, `/#activities`, `/#cohorts`, `/#mentor` și `/#experience` se păstrează; deschiderea unei secțiuni extinde automat submeniul.
+Pentru profesor și administrator, meniul principal are cinci puncte: ЭдуМост, Expertiză, **Continuitate**, Trasee, **Investigație**. Investigație se deschide/închide ca submeniu și oferă și o pagină cu acces rapid la secțiuni, în ordinea: Prezentare, Practici pedagogice, Cursul meu, Activități, Cohorte, AI Mentor, Experiența mea. Adresele existente `/#dashboard`, `/#practices`, `/#course`, `/#activities`, `/#cohorts`, `/#mentor` și `/#experience` se păstrează; deschiderea unei secțiuni extinde automat submeniul.
 
 `/#continuitate` arată progresul demonstrativ existent al contului în browser și următoarea etapă neparcursă. Butonul de continuare deschide cursul, activitatea sau reflecția, în funcție de cele trei etape. După finalizare sunt disponibile revenirea la reflecție și repetarea etapelor, fără resetare automată. Nu introduce o stocare separată și nu înlocuiește progresul din paginile existente.
 
 Elevul are numai secțiunile permise rolului său: Prezentare, Practici, Curs, Exerciții și Cohorte în Investigație. Continuitate îi oferă acces la curs și exerciții, fără progresul celor trei etape specifice profesorului. Trasee, AI Mentor și Experiența mea își păstrează restricțiile existente. Pe mobil submeniul se afișează sub butoanele principale, fără suprapunerea lor. Denumirile Continuitate și Investigație sunt păstrate în ambele limbi, iar descrierile și conținutul sunt RO/RU.
 
-## Catalogul Puntea Edu
+## Catalogul ЭдуМост
 
 Datele provin din fișierele `frontend/src/puntea/catalog.mjs` și `resources.mjs` ale proiectului Edumentor furnizat. Au fost extrase ca date, fără executarea scripturilor proiectului-sursă. Snapshotul normalizat este `src/features/puntea/catalog.json`: 49 de ID-uri unice, 9 categorii și 14 referințe suplimentare. Au fost completate categoriile lipsă pentru 12 fișe și transformate referințele în perechi etichetă–URL. Fișierele din Downloads nu sunt modificate.
 

@@ -129,11 +129,11 @@ test("date comparisons follow the Bucharest calendar in winter and summer", () =
     "2026-07-02",
   );
 });
-test("Puntea Edu is the first workspace menu item without replacing the dashboard", () => {
+test("ЭдуМост is the first workspace menu item without replacing the dashboard", () => {
   const demo = load("src/lib/demo.ts");
   assert.equal(demo.navigation[0].id, "puntea");
-  assert.equal(demo.navigation[0].label.ro, "Puntea Edu · Catalog");
-  assert.equal(demo.navigation[0].label.ru, "Puntea Edu · Каталог");
+  assert.equal(demo.navigation[0].label.ro, "ЭдуМост · Catalog");
+  assert.equal(demo.navigation[0].label.ru, "ЭдуМост · Каталог");
   assert.ok(demo.navigation.some((item) => item.id === "dashboard"));
 });
 

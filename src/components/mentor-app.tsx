@@ -58,7 +58,7 @@ const PunteaCatalog = dynamic(
     import("@/features/puntea/PunteaCatalog").then(
       (module) => module.PunteaCatalog,
     ),
-  { loading: () => <p role="status">Se încarcă Puntea Edu…</p> },
+  { loading: () => <p role="status">Se încarcă ЭдуМост…</p> },
 );
 
 const PracticesApp = dynamic(
@@ -367,7 +367,7 @@ export function MentorApp({ account }: { account: Account }) {
                   : view === "practices"
                   ? "Practici · Publicare cu moderare · Salvare în Supabase"
                   : view === "puntea"
-                  ? "Puntea Edu · Catalog informativ · Surse externe"
+                  ? "ЭдуМост · Catalog informativ · Surse externe"
                   : view === "expertiza"
                     ? "Comunitate · Contribuții salvate în Supabase"
                     : view === "trasee"
@@ -382,7 +382,7 @@ export function MentorApp({ account }: { account: Account }) {
                   : view === "practices"
                   ? "Практики · Публикация с модерацией · Сохранение в Supabase"
                   : view === "puntea"
-                  ? "Puntea Edu · Информационный каталог · Внешние источники"
+                  ? "ЭдуМост · Информационный каталог · Внешние источники"
                   : view === "expertiza"
                     ? "Сообщество · Данные сохранены в Supabase"
                     : view === "trasee"
